@@ -10,16 +10,13 @@ function Router() {
   const [user, setUser] = useState();
   const dispatch = useDispatch();
   const state = useSelector((reduxState) => reduxState);
-  console.log(state);
   const currentUser = state.newapi.currentUser;
 
   useAbortableEffect(
     async (status) => {
       const access = localStorage.getItem("access_token");
-      console.log(access);
       if (access) {
         const res = await dispatch(getCurrentUser());
-        console.log(res);
         setUser(res.data.data);
         navigate("/");
       } else {

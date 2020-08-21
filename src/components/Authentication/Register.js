@@ -57,10 +57,7 @@ function Register() {
 
   function submitHandler(e) {
     e.preventDefault();
-    console.log(form);
-    dispatch(register(form)).then((res) => {
-      console.log(res);
-    });
+    dispatch(register(form)).then((res) => {});
   }
 
   const classes = useStyles();
