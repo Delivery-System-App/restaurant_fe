@@ -22,8 +22,6 @@ function App() {
     }
   });
 
-  console.log("App started");
-
   return (
     <ThemeProvider theme={theme}>
       <Router />

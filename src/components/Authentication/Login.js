@@ -56,9 +56,7 @@ function Login() {
 
   function submitHandler(e) {
     e.preventDefault();
-    console.log(form);
     dispatch(login(form)).then((resp) => {
-      console.log(resp);
       const { data: res } = resp;
       const { status: statusCode } = resp;
 
