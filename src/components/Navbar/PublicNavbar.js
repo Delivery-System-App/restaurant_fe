@@ -6,7 +6,7 @@ import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import LockIcon from "@material-ui/icons/Lock";
 import Navbar from "./Navbar";
 
-function PublicNavbar({ page }) {
+const PublicNavbar = ({ page }) => {
   const drawer = [
     {
       path: "/",
@@ -32,7 +32,7 @@ function PublicNavbar({ page }) {
   ];
 
   return <Navbar drawer={drawer} page={page} />;
-}
+};
 
 PublicNavbar.propTypes = {
   page: PropTypes.element,

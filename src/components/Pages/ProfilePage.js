@@ -29,7 +29,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function ImgMediaCard() {
+const ProfilePage = () => {
   UseHeading("Profile");
   const classes = useStyles();
   const state = useSelector((reduxState) => reduxState);
@@ -58,4 +58,6 @@ export default function ImgMediaCard() {
       </CardActions>
     </Card>
   );
-}
+};
+
+export default ProfilePage;

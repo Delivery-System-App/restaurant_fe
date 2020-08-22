@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCurrentUser } from "../redux/apiactions";
 import { navigate } from "hookrouter";
 import Loader from "../utils/Loader";
-function Router() {
+const Router = () => {
   const [user, setUser] = useState();
   const dispatch = useDispatch();
   const state = useSelector((reduxState) => reduxState);
@@ -29,6 +29,6 @@ function Router() {
     return <Loader />;
   }
   return user ? <AuthenticatedRouter /> : <PublicRouter />;
-}
+};
 
 export default Router;

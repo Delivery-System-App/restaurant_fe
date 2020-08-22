@@ -14,10 +14,10 @@ const routes = {
   "/register": () => <RegisterPage />,
 };
 
-function PublicRouter() {
+const PublicRouter = () => {
   const page = useRoutes(routes);
 
   return page ? <PublicNavbar page={page} /> : <NotFoundPage />;
-}
+};
 
 export default PublicRouter;

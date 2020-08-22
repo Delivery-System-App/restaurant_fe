@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Login() {
+const Login = () => {
   const dispatch = useDispatch();
   const initForm = {
     email: "",
@@ -143,6 +143,6 @@ function Login() {
       </div>
     </Container>
   );
-}
+};
 
 export default Login;

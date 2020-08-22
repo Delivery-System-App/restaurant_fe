@@ -1,10 +1,9 @@
 import React from "react";
 import useHeading from "./useHeading";
 
-function ProfilePage({ user }) {
+const DashboardPage = () => {
   useHeading("Dashboard");
+  return <div>DashboardPage</div>;
+};
 
-  return <div>Dashboard </div>;
-}
-
-export default ProfilePage;
+export default DashboardPage;

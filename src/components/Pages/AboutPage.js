@@ -1,10 +1,10 @@
 import React from "react";
 import useHeading from "./useHeading";
 
-function AboutPage() {
+const AboutPage = () => {
   useHeading("About");
 
   return <div>AboutPage</div>;
-}
+};
 
 export default AboutPage;
