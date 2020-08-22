@@ -10,10 +10,10 @@ const routes = {
   "/user/:user": ({ user }) => <ProfilePage user={user} />,
 };
 
-function AuthenticatedRouter() {
+const AuthenticatedRouter = () => {
   const page = useRoutes(routes);
 
   return page ? <AuthenticatedNavbar page={page} /> : <NotFoundPage />;
-}
+};
 
 export default AuthenticatedRouter;

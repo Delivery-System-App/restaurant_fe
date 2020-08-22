@@ -6,7 +6,7 @@ import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import Navbar from "./Navbar";
 import { navigate } from "hookrouter";
 
-function AuthenticatedNavbar({ page }) {
+const AuthenticatedNavbar = ({ page }) => {
   const drawer = [
     {
       path: "/",
@@ -31,7 +31,7 @@ function AuthenticatedNavbar({ page }) {
   ];
 
   return <Navbar drawer={drawer} page={page} />;
-}
+};
 
 AuthenticatedNavbar.propTypes = {
   page: PropTypes.element,

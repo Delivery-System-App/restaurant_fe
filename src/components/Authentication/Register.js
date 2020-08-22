@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Register() {
+const Register = () => {
   const dispatch = useDispatch();
   const initForm = {
     email: "",
@@ -183,6 +183,6 @@ function Register() {
       </div>
     </Container>
   );
-}
+};
 
 export default Register;

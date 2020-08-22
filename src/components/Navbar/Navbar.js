@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Navbar({ drawer, page }) {
+const Navbar = ({ drawer, page }) => {
   const { heading, theme } = useSelector((state) => state.appState);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -152,7 +152,7 @@ function Navbar({ drawer, page }) {
       </main>
     </div>
   );
-}
+};
 
 Navbar.propTypes = {
   drawer: PropTypes.array.isRequired,
