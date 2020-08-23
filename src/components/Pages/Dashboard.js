@@ -70,17 +70,17 @@ const DashboardPage = () => {
   return (
     <>
       <Grid item container justify="center" style={{ marginBottom: "20px" }}>
-        <Button variant="outlined" color="primary">
-          <A href="/addhotel" className={classes.link}>
-            <Link
-              style={{
-                color: "#757de8",
-                fontSize: "16px",
-                textDecoration: "none",
-              }}
-            >
-              Add New Hotel
-            </Link>
+        <Button variant="outlined" color="primary" style={{ outline: "none" }}>
+          <A
+            href="/addhotel"
+            className={classes.link}
+            style={{
+              color: "#757de8",
+              fontSize: "16px",
+              textDecoration: "none",
+            }}
+          >
+            Add New Hotel
           </A>
         </Button>
       </Grid>
@@ -113,7 +113,11 @@ const DashboardPage = () => {
                     </CardContent>
                   </CardActionArea>
                   <CardActions>
-                    <Button size="small" color="primary">
+                    <Button
+                      size="small"
+                      color="primary"
+                      style={{ outline: "none" }}
+                    >
                       Edit Hotel
                     </Button>
                   </CardActions>
