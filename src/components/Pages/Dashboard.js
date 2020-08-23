@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useHeading from "./useHeading";
 import { A } from "hookrouter";
-import { Link, Grid, Icon } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch } from "react-redux";
 import { allHotels } from "../../redux/apiActions";
@@ -116,7 +116,7 @@ const DashboardPage = () => {
                     <Button
                       size="small"
                       color="primary"
-                      style={{ outline: "none" }}
+                      style={{ outline: "none", color: "#757de8" }}
                     >
                       Edit Hotel
                     </Button>
