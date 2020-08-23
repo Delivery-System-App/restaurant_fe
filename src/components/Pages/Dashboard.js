@@ -4,7 +4,7 @@ import { A } from "hookrouter";
 import { Link, Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch } from "react-redux";
-import { allHotels } from "../../redux/apiactions";
+import { allHotels } from "../../redux/apiActions";
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),

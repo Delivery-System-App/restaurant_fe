@@ -10,7 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { A } from "hookrouter";
-import { register } from "../../redux/apiactions";
+import { register } from "../../redux/apiActions";
 import { useDispatch } from "react-redux";
 import { validateEmailAddress, validatePassword } from "../../utils/validation";
 
