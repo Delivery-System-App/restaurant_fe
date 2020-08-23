@@ -13,4 +13,13 @@ export default {
     method: "post",
     noAuth: true,
   },
+  addHotel: {
+    path: "/api/v1/restaurant/add-restaurant",
+    method: "post",
+    noAuth: false,
+  },
+  allHotels: {
+    path: "/api/v1/restaurant/userRestaurants",
+    noAuth: false,
+  },
 };

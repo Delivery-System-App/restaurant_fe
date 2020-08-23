@@ -10,3 +10,12 @@ export const getCurrentUser = () => {
 export const register = (body) => {
   return fireRequest("register", [], body);
 };
+
+export const addHotel = (body) => {
+  //  return fireRequest("addHotel", [], body, "", true);
+  return fireRequest("addHotel", [], body);
+};
+
+export const allHotels = () => {
+  return fireRequest("allHotels");
+};
