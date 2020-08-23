@@ -118,7 +118,17 @@ const DashboardPage = () => {
                       color="primary"
                       style={{ outline: "none", color: "#757de8" }}
                     >
-                      Edit Hotel
+                      <A
+                        href="/editHotel"
+                        className={classes.link}
+                        style={{
+                          color: "#757de8",
+                          fontSize: "16px",
+                          textDecoration: "none",
+                        }}
+                      >
+                        Edit Hotel
+                      </A>
                     </Button>
                   </CardActions>
                 </Card>
