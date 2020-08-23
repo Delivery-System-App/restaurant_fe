@@ -52,7 +52,7 @@ const ProfilePage = () => {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" color="primary">
+        <Button size="small" color="primary" style={{ outline: "none" }}>
           Edit profile
         </Button>
       </CardActions>
