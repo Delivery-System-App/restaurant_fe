@@ -12,6 +12,8 @@ import Container from "@material-ui/core/Container";
 import { A } from "hookrouter";
 import { register } from "../../redux/apiactions";
 import { useDispatch } from "react-redux";
+import { validateEmailAddress, validatePassword } from "../../utils/validation";
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -48,16 +50,62 @@ const Register = () => {
     type: "owner",
     location: "",
   };
+  const initError = {
+    name: "",
+    email: "",
+    password: "",
+    confirm: "",
+  };
   const [form, setForm] = useState(initForm);
+  const [error, setError] = useState(initError);
 
   function changeHandler(e) {
     const { name, value } = e.target;
+    setError(initError);
     setForm({ ...form, [name]: value });
+  }
+
+  function validInputs() {
+    let formValid = true;
+    let err = Object.assign({}, initError);
+    const { password, confirm, email } = form;
+    Object.keys(form).forEach((key) => {
+      if (form[key] === "") {
+        formValid = false;
+        err[key] = "This field is required";
+      }
+    });
+    if (password !== confirm) {
+      err["confirm"] = "Passwords do not match";
+      formValid = false;
+    }
+    if (!validateEmailAddress(email)) {
+      err["email"] = "Enter a valid email";
+      formValid = false;
+    }
+    if (password.length < 8) {
+      err["password"] = "Must be atleast 8 characters";
+      formValid = false;
+    } else if (password.length > 49) {
+      err["password"] = "Maximum 49 characters";
+      formValid = false;
+    } else if (!validatePassword(password)) {
+      err["password"] = "Needed one upper one lower and one digit";
+      formValid = false;
+    }
+
+    setError(err);
+    return formValid;
   }
 
   function submitHandler(e) {
     e.preventDefault();
-    dispatch(register(form)).then((res) => {});
+    if (validInputs()) {
+      dispatch(register(form)).then((res) => {
+        console.log(res);
+      });
+      setForm(initForm);
+    }
   }
 
   const classes = useStyles();
@@ -113,7 +161,6 @@ const Register = () => {
                 fullWidth
                 id="number"
                 label="Mobile No"
-                autoFocus
               />
             </Grid>
             <Grid item xs={12}>
@@ -127,7 +174,6 @@ const Register = () => {
                 fullWidth
                 id="location"
                 label="Location"
-                autoFocus
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -142,7 +188,8 @@ const Register = () => {
                 fullWidth
                 id="password"
                 label="Password"
-                autoFocus
+                error={error["password"]}
+                helperText={error["password"]}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -157,7 +204,8 @@ const Register = () => {
                 fullWidth
                 id="confirm"
                 label="Confirm Password"
-                autoFocus
+                error={error["confirm"]}
+                helperText={error["confirm"]}
               />
             </Grid>
           </Grid>
