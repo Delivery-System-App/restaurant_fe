@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useHeading from "./useHeading";
 import { A } from "hookrouter";
-import { Link, Grid } from "@material-ui/core";
+import { Link, Grid, Icon } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch } from "react-redux";
 import { allHotels } from "../../redux/apiActions";
@@ -69,12 +69,20 @@ const DashboardPage = () => {
 
   return (
     <>
-      <Grid item>
-        <A href="/addhotel" className={classes.link}>
-          <Link component="button" variant="body2">
-            Add New Hotel
-          </Link>
-        </A>
+      <Grid item container justify="center" style={{ marginBottom: "20px" }}>
+        <Button variant="outlined" color="primary">
+          <A href="/addhotel" className={classes.link}>
+            <Link
+              style={{
+                color: "#757de8",
+                fontSize: "16px",
+                textDecoration: "none",
+              }}
+            >
+              Add New Hotel
+            </Link>
+          </A>
+        </Button>
       </Grid>
       {Loading ? (
         <Loader />
