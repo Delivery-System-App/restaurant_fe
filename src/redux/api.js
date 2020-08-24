@@ -32,4 +32,14 @@ export default {
     method: "DELETE",
     noAuth: false,
   },
+  viewMenu: {
+    path: "/api/v1/menu/menu",
+    method: "get",
+    noAuth: false,
+  },
+  addDish: {
+    path: "/api/v1/menu",
+    method: "POST",
+    noAuth: false,
+  },
 };

@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import useHeading from "./useHeading";
 import { A } from "hookrouter";
-import { Link, Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch } from "react-redux";
 import { allHotels, deleteHotel } from "../../redux/apiActions";
 import Loader from "../../utils/Loader";
 import Confirm from "./ConfirmPage";
 import Notify from "../../utils/Notify";
-
 import {
   Card,
   CardActionArea,
   CardActions,
+  Link,
+  Grid,
   CardContent,
   Button,
   Typography,
@@ -110,28 +110,30 @@ const DashboardPage = () => {
         <Grid container className={classes.container}>
           {Data.map((value, index) => {
             return (
-              <Grid item xs={12} md={6} lg={4}>
+              <Grid key={index + 1} item xs={12} md={6} lg={4}>
                 <Card className={classes.root}>
-                  <CardActionArea>
-                    <CardMedia
-                      objectFit="contain"
-                      className={classes.media}
-                      image={noImage}
-                      title="Contemplative Reptile"
-                    />
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="h2">
-                        {value.name}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        color="textSecondary"
-                        component="p"
-                      >
-                        {value.contact}
-                      </Typography>
-                    </CardContent>
-                  </CardActionArea>
+                  <A href={`/hotel/${value.id}`}>
+                    <CardActionArea>
+                      <CardMedia
+                        objectFit="contain"
+                        className={classes.media}
+                        image={noImage}
+                        title="Contemplative Reptile"
+                      />
+                      <CardContent>
+                        <Typography gutterBottom variant="h5" component="h2">
+                          {value.name}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color="textSecondary"
+                          component="p"
+                        >
+                          {value.contact}
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                  </A>
                   <CardActions>
                     <A href={`/edithotel/${value.id}`}>
                       <Button size="small" color="primary">

@@ -15,7 +15,8 @@ const comp =
   compose;
 const store = createStore(
   allReducers /* preloadedState, */,
-  comp(applyMiddleware(thunk, logger))
+  // comp(applyMiddleware(thunk, logger))
+  comp(applyMiddleware(thunk))
 );
 
 ReactDOM.render(
