@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
   root: {
     maxWidth: 345,
+    marginTop: 15,
     margin: "0px auto",
   },
   media: {
@@ -58,14 +59,19 @@ const DashboardPage = () => {
   const dispatch = useDispatch();
   const [Loading, setLoading] = useState(false);
   useEffect(() => {
+    let mount = true;
     setLoading(true);
-    dispatch(allHotels()).then((res) => {
-      console.log(res.data.data);
-      const len = res.data.data;
-      setData(Object.values(len));
-      setLoading(false);
-    });
-  }, []);
+    if (mount) {
+      dispatch(allHotels()).then((res) => {
+        const len = res.data.data;
+        setData(Object.values(len));
+        setLoading(false);
+      });
+    }
+    return () => {
+      mount = false;
+    };
+  }, [dispatch]);
 
   return (
     <>
@@ -105,9 +111,11 @@ const DashboardPage = () => {
                     </CardContent>
                   </CardActionArea>
                   <CardActions>
-                    <Button size="small" color="primary">
-                      Edit Hotel
-                    </Button>
+                    <A href={`/edithotel/${value.id}`}>
+                      <Button size="small" color="primary">
+                        Edit Hotel
+                      </Button>
+                    </A>
                   </CardActions>
                 </Card>
               </Grid>

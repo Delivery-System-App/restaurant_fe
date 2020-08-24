@@ -19,3 +19,7 @@ export const addHotel = (body) => {
 export const allHotels = () => {
   return fireRequest("allHotels");
 };
+
+export const updateHotel = (id, body) => {
+  return fireRequest("updateHotel", [id], body);
+};

@@ -1,18 +1,12 @@
-import React, { useState } from "react";
-import { phonePreg } from "../../utils/validation";
-import { addHotel } from "../../redux/apiActions";
+import React, { useState, useEffect } from "react";
+import { updateHotel, allHotels } from "../../redux/apiActions";
 import { useDispatch } from "react-redux";
 import HotelForm from "./HotelForm";
+import { phonePreg } from "../../utils/validation";
+import Loader from "../../utils/Loader";
 
-export default function AddressForm() {
+function EditHotel({ id }) {
   const dispatch = useDispatch();
-  const Initform = {
-    name: "",
-    photos: "",
-    location: "",
-    address: "",
-    contact: "",
-  };
   const initError = {
     name: "",
     photos: "",
@@ -20,9 +14,35 @@ export default function AddressForm() {
     address: "",
     contact: "",
   };
-
-  const [Form, setForm] = useState(Initform);
+  let initForm = {
+    name: "",
+    photos: "",
+    location: "",
+    address: "",
+    contact: "",
+  };
   const [Error, setError] = useState(initError);
+  const [Form, setForm] = useState(initForm);
+  const [Loading, setLoading] = useState(false);
+  useEffect(() => {
+    setLoading(true);
+    let mount = true;
+
+    if (mount) {
+      dispatch(allHotels()).then((res) => {
+        if (res) {
+          const len = res.data.data;
+          const Resp = Object.values(len);
+          const result = Resp.filter((obj) => obj.id === id);
+          setForm(result[0]);
+        }
+        setLoading(false);
+      });
+    }
+    return () => {
+      mount = false;
+    };
+  }, [dispatch, id]);
   const setFiles = (files) => {
     setForm({ ...Form, photos: files });
   };
@@ -31,6 +51,7 @@ export default function AddressForm() {
     const { value, name } = e.target;
     setForm({ ...Form, [name]: value });
   };
+
   const optionalValues = ["photos"];
 
   const validInputs = () => {
@@ -55,8 +76,8 @@ export default function AddressForm() {
   };
   const handleSubmit = () => {
     if (validInputs()) {
+      setLoading(true);
       let formData = new FormData();
-      setForm(Initform);
       Object.keys(Form).forEach((key) => {
         if (key === "photos" && Form[key] !== "") {
           Form[key].forEach((el) => {
@@ -67,22 +88,33 @@ export default function AddressForm() {
         }
       });
 
-      dispatch(addHotel(Form)).then((res) => {
-        console.log(res);
+      dispatch(updateHotel([id + "/update-Restaurant"], Form)).then((res) => {
+        if (res.status === 200) {
+          setLoading(false);
+          alert("Success");
+        }
+        setLoading(false);
       });
     }
   };
+
   return (
     <>
-      <HotelForm
-        Form={Form}
-        handleChange={handleChange}
-        handleSubmit={handleSubmit}
-        setFiles={setFiles}
-        Error={Error}
-        type={"Add"}
-        Helper={""}
-      />
+      {Loading ? (
+        <Loader />
+      ) : (
+        <HotelForm
+          Form={Form}
+          handleChange={handleChange}
+          handleSubmit={handleSubmit}
+          setFiles={setFiles}
+          Error={Error}
+          type={"Update"}
+          Helper={"Adding new will remove previous ones"}
+        />
+      )}
     </>
   );
 }
+
+export default EditHotel;

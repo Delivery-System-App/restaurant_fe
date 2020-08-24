@@ -22,4 +22,9 @@ export default {
     path: "/api/v1/restaurant/userRestaurants",
     noAuth: false,
   },
+  updateHotel: {
+    path: "/api/v1/restaurant",
+    method: "PATCH",
+    noAuth: false,
+  },
 };
