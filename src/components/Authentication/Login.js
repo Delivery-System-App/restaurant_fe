@@ -12,6 +12,9 @@ import Container from "@material-ui/core/Container";
 import { A, navigate, useQueryParams } from "hookrouter";
 import { login } from "../../redux/apiActions";
 import { useDispatch } from "react-redux";
+import { validateEmailAddress } from "../../utils/validation";
+import Notify from "../../utils/Notify";
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -44,6 +47,8 @@ const Login = () => {
   };
   const [form, setForm] = useState(initForm);
   const [queryParams, setQueryParams] = useQueryParams();
+  const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
+
   useEffect(() => {
     setQueryParams(queryParams);
   }, []);
@@ -54,92 +59,116 @@ const Login = () => {
 
   function submitHandler(e) {
     e.preventDefault();
-    dispatch(login(form)).then((resp) => {
-      const { data: res } = resp;
-      const { status: statusCode } = resp;
+    const { email } = form;
+    if (validateEmailAddress(email)) {
+      dispatch(login(form)).then((resp) => {
+        const { data: res } = resp;
+        const { status: statusCode } = resp;
 
-      // set captha logic needed
+        // set captha logic needed
 
-      // TODO: change status code to 200 (backend was sending 201 on login)
-      if (res && statusCode === 201) {
-        localStorage.setItem("access_token", res.access_token);
-        if (queryParams && queryParams.redirect) {
-          navigate("/");
-        } else {
-          //     navigate("/");
+        // TODO: change status code to 200 (backend was sending 201 on login)
+        if (resp.data === undefined) {
+          setnotify({
+            msg: "Invalid credentials",
+            type: "error",
+            popup: !notify.popup,
+          });
         }
-        window.location.reload();
-      }
-    });
-    // localStorage.setItem(`${process.env.REACT_APP_NAME}_token`, "yay man");
-    // navigate("/");
-    //   window.location.reload();
+        if (res && statusCode === 201) {
+          localStorage.setItem("access_token", res.access_token);
+          if (queryParams && queryParams.redirect) {
+            navigate("/");
+          } else {
+            //     navigate("/");
+          }
+          window.location.reload();
+        }
+      });
+      // localStorage.setItem(`${process.env.REACT_APP_NAME}_token`, "yay man");
+      // navigate("/");
+      //   window.location.reload();
+    } else {
+      setnotify({
+        msg: "invalid email",
+        type: "error",
+        popup: true,
+      });
+    }
   }
   const classes = useStyles();
+  const closeAlert = () => {
+    setnotify({
+      popup: false,
+    });
+  };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <VpnKeyIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Login
-        </Typography>
-        <form className={classes.form} onSubmit={submitHandler}>
-          <TextField
-            onChange={changeHandler}
-            value={form.email}
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-          />
-          <TextField
-            onChange={changeHandler}
-            value={form.password}
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Sign In
-          </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <A href="/register" className={classes.link}>
-                <Link variant="body2" component="button">
-                  Don't have an account? Sign Up
+    <>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <VpnKeyIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Login
+          </Typography>
+          <form className={classes.form} onSubmit={submitHandler}>
+            <TextField
+              onChange={changeHandler}
+              value={form.email}
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+            />
+            <TextField
+              onChange={changeHandler}
+              value={form.password}
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Sign In
+            </Button>
+            <Grid container>
+              <Grid item xs>
+                <Link href="#" variant="body2">
+                  Forgot password?
                 </Link>
-              </A>
+              </Grid>
+              <Grid item>
+                <A href="/register" className={classes.link}>
+                  <Link variant="body2" component="button">
+                    Don't have an account? Sign Up
+                  </Link>
+                </A>
+              </Grid>
             </Grid>
-          </Grid>
-        </form>
-      </div>
-    </Container>
+          </form>
+        </div>
+      </Container>
+      <Notify props={notify} closeAlert={closeAlert} />
+    </>
   );
 };
 
