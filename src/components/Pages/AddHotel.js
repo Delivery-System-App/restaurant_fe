@@ -3,6 +3,7 @@ import { phonePreg } from "../../utils/validation";
 import { addHotel } from "../../redux/apiActions";
 import { useDispatch } from "react-redux";
 import HotelForm from "./HotelForm";
+import Notify from "../../utils/Notify";
 
 export default function AddressForm() {
   const dispatch = useDispatch();
@@ -23,6 +24,8 @@ export default function AddressForm() {
 
   const [Form, setForm] = useState(Initform);
   const [Error, setError] = useState(initError);
+  const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
+
   const setFiles = (files) => {
     setForm({ ...Form, photos: files });
   };
@@ -68,12 +71,32 @@ export default function AddressForm() {
       });
 
       dispatch(addHotel(Form)).then((res) => {
-        console.log(res);
+        if (res) {
+          if (res.status === 201) {
+            setnotify({
+              msg: "Hotel added",
+              type: "success",
+              popup: true,
+            });
+          } else {
+            setnotify({
+              msg: "Error",
+              type: "error",
+              popup: true,
+            });
+          }
+        }
       });
     }
   };
+  const closeAlert = () => {
+    setnotify({
+      popup: false,
+    });
+  };
   return (
     <>
+      <Notify props={notify} closeAlert={closeAlert} />
       <HotelForm
         Form={Form}
         handleChange={handleChange}

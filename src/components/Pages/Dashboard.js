@@ -4,8 +4,10 @@ import { A } from "hookrouter";
 import { Link, Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch } from "react-redux";
-import { allHotels } from "../../redux/apiActions";
+import { allHotels, deleteHotel } from "../../redux/apiActions";
 import Loader from "../../utils/Loader";
+import Confirm from "./ConfirmPage";
+
 import {
   Card,
   CardActionArea,
@@ -73,6 +75,12 @@ const DashboardPage = () => {
     };
   }, [dispatch]);
 
+  const handleConfirm = (e) => {
+    dispatch(deleteHotel([e])).then((res) => {
+      console.log(res);
+    });
+  };
+
   return (
     <>
       <Grid item>
@@ -116,6 +124,14 @@ const DashboardPage = () => {
                         Edit Hotel
                       </Button>
                     </A>
+                    <Confirm
+                      handleConfirm={handleConfirm}
+                      cancelDialog={"Cancel"}
+                      confirmDialog={"Delete"}
+                      buttonText={"Delete"}
+                      id={value.id}
+                      sentence={`You are about to delete hotel ${value.name} ?`}
+                    />
                   </CardActions>
                 </Card>
               </Grid>

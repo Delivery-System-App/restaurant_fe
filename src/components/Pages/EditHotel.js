@@ -4,6 +4,8 @@ import { useDispatch } from "react-redux";
 import HotelForm from "./HotelForm";
 import { phonePreg } from "../../utils/validation";
 import Loader from "../../utils/Loader";
+import Notify from "../../utils/Notify";
+import { Button } from "@material-ui/core";
 
 function EditHotel({ id }) {
   const dispatch = useDispatch();
@@ -24,6 +26,7 @@ function EditHotel({ id }) {
   const [Error, setError] = useState(initError);
   const [Form, setForm] = useState(initForm);
   const [Loading, setLoading] = useState(false);
+  const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
   useEffect(() => {
     setLoading(true);
     let mount = true;
@@ -47,6 +50,9 @@ function EditHotel({ id }) {
     setForm({ ...Form, photos: files });
   };
   const handleChange = (e) => {
+    setnotify({
+      popup: false,
+    });
     setError(initError);
     const { value, name } = e.target;
     setForm({ ...Form, [name]: value });
@@ -91,11 +97,20 @@ function EditHotel({ id }) {
       dispatch(updateHotel([id + "/update-Restaurant"], Form)).then((res) => {
         if (res.status === 200) {
           setLoading(false);
-          alert("Success");
+          setnotify({
+            msg: "Hotel updated",
+            type: "success",
+            popup: true,
+          });
         }
         setLoading(false);
       });
     }
+  };
+  const closeAlert = () => {
+    setnotify({
+      popup: false,
+    });
   };
 
   return (
@@ -103,15 +118,18 @@ function EditHotel({ id }) {
       {Loading ? (
         <Loader />
       ) : (
-        <HotelForm
-          Form={Form}
-          handleChange={handleChange}
-          handleSubmit={handleSubmit}
-          setFiles={setFiles}
-          Error={Error}
-          type={"Update"}
-          Helper={"Adding new will remove previous ones"}
-        />
+        <>
+          <Notify props={notify} closeAlert={closeAlert} />
+          <HotelForm
+            Form={Form}
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+            setFiles={setFiles}
+            Error={Error}
+            type={"Update"}
+            Helper={"Adding new will remove previous ones"}
+          />
+        </>
       )}
     </>
   );
