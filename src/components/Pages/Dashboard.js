@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { allHotels, deleteHotel } from "../../redux/apiActions";
 import Loader from "../../utils/Loader";
 import Confirm from "./ConfirmPage";
+import Notify from "../../utils/Notify";
 
 import {
   Card,
@@ -60,6 +61,8 @@ const DashboardPage = () => {
   const [Data, setData] = useState([]);
   const dispatch = useDispatch();
   const [Loading, setLoading] = useState(false);
+  const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
+
   useEffect(() => {
     let mount = true;
     setLoading(true);
@@ -77,7 +80,18 @@ const DashboardPage = () => {
 
   const handleConfirm = (e) => {
     dispatch(deleteHotel([e])).then((res) => {
-      console.log(res);
+      if (res.status === 200) {
+        setnotify({
+          msg: "Hotel Deleted",
+          type: "success",
+          popup: true,
+        });
+      }
+    });
+  };
+  const closeAlert = () => {
+    setnotify({
+      popup: false,
     });
   };
 
@@ -139,6 +153,7 @@ const DashboardPage = () => {
           })}
         </Grid>
       )}
+      <Notify props={notify} closeAlert={closeAlert} />
     </>
   );
 };
