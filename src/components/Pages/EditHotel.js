@@ -5,7 +5,6 @@ import HotelForm from "./HotelForm";
 import { phonePreg } from "../../utils/validation";
 import Loader from "../../utils/Loader";
 import Notify from "../../utils/Notify";
-import { Button } from "@material-ui/core";
 
 function EditHotel({ id }) {
   const dispatch = useDispatch();
