@@ -3,7 +3,7 @@ import PublicRouter from "./PublicRouter";
 import AuthenticatedRouter from "./AuthenticatedRouter";
 import { useAbortableEffect } from "../utils/UseAbortableEffect";
 import { useDispatch, useSelector } from "react-redux";
-import { getCurrentUser } from "../redux/apiActions";
+import { getCurrentUser } from "../redux/apiAction";
 import { navigate } from "hookrouter";
 import Loader from "../utils/Loader";
 const Router = () => {
