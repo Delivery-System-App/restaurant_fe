@@ -133,6 +133,7 @@ const Navbar = ({ drawer, page }) => {
               aria-label="Dark mode toggle"
               color="inherit"
               onClick={handleThemeChange}
+              style={{ outline: "none" }}
             >
               <Brightness4Icon />
             </IconButton>
