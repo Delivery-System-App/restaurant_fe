@@ -22,4 +22,24 @@ export default {
     path: "/api/v1/restaurant/userRestaurants",
     noAuth: false,
   },
+  updateHotel: {
+    path: "/api/v1/restaurant",
+    method: "PATCH",
+    noAuth: false,
+  },
+  deleteHotel: {
+    path: "/api/v1/restaurant",
+    method: "DELETE",
+    noAuth: false,
+  },
+  viewMenu: {
+    path: "/api/v1/menu/menu",
+    method: "get",
+    noAuth: false,
+  },
+  addDish: {
+    path: "/api/v1/menu",
+    method: "POST",
+    noAuth: false,
+  },
 };

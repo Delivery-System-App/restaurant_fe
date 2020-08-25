@@ -13,6 +13,7 @@ import { A } from "hookrouter";
 import { register } from "../../redux/apiActions";
 import { useDispatch } from "react-redux";
 import { validateEmailAddress, validatePassword } from "../../utils/validation";
+import Notify from "../../utils/Notify";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -58,6 +59,7 @@ const Register = () => {
   };
   const [form, setForm] = useState(initForm);
   const [error, setError] = useState(initError);
+  const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
 
   function changeHandler(e) {
     const { name, value } = e.target;
@@ -98,139 +100,161 @@ const Register = () => {
     return formValid;
   }
 
+  const closeAlert = () => {
+    setnotify({
+      popup: false,
+    });
+  };
+
   function submitHandler(e) {
     e.preventDefault();
     if (validInputs()) {
-      console.log(form);
       dispatch(register(form)).then((res) => {
-        console.log(res);
+        if (res) {
+          if (res.data.success === true) {
+            setnotify({
+              msg: "Regsitration success",
+              type: "success",
+              popup: true,
+            });
+            setForm(initForm);
+          } else {
+            setnotify({
+              msg: "Error in registering",
+              type: "error",
+              popup: true,
+            });
+          }
+        }
       });
-      setForm(initForm);
     }
   }
 
   const classes = useStyles();
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Register
-        </Typography>
-        <form className={classes.form} onSubmit={submitHandler}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                onChange={changeHandler}
-                autoComplete="fname"
-                name="name"
-                variant="outlined"
-                value={form.name}
-                required
-                fullWidth
-                id="name"
-                label="Name"
-                autoFocus
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                onChange={changeHandler}
-                variant="outlined"
-                value={form.email}
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                type="email"
-                autoComplete="email"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                onChange={changeHandler}
-                autoComplete="number"
-                name="number"
-                variant="outlined"
-                value={form.number}
-                required
-                fullWidth
-                id="number"
-                label="Mobile No"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                onChange={changeHandler}
-                autoComplete="location"
-                name="location"
-                variant="outlined"
-                value={form.location}
-                required
-                fullWidth
-                id="location"
-                label="Location"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                onChange={changeHandler}
-                autoComplete="password"
-                name="password"
-                variant="outlined"
-                value={form.password}
-                required
-                type="password"
-                fullWidth
-                id="password"
-                label="Password"
-                error={error["password"]}
-                helperText={error["password"]}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                onChange={changeHandler}
-                autoComplete="confirm"
-                name="confirm"
-                variant="outlined"
-                value={form.confirm}
-                required
-                type="password"
-                fullWidth
-                id="confirm"
-                label="Confirm Password"
-                error={error["confirm"]}
-                helperText={error["confirm"]}
-              />
-            </Grid>
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
+    <>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
             Register
-          </Button>
-          <Grid container justify="flex-end">
-            <Grid item>
-              <A href="/login" className={classes.link}>
-                <Link component="button" variant="body2">
-                  Already have an account? Sign in
-                </Link>
-              </A>
+          </Typography>
+          <form className={classes.form} onSubmit={submitHandler}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  onChange={changeHandler}
+                  autoComplete="fname"
+                  name="name"
+                  variant="outlined"
+                  value={form.name}
+                  required
+                  fullWidth
+                  id="name"
+                  label="Name"
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  onChange={changeHandler}
+                  variant="outlined"
+                  value={form.email}
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  onChange={changeHandler}
+                  autoComplete="number"
+                  name="number"
+                  variant="outlined"
+                  value={form.number}
+                  required
+                  fullWidth
+                  id="number"
+                  label="Mobile No"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  onChange={changeHandler}
+                  autoComplete="location"
+                  name="location"
+                  variant="outlined"
+                  value={form.location}
+                  required
+                  fullWidth
+                  id="location"
+                  label="Location"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  onChange={changeHandler}
+                  autoComplete="password"
+                  name="password"
+                  variant="outlined"
+                  value={form.password}
+                  required
+                  type="password"
+                  fullWidth
+                  id="password"
+                  label="Password"
+                  error={error["password"]}
+                  helperText={error["password"]}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  onChange={changeHandler}
+                  autoComplete="confirm"
+                  name="confirm"
+                  variant="outlined"
+                  value={form.confirm}
+                  required
+                  type="password"
+                  fullWidth
+                  id="confirm"
+                  label="Confirm Password"
+                  error={error["confirm"]}
+                  helperText={error["confirm"]}
+                />
+              </Grid>
             </Grid>
-          </Grid>
-        </form>
-      </div>
-    </Container>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Register
+            </Button>
+            <Grid container justify="flex-end">
+              <Grid item>
+                <A href="/login" className={classes.link}>
+                  <Link component="button" variant="body2">
+                    Already have an account? Sign in
+                  </Link>
+                </A>
+              </Grid>
+            </Grid>
+          </form>
+        </div>
+      </Container>
+      <Notify props={notify} closeAlert={closeAlert} />
+    </>
   );
 };
 

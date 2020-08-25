@@ -7,7 +7,6 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import allReducers from "./redux/reducers/";
 import thunk from "redux-thunk";
-import logger from "redux-logger";
 
 const comp =
   (window.__REDUX_DEVTOOLS_EXTENSION__ &&
@@ -15,7 +14,8 @@ const comp =
   compose;
 const store = createStore(
   allReducers /* preloadedState, */,
-  comp(applyMiddleware(thunk, logger))
+  // comp(applyMiddleware(thunk, logger))
+  comp(applyMiddleware(thunk))
 );
 
 ReactDOM.render(

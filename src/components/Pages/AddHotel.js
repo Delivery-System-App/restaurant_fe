@@ -1,28 +1,13 @@
 import React, { useState } from "react";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
-import { Button } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { Card } from "@material-ui/core";
-import Uploader from "./UploadImage";
 import { phonePreg } from "../../utils/validation";
 import { addHotel } from "../../redux/apiActions";
 import { useDispatch } from "react-redux";
+import HotelForm from "./HotelForm";
+import Notify from "../../utils/Notify";
+import useHeading from "./useHeading";
 
-const useStyles = makeStyles((theme) => ({
-  form: {
-    maxWidth: "500px",
-    margin: "0px auto",
-    padding: "20px 30px 20px 30px",
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
-
-export default function AddressForm() {
-  const classes = useStyles();
+export default function AddHotel() {
+  useHeading("Add Hotel");
   const dispatch = useDispatch();
   const Initform = {
     name: "",
@@ -41,6 +26,8 @@ export default function AddressForm() {
 
   const [Form, setForm] = useState(Initform);
   const [Error, setError] = useState(initError);
+  const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
+
   const setFiles = (files) => {
     setForm({ ...Form, photos: files });
   };
@@ -86,89 +73,41 @@ export default function AddressForm() {
       });
 
       dispatch(addHotel(Form)).then((res) => {
-        console.log(res);
+        if (res) {
+          if (res.status === 201) {
+            setnotify({
+              msg: "Hotel added",
+              type: "success",
+              popup: true,
+            });
+          } else {
+            setnotify({
+              msg: "Error",
+              type: "error",
+              popup: true,
+            });
+          }
+        }
       });
     }
   };
+  const closeAlert = () => {
+    setnotify({
+      popup: false,
+    });
+  };
   return (
-    <Card className={classes.form}>
-      <Typography variant="h6" gutterBottom>
-        Add Hotel Details
-      </Typography>
-      <form className={classes.form}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <TextField
-              required
-              id="name"
-              name="name"
-              value={Form.name}
-              onChange={handleChange}
-              label="Hotel name"
-              fullWidth
-              autoComplete="hotelname"
-              error={Error["name"]}
-              helperText={Error["name"]}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              required
-              id="address"
-              name="address"
-              value={Form.address}
-              onChange={handleChange}
-              label="Address"
-              error={Error["address"]}
-              helperText={Error["address"]}
-              fullWidth
-              autoComplete="address"
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              required
-              id="contact"
-              name="contact"
-              onChange={handleChange}
-              label="Mobile Number"
-              value={Form.contact}
-              fullWidth
-              autoComplete="number"
-              error={Error["contact"]}
-              helperText={Error["contact"]}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Uploader setFiles={setFiles} formLoading={false} />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              required
-              id="location"
-              name="location"
-              label="Location"
-              value={Form.location}
-              fullWidth
-              onChange={handleChange}
-              autoComplete="Location"
-              error={Error["location"]}
-              helperText={Error["location"]}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Button
-              onClick={handleSubmit}
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-            >
-              Add Hotel
-            </Button>
-          </Grid>
-        </Grid>
-      </form>
-    </Card>
+    <>
+      <Notify props={notify} closeAlert={closeAlert} />
+      <HotelForm
+        Form={Form}
+        handleChange={handleChange}
+        handleSubmit={handleSubmit}
+        setFiles={setFiles}
+        Error={Error}
+        type={"Add"}
+        Helper={""}
+      />
+    </>
   );
 }
