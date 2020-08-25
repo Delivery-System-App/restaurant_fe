@@ -10,7 +10,6 @@ import {
   Button,
   makeStyles,
 } from "@material-ui/core";
-import { A } from "hookrouter";
 import Confirm from "./ConfirmPage";
 
 const useStyles = makeStyles((theme) => ({
