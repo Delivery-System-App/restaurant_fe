@@ -55,7 +55,7 @@ export default function ConfirmPage({
           <Button onClick={handleClose} color="primary">
             {cancelDialog}
           </Button>
-          <Button onClick={Confirmed} color="primary" autoFocus>
+          <Button onClick={Confirmed} color="secondary" autoFocus>
             {confirmDialog}
           </Button>
         </DialogActions>

@@ -61,7 +61,7 @@ const DashboardPage = () => {
   const dispatch = useDispatch();
   const [Loading, setLoading] = useState(false);
   const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
-
+  const [reRender, setreRender] = useState(Math.random());
   useEffect(() => {
     let mount = true;
     setLoading(true);
@@ -75,9 +75,10 @@ const DashboardPage = () => {
     return () => {
       mount = false;
     };
-  }, [dispatch]);
+  }, [dispatch, reRender]);
 
   const handleConfirm = (e) => {
+    setLoading(true);
     dispatch(deleteHotel([e])).then((res) => {
       if (res.status === 200) {
         setnotify({
@@ -85,6 +86,7 @@ const DashboardPage = () => {
           type: "success",
           popup: true,
         });
+        setreRender(Math.random());
       }
     });
   };

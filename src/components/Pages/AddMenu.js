@@ -166,7 +166,7 @@ const AddMenu = ({ id }) => {
                 color="primary"
                 className={classes.submit}
               >
-                Hotel
+                Add Item
               </Button>
             </Grid>
           </Grid>
