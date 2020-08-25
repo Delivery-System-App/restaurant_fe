@@ -12,8 +12,6 @@ import {
   Card,
   CardActionArea,
   CardActions,
-  Link,
-  Grid,
   CardContent,
   Button,
   Typography,
@@ -145,7 +143,11 @@ const DashboardPage = () => {
                   </A>
                   <CardActions>
                     <A href={`/edithotel/${value.id}`}>
-                      <Button size="small" color="primary">
+                      <Button
+                        size="small"
+                        color="primary"
+                        style={{ outline: "none" }}
+                      >
                         Edit Hotel
                       </Button>
                     </A>
