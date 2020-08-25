@@ -42,4 +42,9 @@ export default {
     method: "POST",
     noAuth: false,
   },
+  restaurantDishes: {
+    path: "/api/v1/menu/redishes",
+    method: "get",
+    noAuth: false,
+  },
 };

@@ -8,6 +8,7 @@ import AddHotel from "../components/Pages/AddHotel";
 import EditHotel from "../components/Pages/EditHotel";
 import ViewMenu from "../components/Pages/ViewMenu";
 import AddMenu from "../components/Pages/AddMenu";
+import ListMenuItems from "../components/Pages/ListMenuItems";
 
 const routes = {
   "/": () => <Dashboard />,
@@ -16,6 +17,7 @@ const routes = {
   "/edithotel/:id": ({ id }) => <EditHotel id={id} />,
   "/hotel/:id": ({ id }) => <ViewMenu id={id} />,
   "/hotel/:id/addmenu": ({ id }) => <AddMenu id={id} />,
+  "/hotel/:id/listmenuitems": ({ id }) => <ListMenuItems id={id} />,
 };
 
 const AuthenticatedRouter = () => {

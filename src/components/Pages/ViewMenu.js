@@ -2,7 +2,16 @@ import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { viewMenu } from "../../redux/apiActions";
 import { A } from "hookrouter";
-import { Link, Grid } from "@material-ui/core";
+import Confirm from "./ConfirmPage";
+import {
+  Grid,
+  Button,
+  Card,
+  Typography,
+  CardContent,
+  CardActions,
+  CardActionArea,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -37,29 +46,78 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer",
   },
   container: {
-    marginTop: "10px",
+    marginTop: "20px",
   },
 }));
 
 const ViewMenu = ({ id }) => {
+  const [Data, setData] = useState([]);
   const classes = useStyles();
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(viewMenu([id])).then((res) => {
-      console.log(res);
       if (res.data) {
-        console.log(res.data);
+        const len = res.data.data;
+        setData(Object.values(len));
       }
     });
   }, [id, dispatch]);
   return (
     <div>
-      <Grid item>
-        <A href={`/hotel/${id}/addmenu`} className={classes.link}>
-          <Link component="button" variant="body2">
+      <Grid item container justify="center" style={{ marginBottom: "20px" }}>
+        <Button variant="outlined" color="primary" style={{ outline: "none" }}>
+          <A
+            href={`/hotel/${id}/addmenu`}
+            className={classes.link}
+            style={{
+              color: "#757de8",
+              fontSize: "16px",
+              textDecoration: "none",
+            }}
+          >
             Add Menu
-          </Link>
-        </A>
+          </A>
+        </Button>
+        <Grid container className={classes.container}>
+          {Data.map((value) => {
+            return (
+              <Grid key={value.id} item xs={12} md={6} lg={4}>
+                <Card className={classes.root}>
+                  <A href={`/hotel/${value.id}/listmenuitems`}>
+                    <CardActionArea>
+                      <CardContent>
+                        <Typography gutterBottom variant="h5" component="h2">
+                          {value.name}
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                  </A>
+                  <CardActions>
+                    {/* <A href={`/edithotel/${value.id}`}> */}
+                    <Button
+                      size="small"
+                      color="primary"
+                      style={{ outline: "none" }}
+                    >
+                      View Menu
+                    </Button>
+                    {/* </A> */}
+                    <Confirm
+                      handleConfirm={() => {
+                        console.log("hello");
+                      }}
+                      cancelDialog={"Cancel"}
+                      confirmDialog={"Delete"}
+                      buttonText={"Delete"}
+                      id={value.id}
+                      sentence={`You are about to delete the full menu list ${value.name} ?`}
+                    />
+                  </CardActions>
+                </Card>
+              </Grid>
+            );
+          })}
+        </Grid>
       </Grid>
     </div>
   );
