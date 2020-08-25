@@ -9,6 +9,7 @@ import Uploader from "./UploadImage";
 import { addDish } from "../../redux/apiActions";
 import { useDispatch } from "react-redux";
 import Notify from "../../utils/Notify";
+import useHeading from "./useHeading";
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -21,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const AddMenu = ({ id }) => {
+  useHeading("Add Menu");
   const classes = useStyles();
   const dispatch = useDispatch();
   const Initform = {
@@ -104,7 +106,7 @@ const AddMenu = ({ id }) => {
     <>
       <Card className={classes.form}>
         <Typography variant="h6" gutterBottom>
-          Add Menu {id}
+          Add Menu
         </Typography>
         <form className={classes.form}>
           <Grid container spacing={3}>

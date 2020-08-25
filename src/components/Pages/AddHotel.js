@@ -4,8 +4,10 @@ import { addHotel } from "../../redux/apiActions";
 import { useDispatch } from "react-redux";
 import HotelForm from "./HotelForm";
 import Notify from "../../utils/Notify";
+import useHeading from "./useHeading";
 
-export default function AddressForm() {
+export default function AddHotel() {
+  useHeading("Add Hotel");
   const dispatch = useDispatch();
   const Initform = {
     name: "",
