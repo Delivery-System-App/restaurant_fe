@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { viewMenu } from "../../redux/apiActions";
 import { A } from "hookrouter";
 import Confirm from "./ConfirmPage";
+import Loader from "../../utils/Loader";
 import {
   Grid,
   Button,
@@ -52,74 +53,96 @@ const useStyles = makeStyles((theme) => ({
 
 const ViewMenu = ({ id }) => {
   const [Data, setData] = useState([]);
+  const [Loading, setLoading] = useState(false);
   const classes = useStyles();
   const dispatch = useDispatch();
   useEffect(() => {
+    setLoading(true);
     dispatch(viewMenu([id])).then((res) => {
       if (res.data) {
         const len = res.data.data;
         setData(Object.values(len));
       }
+      setLoading(false);
     });
   }, [id, dispatch]);
   return (
-    <div>
-      <Grid item container justify="center" style={{ marginBottom: "20px" }}>
-        <Button variant="outlined" color="primary" style={{ outline: "none" }}>
-          <A
-            href={`/hotel/${id}/addmenu`}
-            className={classes.link}
-            style={{
-              color: "#757de8",
-              fontSize: "16px",
-              textDecoration: "none",
-            }}
+    <>
+      {Loading ? (
+        <Loader />
+      ) : (
+        <div>
+          <Grid
+            item
+            container
+            justify="center"
+            style={{ marginBottom: "20px" }}
           >
-            Add Menu
-          </A>
-        </Button>
-        <Grid container className={classes.container}>
-          {Data.map((value) => {
-            return (
-              <Grid key={value.id} item xs={12} md={6} lg={4}>
-                <Card className={classes.root}>
-                  <A href={`/hotel/${value.id}/listmenuitems`}>
-                    <CardActionArea>
-                      <CardContent>
-                        <Typography gutterBottom variant="h5" component="h2">
-                          {value.name}
-                        </Typography>
-                      </CardContent>
-                    </CardActionArea>
-                  </A>
-                  <CardActions>
-                    {/* <A href={`/edithotel/${value.id}`}> */}
-                    <Button
-                      size="small"
-                      color="primary"
-                      style={{ outline: "none" }}
-                    >
-                      View Menu
-                    </Button>
-                    {/* </A> */}
-                    <Confirm
-                      handleConfirm={() => {
-                        console.log("hello");
-                      }}
-                      cancelDialog={"Cancel"}
-                      confirmDialog={"Delete"}
-                      buttonText={"Delete"}
-                      id={value.id}
-                      sentence={`You are about to delete the full menu list ${value.name} ?`}
-                    />
-                  </CardActions>
-                </Card>
-              </Grid>
-            );
-          })}
-        </Grid>
-      </Grid>
-    </div>
+            <Button
+              variant="outlined"
+              color="primary"
+              style={{ outline: "none" }}
+            >
+              <A
+                href={`/hotel/${id}/addmenu`}
+                className={classes.link}
+                style={{
+                  color: "#757de8",
+                  fontSize: "16px",
+                  textDecoration: "none",
+                }}
+              >
+                Add Menu
+              </A>
+            </Button>
+            <Grid container className={classes.container}>
+              {Data.map((value) => {
+                return (
+                  <Grid key={value.id} item xs={12} md={6} lg={4}>
+                    <Card className={classes.root}>
+                      <A href={`/hotel/${value.id}/listmenuitems`}>
+                        <CardActionArea>
+                          <CardContent>
+                            <Typography
+                              gutterBottom
+                              variant="h5"
+                              component="h2"
+                            >
+                              {value.name}
+                            </Typography>
+                          </CardContent>
+                        </CardActionArea>
+                      </A>
+                      <CardActions>
+                        {/* <A href={`/edithotel/${value.id}`}> */}
+                        <Button
+                          size="small"
+                          color="primary"
+                          style={{ outline: "none" }}
+                        >
+                          View Menu
+                        </Button>
+                        {/* </A> */}
+                        <Confirm
+                          handleConfirm={(e) => {
+                            console.log(e);
+                          }}
+                          cancelDialog={"Cancel"}
+                          confirmDialog={"Delete"}
+                          buttonText={"Delete"}
+                          id={value.id}
+                          sentence={`You are about to delete the full menu list ${value.name} ?`}
+                        />
+                      </CardActions>
+                    </Card>
+                  </Grid>
+                );
+              })}
+            </Grid>
+          </Grid>
+        </div>
+      )}
+    </>
   );
 };
 
