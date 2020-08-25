@@ -118,55 +118,53 @@ const DashboardPage = () => {
       ) : (
         <Grid container className={classes.container}>
           {Data.map((value, index) => {
-            if (value.status === "ACTIVE") {
-              return (
-                <Grid key={index + 1} item xs={12} md={6} lg={4}>
-                  <Card className={classes.root}>
-                    <A href={`/hotel/${value.id}`}>
-                      <CardActionArea>
-                        <CardMedia
-                          objectFit="contain"
-                          className={classes.media}
-                          image={noImage}
-                          title="Contemplative Reptile"
-                        />
-                        <CardContent>
-                          <Typography gutterBottom variant="h5" component="h2">
-                            {value.name}
-                          </Typography>
-                          <Typography
-                            variant="body2"
-                            color="textSecondary"
-                            component="p"
-                          >
-                            {value.contact}
-                          </Typography>
-                        </CardContent>
-                      </CardActionArea>
-                    </A>
-                    <CardActions>
-                      <A href={`/edithotel/${value.id}`}>
-                        <Button
-                          size="small"
-                          color="primary"
-                          style={{ outline: "none" }}
-                        >
-                          Edit Hotel
-                        </Button>
-                      </A>
-                      <Confirm
-                        handleConfirm={handleConfirm}
-                        cancelDialog={"Cancel"}
-                        confirmDialog={"Delete"}
-                        buttonText={"Delete"}
-                        id={value.id}
-                        sentence={`You are about to delete hotel ${value.name} ?`}
+            return (
+              <Grid key={index + 1} item xs={12} md={6} lg={4}>
+                <Card className={classes.root}>
+                  <A href={`/hotel/${value.id}`}>
+                    <CardActionArea>
+                      <CardMedia
+                        objectFit="contain"
+                        className={classes.media}
+                        image={noImage}
+                        title="Contemplative Reptile"
                       />
-                    </CardActions>
-                  </Card>
-                </Grid>
-              );
-            }
+                      <CardContent>
+                        <Typography gutterBottom variant="h5" component="h2">
+                          {value.name}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color="textSecondary"
+                          component="p"
+                        >
+                          {value.contact}
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                  </A>
+                  <CardActions>
+                    <A href={`/edithotel/${value.id}`}>
+                      <Button
+                        size="small"
+                        color="primary"
+                        style={{ outline: "none" }}
+                      >
+                        Edit Hotel
+                      </Button>
+                    </A>
+                    <Confirm
+                      handleConfirm={handleConfirm}
+                      cancelDialog={"Cancel"}
+                      confirmDialog={"Delete"}
+                      buttonText={"Delete"}
+                      id={value.id}
+                      sentence={`You are about to delete hotel ${value.name} ?`}
+                    />
+                  </CardActions>
+                </Card>
+              </Grid>
+            );
           })}
         </Grid>
       )}
