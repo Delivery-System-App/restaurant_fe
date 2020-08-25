@@ -8,6 +8,7 @@ import { Card } from "@material-ui/core";
 import Uploader from "./UploadImage";
 import { addDish } from "../../redux/apiActions";
 import { useDispatch } from "react-redux";
+import Notify from "../../utils/Notify";
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -37,6 +38,8 @@ const AddMenu = ({ id }) => {
 
   const [Form, setForm] = useState(Initform);
   const [Error, setError] = useState(initError);
+  const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
+
   const setFiles = (files) => {
     setForm({ ...Form, photos: files });
   };
@@ -79,78 +82,96 @@ const AddMenu = ({ id }) => {
       console.log(Result);
       dispatch(addDish([id], Result)).then((res) => {
         console.log(res);
+        if (res) {
+          if (res.status === 201) {
+            setnotify({
+              msg: "Added dish",
+              type: "success",
+              popup: true,
+            });
+          }
+          setForm(Initform);
+        }
       });
     }
   };
+  const closeAlert = () => {
+    setnotify({
+      popup: false,
+    });
+  };
   return (
-    <Card className={classes.form}>
-      <Typography variant="h6" gutterBottom>
-        Add Menu {id}
-      </Typography>
-      <form className={classes.form}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <TextField
-              required
-              id="name"
-              name="name"
-              value={Form.name}
-              onChange={handleChange}
-              label="Menu name"
-              fullWidth
-              autoComplete="name"
-              error={Error["name"]}
-              helperText={Error["name"]}
-            />
+    <>
+      <Card className={classes.form}>
+        <Typography variant="h6" gutterBottom>
+          Add Menu {id}
+        </Typography>
+        <form className={classes.form}>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <TextField
+                required
+                id="name"
+                name="name"
+                value={Form.name}
+                onChange={handleChange}
+                label="Menu name"
+                fullWidth
+                autoComplete="name"
+                error={Error["name"]}
+                helperText={Error["name"]}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                id="dishname"
+                name="dishname"
+                onChange={handleChange}
+                label="Dish name"
+                value={Form.dishname}
+                fullWidth
+                autoComplete="dishname"
+                error={Error["dishname"]}
+                helperText={Error["dishname"]}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                label="Price"
+                type="text"
+                id="price"
+                name="price"
+                value={Form.price}
+                onChange={handleChange}
+                error={Error["price"]}
+                helperText={Error["price"]}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">₹</InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Uploader setFiles={setFiles} formLoading={false} />
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                onClick={handleSubmit}
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+              >
+                Hotel
+              </Button>
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <TextField
-              required
-              id="dishname"
-              name="dishname"
-              onChange={handleChange}
-              label="Dish name"
-              value={Form.dishname}
-              fullWidth
-              autoComplete="dishname"
-              error={Error["dishname"]}
-              helperText={Error["dishname"]}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              label="Price"
-              type="text"
-              id="price"
-              name="price"
-              value={Form.price}
-              onChange={handleChange}
-              error={Error["price"]}
-              helperText={Error["price"]}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">₹</InputAdornment>
-                ),
-              }}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Uploader setFiles={setFiles} formLoading={false} />
-          </Grid>
-          <Grid item xs={12}>
-            <Button
-              onClick={handleSubmit}
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-            >
-              Hotel
-            </Button>
-          </Grid>
-        </Grid>
-      </form>
-    </Card>
+        </form>
+      </Card>
+      <Notify props={notify} closeAlert={closeAlert} />
+    </>
   );
 };
 
