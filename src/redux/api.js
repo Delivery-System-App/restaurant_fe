@@ -47,4 +47,9 @@ export default {
     method: "get",
     noAuth: false,
   },
+  updateDish: {
+    path: "/api/v1/menu/updateDish",
+    method: "put",
+    noAuth: false,
+  },
 };

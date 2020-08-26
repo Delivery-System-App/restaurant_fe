@@ -14,6 +14,7 @@ import Confirm from "./ConfirmPage";
 import { useDispatch } from "react-redux";
 import { menuItems } from "../../redux/apiActions";
 import Loader from "../../utils/Loader";
+import { A } from "hookrouter";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -51,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ListMenuItems = ({ id }) => {
+const ListMenuItems = ({ resid, id }) => {
   //getting menuid as props
   const classes = useStyles();
   const [Data, setData] = useState([]);
@@ -107,15 +108,15 @@ const ListMenuItems = ({ id }) => {
                   </CardActionArea>
                   {/* </A> */}
                   <CardActions>
-                    {/* <A href={`/edithotel/${value.id}`}> */}
-                    <Button
-                      size="small"
-                      color="primary"
-                      style={{ outline: "none" }}
-                    >
-                      Edit Item
-                    </Button>
-                    {/* </A> */}
+                    <A href={`/editDish/${resid}/${id}/${value.dishId}`}>
+                      <Button
+                        size="small"
+                        color="primary"
+                        style={{ outline: "none" }}
+                      >
+                        Edit Item
+                      </Button>
+                    </A>
                     <Confirm
                       handleConfirm={() => {
                         console.log("ok");
