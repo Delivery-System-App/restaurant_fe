@@ -6,12 +6,14 @@ import LoginPage from "../components/Pages/LoginPage";
 import RegisterPage from "../components/Pages/RegisterPage";
 import NotFoundPage from "../components/Pages/NotFoundPage";
 import PublicNavbar from "../components/Navbar/PublicNavbar";
+import ErrorPage from "../components/Pages/ErrorPage";
 
 const routes = {
   "/": () => <HomePage />,
   "/about": () => <AboutPage />,
   "/login": () => <LoginPage />,
   "/register": () => <RegisterPage />,
+  "/error": () => <ErrorPage />,
 };
 
 const PublicRouter = () => {
