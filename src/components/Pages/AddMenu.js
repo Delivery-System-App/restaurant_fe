@@ -44,7 +44,6 @@ const AddMenu = ({ id }) => {
   function addDishes(e) {
     e.preventDefault();
     if (validateForm()) {
-      console.log(Form);
       setPreviousDishes([...previousDishes, { ...Form }]);
       setnotify({
         msg: "Added dish",
