@@ -15,6 +15,7 @@ import { useDispatch } from "react-redux";
 import { menuItems } from "../../redux/apiActions";
 import Loader from "../../utils/Loader";
 import { A } from "hookrouter";
+import Carousal from "./Carousal";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -34,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
   media: {
     height: 180,
+    marginTop: "10px",
   },
   form: {
     width: "100%",
@@ -64,7 +66,6 @@ const ListMenuItems = ({ resid, id }) => {
     if (mount) {
       dispatch(menuItems([id])).then((res) => {
         const len = res.data.data;
-        console.log(len);
         setData(Object.values(len));
         setLoading(false);
       });
@@ -75,6 +76,10 @@ const ListMenuItems = ({ resid, id }) => {
   }, [id, dispatch]);
 
   const noImage = require("../../assets/images/noimage.jpg");
+  const Images = [
+    "https://us.123rf.com/450wm/indianfoodimages/indianfoodimages1808/indianfoodimages180800087/106450537-group-of-south-indian-food-like-masala-dosa-uttapam-idli-idly-wada-vada-sambar-appam-semolina-halwa-.jpg?ver=6",
+    noImage,
+  ];
   return (
     <>
       {Loading ? (
@@ -86,29 +91,28 @@ const ListMenuItems = ({ resid, id }) => {
               <Grid key={index + 1} item xs={12} md={6} lg={4}>
                 <Card className={classes.root}>
                   {/* <A href={`/hotel/${value.id}`}> */}
-                  <CardActionArea>
-                    <CardMedia
-                      objectFit="contain"
-                      className={classes.media}
-                      image={!value.photo ? noImage : value.photo}
-                      title="Contemplative Reptile"
-                    />
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="h2">
-                        {value.dishname}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        color="textSecondary"
-                        component="p"
-                      >
-                        Price:{value.price}
-                      </Typography>
-                    </CardContent>
-                  </CardActionArea>
+                  <CardMedia
+                    objectFit="contain"
+                    className={classes.media}
+                    title="Hotel Image"
+                  >
+                    <Carousal images={Images} />
+                  </CardMedia>
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="h2">
+                      {value.dishname}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      component="p"
+                    >
+                      Price:{value.price}
+                    </Typography>
+                  </CardContent>
                   {/* </A> */}
                   <CardActions>
-                    <A href={`/editDish/${resid}/${id}/${value.dishId}`}>
+                    <A href={`/editdish/${resid}/${id}/${value.dishId}`}>
                       <Button
                         size="small"
                         color="primary"

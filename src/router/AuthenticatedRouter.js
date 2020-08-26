@@ -21,7 +21,7 @@ const routes = {
   "/hotel/:resid/:id/listmenuitems": ({ resid, id }) => (
     <ListMenuItems resid={resid} id={id} />
   ),
-  "/editDish/:resid/:menuid/:dishid": ({ resid, dishid, menuid }) => (
+  "/editdish/:resid/:menuid/:dishid": ({ resid, dishid, menuid }) => (
     <EditDishItem dishid={dishid} menuid={menuid} resid={resid} />
   ),
 };
