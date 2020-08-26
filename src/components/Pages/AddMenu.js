@@ -88,7 +88,11 @@ const AddMenu = ({ id }) => {
     return formValid;
   };
   const handleSubmit = () => {
-    if (validateForm()) {
+    if (
+      validateForm() ||
+      (previousDishes.length !== 0 && Form.dishname === "" && Form.price === "")
+    ) {
+      setError(initError);
       const Result = {
         name: menuName,
         dish: [...previousDishes, { ...Form }],
