@@ -34,3 +34,7 @@ export const deleteHotel = (id) => {
 export const viewMenu = (id) => {
   return fireRequest("viewMenu", [id]);
 };
+
+export const menuItems = (id) => {
+  return fireRequest("menuItems", [id]);
+};

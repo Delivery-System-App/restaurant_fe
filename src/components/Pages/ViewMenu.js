@@ -114,15 +114,15 @@ const ViewMenu = ({ id }) => {
                         </CardActionArea>
                       </A>
                       <CardActions>
-                        {/* <A href={`/edithotel/${value.id}`}> */}
-                        <Button
-                          size="small"
-                          color="primary"
-                          style={{ outline: "none" }}
-                        >
-                          View Menu
-                        </Button>
-                        {/* </A> */}
+                        <A href={`/hotel/${value.id}/listmenuitems`}>
+                          <Button
+                            size="small"
+                            color="primary"
+                            style={{ outline: "none" }}
+                          >
+                            View Menu
+                          </Button>
+                        </A>
                         <Confirm
                           handleConfirm={(e) => {
                             console.log(e);

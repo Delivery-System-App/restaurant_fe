@@ -42,8 +42,8 @@ export default {
     method: "POST",
     noAuth: false,
   },
-  restaurantDishes: {
-    path: "/api/v1/menu/redishes",
+  menuItems: {
+    path: "/api/v1/menu/dishes",
     method: "get",
     noAuth: false,
   },

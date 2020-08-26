@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Grid,
   Card,
@@ -11,6 +11,9 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import Confirm from "./ConfirmPage";
+import { useDispatch } from "react-redux";
+import { menuItems } from "../../redux/apiActions";
+import Loader from "../../utils/Loader";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -51,81 +54,143 @@ const useStyles = makeStyles((theme) => ({
 const ListMenuItems = ({ id }) => {
   //getting menuid as props
   const classes = useStyles();
-  //need to get data from the api once done
-  const Data = [
-    {
-      name: "Masala Dosa",
-      photo:
-        "https://i2.wp.com/www.vegrecipesofindia.com/wp-content/uploads/2017/11/paper-masala-dosa-0.jpg",
-      price: 50,
-    },
-    {
-      name: "Masala Dosa",
-      photo:
-        "https://i2.wp.com/www.vegrecipesofindia.com/wp-content/uploads/2017/11/paper-masala-dosa-0.jpg",
-      price: 100,
-    },
-    {
-      name: "Masala Dosa",
-      photo:
-        "https://i2.wp.com/www.vegrecipesofindia.com/wp-content/uploads/2017/11/paper-masala-dosa-0.jpg",
-      price: 500,
-    },
-  ];
+  const [Data, setData] = useState([]);
+  const dispatch = useDispatch();
+  const [Loading, setLoading] = useState(false);
+  useEffect(() => {
+    let mount = true;
+    setLoading(true);
+    if (mount) {
+      dispatch(menuItems([id])).then((res) => {
+        const len = res.data.data;
+        console.log(len);
+        setData(Object.values(len));
+        setLoading(false);
+      });
+    }
+    return () => {
+      mount = false;
+    };
+  }, [id, dispatch]);
+
+  const noImage = require("../../assets/images/noimage.jpg");
+
+  // return (
+  //   <Grid container className={classes.container}>
+  //     {Data.map((value, index) => {
+  //       return (
+  //         <Grid key={index + 1} item xs={12} md={6} lg={4}>
+  //           <Card className={classes.root}>
+  //             {/* <A href={`/hotel/${value.id}`}> */}
+  //             <CardActionArea>
+  //               <CardMedia
+  //                 objectFit="contain"
+  //                 className={classes.media}
+  //                 image={!value.photo ? noImage : value.photo}
+  //                 title="Contemplative Reptile"
+  //               />
+  //               <CardContent>
+  //                 <Typography gutterBottom variant="h5" component="h2">
+  //                   {value.dishname}
+  //                 </Typography>
+  //                 <Typography
+  //                   variant="body2"
+  //                   color="textSecondary"
+  //                   component="p"
+  //                 >
+  //                   Price:{value.price}
+  //                 </Typography>
+  //               </CardContent>
+  //             </CardActionArea>
+  //             {/* </A> */}
+  //             <CardActions>
+  //               {/* <A href={`/edithotel/${value.id}`}> */}
+  //               <Button
+  //                 size="small"
+  //                 color="primary"
+  //                 style={{ outline: "none" }}
+  //               >
+  //                 Edit Item
+  //               </Button>
+  //               {/* </A> */}
+  //               <Confirm
+  //                 handleConfirm={() => {
+  //                   console.log("ok");
+  //                 }}
+  //                 cancelDialog={"Cancel"}
+  //                 confirmDialog={"Delete"}
+  //                 buttonText={"Delete"}
+  //                 id={value.id}
+  //                 sentence={`You are about to delete the item ${value.name} ?`}
+  //               />
+  //             </CardActions>
+  //           </Card>
+  //         </Grid>
+  //       );
+  //     })}
+  //   </Grid>
+  // );
+
   return (
-    <Grid container className={classes.container}>
-      {Data.map((value, index) => {
-        return (
-          <Grid key={index + 1} item xs={12} md={6} lg={4}>
-            <Card className={classes.root}>
-              {/* <A href={`/hotel/${value.id}`}> */}
-              <CardActionArea>
-                <CardMedia
-                  objectFit="contain"
-                  className={classes.media}
-                  image={value.photo}
-                  title="Contemplative Reptile"
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="h2">
-                    {value.name}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    component="p"
-                  >
-                    Price:{value.price}
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
-              {/* </A> */}
-              <CardActions>
-                {/* <A href={`/edithotel/${value.id}`}> */}
-                <Button
-                  size="small"
-                  color="primary"
-                  style={{ outline: "none" }}
-                >
-                  Edit Item
-                </Button>
-                {/* </A> */}
-                <Confirm
-                  handleConfirm={() => {
-                    console.log("ok");
-                  }}
-                  cancelDialog={"Cancel"}
-                  confirmDialog={"Delete"}
-                  buttonText={"Delete"}
-                  id={value.id}
-                  sentence={`You are about to delete the item ${value.name} ?`}
-                />
-              </CardActions>
-            </Card>
-          </Grid>
-        );
-      })}
-    </Grid>
+    <>
+      {Loading ? (
+        <Loader />
+      ) : (
+        <Grid container className={classes.container}>
+          {Data.map((value, index) => {
+            return (
+              <Grid key={index + 1} item xs={12} md={6} lg={4}>
+                <Card className={classes.root}>
+                  {/* <A href={`/hotel/${value.id}`}> */}
+                  <CardActionArea>
+                    <CardMedia
+                      objectFit="contain"
+                      className={classes.media}
+                      image={!value.photo ? noImage : value.photo}
+                      title="Contemplative Reptile"
+                    />
+                    <CardContent>
+                      <Typography gutterBottom variant="h5" component="h2">
+                        {value.dishname}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="textSecondary"
+                        component="p"
+                      >
+                        Price:{value.price}
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                  {/* </A> */}
+                  <CardActions>
+                    {/* <A href={`/edithotel/${value.id}`}> */}
+                    <Button
+                      size="small"
+                      color="primary"
+                      style={{ outline: "none" }}
+                    >
+                      Edit Item
+                    </Button>
+                    {/* </A> */}
+                    <Confirm
+                      handleConfirm={() => {
+                        console.log("ok");
+                      }}
+                      cancelDialog={"Cancel"}
+                      confirmDialog={"Delete"}
+                      buttonText={"Delete"}
+                      id={value.id}
+                      sentence={`You are about to delete the item ${value.name} ?`}
+                    />
+                  </CardActions>
+                </Card>
+              </Grid>
+            );
+          })}
+        </Grid>
+      )}
+    </>
   );
 };
 
