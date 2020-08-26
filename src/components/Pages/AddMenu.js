@@ -46,6 +46,11 @@ const AddMenu = ({ id }) => {
     if (validateForm()) {
       console.log(Form);
       setPreviousDishes([...previousDishes, { ...Form }]);
+      setnotify({
+        msg: "Added dish",
+        type: "success",
+        popup: true,
+      });
       setForm(Initform);
     }
   }
@@ -95,7 +100,7 @@ const AddMenu = ({ id }) => {
         if (res) {
           if (res.status === 201) {
             setnotify({
-              msg: "Added dish",
+              msg: "Added menu",
               type: "success",
               popup: true,
             });
