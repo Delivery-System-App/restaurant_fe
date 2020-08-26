@@ -8,6 +8,8 @@ import { allHotels, deleteHotel } from "../../redux/apiActions";
 import Loader from "../../utils/Loader";
 import Confirm from "./ConfirmPage";
 import Notify from "../../utils/Notify";
+import Carousal from "./Carousal";
+
 import {
   Card,
   CardActionArea,
@@ -36,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
   },
   media: {
     height: 180,
+    marginTop: "5px",
   },
   form: {
     width: "100%", // Fix IE 11 issue.
@@ -62,6 +65,11 @@ const DashboardPage = () => {
   const [Loading, setLoading] = useState(false);
   const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
   const [reRender, setreRender] = useState(Math.random());
+  const Images = [
+    "https://cf.bstatic.com/images/hotel/max1024x768/167/167102395.jpg",
+    noImage,
+    "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80",
+  ];
   useEffect(() => {
     let mount = true;
     setLoading(true);
@@ -121,27 +129,26 @@ const DashboardPage = () => {
             return (
               <Grid key={index + 1} item xs={12} md={6} lg={4}>
                 <Card className={classes.root}>
+                  <CardMedia
+                    objectFit="contain"
+                    className={classes.media}
+                    title="Hotel Image"
+                  >
+                    <Carousal images={Images} />
+                  </CardMedia>
                   <A href={`/hotel/${value.id}`}>
-                    <CardActionArea>
-                      <CardMedia
-                        objectFit="contain"
-                        className={classes.media}
-                        image={noImage}
-                        title="Contemplative Reptile"
-                      />
-                      <CardContent>
-                        <Typography gutterBottom variant="h5" component="h2">
-                          {value.name}
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          color="textSecondary"
-                          component="p"
-                        >
-                          {value.contact}
-                        </Typography>
-                      </CardContent>
-                    </CardActionArea>
+                    <CardContent>
+                      <Typography gutterBottom variant="h5" component="h2">
+                        {value.name}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="textSecondary"
+                        component="p"
+                      >
+                        {value.contact}
+                      </Typography>
+                    </CardContent>
                   </A>
                   <CardActions>
                     <A href={`/edithotel/${value.id}`}>
