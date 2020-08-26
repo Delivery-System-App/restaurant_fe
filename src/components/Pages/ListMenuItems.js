@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     height: 180,
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
+    width: "100%",
     marginTop: theme.spacing(3),
   },
   submit: {
@@ -74,63 +74,6 @@ const ListMenuItems = ({ id }) => {
   }, [id, dispatch]);
 
   const noImage = require("../../assets/images/noimage.jpg");
-
-  // return (
-  //   <Grid container className={classes.container}>
-  //     {Data.map((value, index) => {
-  //       return (
-  //         <Grid key={index + 1} item xs={12} md={6} lg={4}>
-  //           <Card className={classes.root}>
-  //             {/* <A href={`/hotel/${value.id}`}> */}
-  //             <CardActionArea>
-  //               <CardMedia
-  //                 objectFit="contain"
-  //                 className={classes.media}
-  //                 image={!value.photo ? noImage : value.photo}
-  //                 title="Contemplative Reptile"
-  //               />
-  //               <CardContent>
-  //                 <Typography gutterBottom variant="h5" component="h2">
-  //                   {value.dishname}
-  //                 </Typography>
-  //                 <Typography
-  //                   variant="body2"
-  //                   color="textSecondary"
-  //                   component="p"
-  //                 >
-  //                   Price:{value.price}
-  //                 </Typography>
-  //               </CardContent>
-  //             </CardActionArea>
-  //             {/* </A> */}
-  //             <CardActions>
-  //               {/* <A href={`/edithotel/${value.id}`}> */}
-  //               <Button
-  //                 size="small"
-  //                 color="primary"
-  //                 style={{ outline: "none" }}
-  //               >
-  //                 Edit Item
-  //               </Button>
-  //               {/* </A> */}
-  //               <Confirm
-  //                 handleConfirm={() => {
-  //                   console.log("ok");
-  //                 }}
-  //                 cancelDialog={"Cancel"}
-  //                 confirmDialog={"Delete"}
-  //                 buttonText={"Delete"}
-  //                 id={value.id}
-  //                 sentence={`You are about to delete the item ${value.name} ?`}
-  //               />
-  //             </CardActions>
-  //           </Card>
-  //         </Grid>
-  //       );
-  //     })}
-  //   </Grid>
-  // );
-
   return (
     <>
       {Loading ? (
