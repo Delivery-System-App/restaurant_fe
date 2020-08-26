@@ -38,3 +38,7 @@ export const viewMenu = (id) => {
 export const menuItems = (id) => {
   return fireRequest("menuItems", [id]);
 };
+
+export const updateDish = (body) => {
+  return fireRequest("updateDish", [], body);
+};
