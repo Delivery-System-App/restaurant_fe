@@ -92,15 +92,19 @@ const AddMenu = ({ id }) => {
       validateForm() ||
       (previousDishes.length !== 0 && Form.dishname === "" && Form.price === "")
     ) {
+      let Dish;
+      if (validateForm()) {
+        Dish = [...previousDishes, { ...Form }];
+      } else {
+        Dish = [...previousDishes];
+      }
       setError(initError);
       const Result = {
         name: menuName,
-        dish: [...previousDishes, { ...Form }],
+        dish: Dish,
       };
 
-      console.log(Result);
       dispatch(addDish([id], Result)).then((res) => {
-        console.log(res);
         if (res) {
           if (res.status === 201) {
             setnotify({
