@@ -26,24 +26,36 @@ const AddMenu = ({ id }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const Initform = {
-    name: "",
     photos: "",
     price: "",
     dishname: "",
   };
   const initError = {
-    name: "",
     photos: "",
     price: "",
     dishname: "",
   };
-
+  const [previousDishes, setPreviousDishes] = useState([]);
+  const [menuName, setMenuName] = useState("");
   const [Form, setForm] = useState(Initform);
   const [Error, setError] = useState(initError);
   const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
 
+  function addDishes(e) {
+    e.preventDefault();
+    if (validateForm()) {
+      console.log(Form);
+      setPreviousDishes([...previousDishes, { ...Form }]);
+      setForm(Initform);
+    }
+  }
+
   const setFiles = (files) => {
     setForm({ ...Form, photos: files });
+  };
+  const handleMenuName = (e) => {
+    const { value } = e.target;
+    setMenuName(value);
   };
   const handleChange = (e) => {
     setError(initError);
@@ -73,12 +85,8 @@ const AddMenu = ({ id }) => {
   const handleSubmit = () => {
     if (validateForm()) {
       const Result = {
-        name: Form.name,
-        dish: {
-          name: Form.dishname,
-          photos: Form.photos,
-          price: Form.price,
-        },
+        name: menuName,
+        dish: [...previousDishes, { ...Form }],
       };
 
       console.log(Result);
@@ -93,6 +101,7 @@ const AddMenu = ({ id }) => {
             });
           }
           setForm(Initform);
+          setMenuName("");
         }
       });
     }
@@ -115,8 +124,8 @@ const AddMenu = ({ id }) => {
                 required
                 id="name"
                 name="name"
-                value={Form.name}
-                onChange={handleChange}
+                value={menuName}
+                onChange={handleMenuName}
                 label="Menu name"
                 fullWidth
                 autoComplete="name"
@@ -160,13 +169,22 @@ const AddMenu = ({ id }) => {
             </Grid>
             <Grid item xs={12}>
               <Button
+                onClick={addDishes}
+                fullWidth
+                variant="outlined"
+                color="secondary"
+                className={classes.submit}
+              >
+                Add More Dishes
+              </Button>
+              <Button
                 onClick={handleSubmit}
                 fullWidth
                 variant="contained"
                 color="primary"
                 className={classes.submit}
               >
-                Add Item
+                Submit Menu
               </Button>
             </Grid>
           </Grid>
