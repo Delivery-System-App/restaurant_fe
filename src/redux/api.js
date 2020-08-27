@@ -52,4 +52,9 @@ export default {
     method: "put",
     noAuth: false,
   },
+  updateProfile: {
+    path: "/api/v1/auth/updateUser",
+    method: "POST",
+    noAuth: false,
+  },
 };

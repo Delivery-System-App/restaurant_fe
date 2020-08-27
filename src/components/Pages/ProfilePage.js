@@ -9,6 +9,7 @@ import Typography from "@material-ui/core/Typography";
 import UseHeading from "./useHeading";
 import { Avatar } from "@material-ui/core";
 import { useSelector } from "react-redux";
+import { A } from "hookrouter";
 
 const useStyles = makeStyles({
   root: {
@@ -52,9 +53,11 @@ const ProfilePage = () => {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" color="primary" style={{ outline: "none" }}>
-          Edit profile
-        </Button>
+        <A href="/updateprofile">
+          <Button size="small" color="primary" style={{ outline: "none" }}>
+            Edit profile
+          </Button>
+        </A>
       </CardActions>
     </Card>
   );

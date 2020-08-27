@@ -10,6 +10,7 @@ import ViewMenu from "../components/Pages/ViewMenu";
 import AddMenu from "../components/Pages/AddMenu";
 import ListMenuItems from "../components/Pages/ListMenuItems";
 import EditDishItem from "../components/Pages/EditDishItem";
+import UpdateProfile from "../components/Pages/UpdateProfile";
 
 const routes = {
   "/": () => <Dashboard />,
@@ -24,6 +25,7 @@ const routes = {
   "/editdish/:resid/:menuid/:dishid": ({ resid, dishid, menuid }) => (
     <EditDishItem dishid={dishid} menuid={menuid} resid={resid} />
   ),
+  "/updateprofile": () => <UpdateProfile />,
 };
 
 const AuthenticatedRouter = () => {
