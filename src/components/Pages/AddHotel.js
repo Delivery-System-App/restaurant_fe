@@ -29,6 +29,7 @@ export default function AddHotel() {
   const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
   const [iurl, setUrl] = useState("");
   const [image, setImage] = useState("");
+  const [Loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (iurl) {
@@ -71,11 +72,9 @@ export default function AddHotel() {
     if (validInputs()) {
       let formData = new FormData();
       setForm(Initform);
+      setImage("");
       Object.keys(Form).forEach((key) => {
         if (key === "photos" && Form[key] !== "") {
-          // Form[key].forEach((el) => {
-          //   formData.append(key, el);
-          // });
           formData.append(key, Form[key]);
         } else {
           formData.append(key, Form[key]);
@@ -85,12 +84,14 @@ export default function AddHotel() {
       dispatch(addHotel(Form)).then((res) => {
         if (res) {
           if (res.status === 201) {
+            setLoading(false);
             setnotify({
               msg: "Hotel added",
               type: "success",
               popup: true,
             });
           } else {
+            setLoading(false);
             setnotify({
               msg: "Error",
               type: "error",
@@ -109,23 +110,28 @@ export default function AddHotel() {
 
   //needs to be done for multiple images
   const uploadImage = () => {
-    if (validInputs) {
+    if (validInputs()) {
+      setLoading(true);
       const data = new FormData();
-      data.append("file", image[0]);
-      data.append("upload_preset", "delivery-app");
-      data.append("cloud_name", "dnpows3tq");
-      fetch("https://api.cloudinary.com/v1_1/dnpows3tq/image/upload", {
-        method: "post",
-        body: data,
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setForm({ ...Form, photos: data.secure_url });
-          setUrl(data.secure_url);
+      if (image) {
+        data.append("file", image[0]);
+        data.append("upload_preset", "delivery-app");
+        data.append("cloud_name", "dnpows3tq");
+        fetch("https://api.cloudinary.com/v1_1/dnpows3tq/image/upload", {
+          method: "post",
+          body: data,
         })
-        .catch((err) => {
-          console.log(err);
-        });
+          .then((res) => res.json())
+          .then((data) => {
+            setForm({ ...Form, photos: data.secure_url });
+            setUrl(data.secure_url);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        handleSubmit();
+      }
     }
   };
 
@@ -140,6 +146,7 @@ export default function AddHotel() {
         Error={Error}
         type={"Add"}
         Helper={""}
+        Loading={Loading}
       />
     </>
   );
