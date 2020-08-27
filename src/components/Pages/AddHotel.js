@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { phonePreg } from "../../utils/validation";
 import { addHotel } from "../../redux/apiActions";
 import { useDispatch } from "react-redux";
@@ -27,9 +27,18 @@ export default function AddHotel() {
   const [Form, setForm] = useState(Initform);
   const [Error, setError] = useState(initError);
   const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
+  const [iurl, setUrl] = useState("");
+  const [image, setImage] = useState("");
+
+  useEffect(() => {
+    if (iurl) {
+      handleSubmit();
+    }
+  }, [iurl]);
 
   const setFiles = (files) => {
-    setForm({ ...Form, photos: files });
+    // setForm({ ...Form, photos: files });
+    setImage(files);
   };
   const handleChange = (e) => {
     setError(initError);
@@ -64,9 +73,10 @@ export default function AddHotel() {
       setForm(Initform);
       Object.keys(Form).forEach((key) => {
         if (key === "photos" && Form[key] !== "") {
-          Form[key].forEach((el) => {
-            formData.append(key, el);
-          });
+          // Form[key].forEach((el) => {
+          //   formData.append(key, el);
+          // });
+          formData.append(key, Form[key]);
         } else {
           formData.append(key, Form[key]);
         }
@@ -96,13 +106,36 @@ export default function AddHotel() {
       popup: false,
     });
   };
+
+  //needs to be done for multiple images
+  const uploadImage = () => {
+    if (validInputs) {
+      const data = new FormData();
+      data.append("file", image[0]);
+      data.append("upload_preset", "delivery-app");
+      data.append("cloud_name", "dnpows3tq");
+      fetch("https://api.cloudinary.com/v1_1/dnpows3tq/image/upload", {
+        method: "post",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setForm({ ...Form, photos: data.secure_url });
+          setUrl(data.secure_url);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
   return (
     <>
       <Notify props={notify} closeAlert={closeAlert} />
       <HotelForm
         Form={Form}
         handleChange={handleChange}
-        handleSubmit={handleSubmit}
+        handleSubmit={uploadImage}
         setFiles={setFiles}
         Error={Error}
         type={"Add"}
