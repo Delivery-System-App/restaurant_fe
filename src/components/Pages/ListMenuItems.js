@@ -12,10 +12,11 @@ import {
 } from "@material-ui/core";
 import Confirm from "./ConfirmPage";
 import { useDispatch } from "react-redux";
-import { menuItems } from "../../redux/apiActions";
+import { menuItems, deleteDish } from "../../redux/apiActions";
 import Loader from "../../utils/Loader";
 import { A } from "hookrouter";
 import Carousal from "./Carousal";
+import Notify from "../../utils/Notify";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -56,10 +57,16 @@ const useStyles = makeStyles((theme) => ({
 
 const ListMenuItems = ({ resid, id }) => {
   //getting menuid as props
+  const body = {
+    resId: resid,
+    menuId: id,
+  };
   const classes = useStyles();
   const [Data, setData] = useState([]);
   const dispatch = useDispatch();
   const [Loading, setLoading] = useState(false);
+  const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
+  const [reRender, setreRender] = useState(Math.random());
   useEffect(() => {
     let mount = true;
     setLoading(true);
@@ -73,7 +80,32 @@ const ListMenuItems = ({ resid, id }) => {
     return () => {
       mount = false;
     };
-  }, [id, dispatch]);
+  }, [reRender, dispatch]);
+
+  const handleConfirm = (e) => {
+    body["dishId"] = e;
+    console.log(body);
+    setLoading(true);
+    //not working
+    dispatch(deleteDish(body)).then((res) => {
+      console.log("res", res);
+      if (res.status === 200) {
+        setnotify({
+          msg: "Dish Deleted",
+          type: "success",
+          popup: true,
+        });
+        setreRender(Math.random());
+      }
+      setLoading(false);
+    });
+  };
+
+  const closeAlert = () => {
+    setnotify({
+      popup: false,
+    });
+  };
 
   const noImage = require("../../assets/images/noimage.jpg");
   const Images = [
@@ -122,13 +154,11 @@ const ListMenuItems = ({ resid, id }) => {
                       </Button>
                     </A>
                     <Confirm
-                      handleConfirm={() => {
-                        console.log("ok");
-                      }}
+                      handleConfirm={handleConfirm}
                       cancelDialog={"Cancel"}
                       confirmDialog={"Delete"}
                       buttonText={"Delete"}
-                      id={value.id}
+                      id={value.dishId}
                       sentence={`You are about to delete the item ${value.name} ?`}
                     />
                   </CardActions>
@@ -138,6 +168,7 @@ const ListMenuItems = ({ resid, id }) => {
           })}
         </Grid>
       )}
+      <Notify props={notify} closeAlert={closeAlert} />
     </>
   );
 };
