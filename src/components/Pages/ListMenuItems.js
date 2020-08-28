@@ -96,7 +96,7 @@ const ListMenuItems = ({ resid, id }) => {
                     className={classes.media}
                     title="Hotel Image"
                   >
-                    <Carousal images={Images} />
+                    <Carousal images={value.photos ? [value.photos] : Images} />
                   </CardMedia>
                   <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">

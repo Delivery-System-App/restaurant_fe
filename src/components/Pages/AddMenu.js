@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
-import { Button, InputAdornment } from "@material-ui/core";
+import { Button, InputAdornment, CircularProgress } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Card } from "@material-ui/core";
 import Uploader from "./UploadImage";
@@ -20,7 +20,58 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  wrapper: {
+    // margin: theme.spacing(1),
+    position: "relative",
+  },
+  buttonProgress: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+
+    marginTop: -5,
+    marginLeft: -1,
+  },
 }));
+
+const LoaderButton = ({ Loading, handleSubmit, type }) => {
+  const classes = useStyles();
+  const [loading, setLoading] = React.useState(false);
+
+  React.useEffect(() => {
+    let mount = true;
+    if (mount) {
+      if (!Loading) {
+        setLoading(false);
+      } else {
+        setLoading(true);
+      }
+    }
+    return () => {
+      mount = false;
+    };
+  }, [Loading]);
+
+  return (
+    <div className={classes.wrapper}>
+      <Button
+        variant="contained"
+        color="primary"
+        disabled={loading}
+        fullWidth
+        onClick={handleSubmit}
+        fullwidth
+        className={classes.submit}
+      >
+        {type}
+      </Button>
+      {loading && (
+        <CircularProgress size={24} className={classes.buttonProgress} />
+      )}
+    </div>
+  );
+};
+
 const AddMenu = ({ id }) => {
   useHeading("Add Menu");
   const classes = useStyles();
@@ -40,10 +91,20 @@ const AddMenu = ({ id }) => {
   const [Form, setForm] = useState(Initform);
   const [Error, setError] = useState(initError);
   const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
+  const [image, setImage] = useState("");
+  const [Loading, setLoading] = useState(false);
 
-  function addDishes(e) {
-    e.preventDefault();
-    if (validateForm()) {
+  const setDishes = (secureUrl) => {
+    if (secureUrl) {
+      const Result = {
+        ...Form,
+        photos: secureUrl,
+      };
+      setPreviousDishes([...previousDishes, { ...Result }]);
+      setLoading(false);
+      setForm(Initform);
+      setImage("CLEARALL");
+    } else {
       setPreviousDishes([...previousDishes, { ...Form }]);
       setnotify({
         msg: "Added dish",
@@ -51,11 +112,28 @@ const AddMenu = ({ id }) => {
         popup: true,
       });
       setForm(Initform);
+      setLoading(false);
     }
-  }
+  };
+  const imageCleared = () => {
+    setImage("CLEARED");
+  };
+  const addDishes = (e) => {
+    e.preventDefault();
+    if (validateForm()) {
+      setLoading(true);
+      if (image) {
+        setLoading(true);
+        uploadImage();
+      } else {
+        setDishes("");
+      }
+    }
+  };
 
   const setFiles = (files) => {
-    setForm({ ...Form, photos: files });
+    // setForm({ ...Form, photos: files });
+    setImage(files);
   };
   const handleMenuName = (e) => {
     const { value } = e.target;
@@ -123,6 +201,30 @@ const AddMenu = ({ id }) => {
       popup: false,
     });
   };
+
+  const uploadImage = () => {
+    const data = new FormData();
+    if (image !== "" && image !== "CLEARED" && image !== "CLEARALL") {
+      data.append("file", image[0]);
+      data.append("upload_preset", "delivery-app");
+      data.append("cloud_name", "dnpows3tq");
+      fetch("https://api.cloudinary.com/v1_1/dnpows3tq/image/upload", {
+        method: "post",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setForm({ ...Form, photos: data.secure_url });
+          setDishes(data.secure_url);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      setDishes("");
+    }
+  };
+
   return (
     <>
       <Card className={classes.form}>
@@ -177,10 +279,15 @@ const AddMenu = ({ id }) => {
               />
             </Grid>
             <Grid item xs={12}>
-              <Uploader setFiles={setFiles} formLoading={false} />
+              <Uploader
+                setFiles={setFiles}
+                imageCleared={imageCleared}
+                formLoading={false}
+                clearImage={image}
+              />
             </Grid>
             <Grid item xs={12}>
-              <Button
+              {/*} <Button
                 onClick={addDishes}
                 fullWidth
                 variant="outlined"
@@ -188,7 +295,14 @@ const AddMenu = ({ id }) => {
                 className={classes.submit}
               >
                 Add More Dishes
-              </Button>
+              </Button>*/}
+              <div className="text-center">
+                <LoaderButton
+                  type={"Add Menu"}
+                  handleSubmit={addDishes}
+                  Loading={Loading}
+                />
+              </div>
               <Button
                 onClick={handleSubmit}
                 fullWidth
@@ -199,6 +313,7 @@ const AddMenu = ({ id }) => {
                 Submit Menu
               </Button>
             </Grid>
+            <Grid item xs={12}></Grid>
           </Grid>
         </form>
       </Card>
