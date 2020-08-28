@@ -6,6 +6,10 @@ const CarouselSlide = ({ images }) => {
   const useStyles = makeStyles(() => ({
     media: {
       height: 180,
+      backgroundImage: "url(" + images + ")",
+      backgroundSize: "100% 100%",
+      backgroundRepeat: "no-repeat",
+      backgroundPosition: "50% 50%",
     },
   }));
 
@@ -13,12 +17,7 @@ const CarouselSlide = ({ images }) => {
 
   return (
     <Card>
-      <CardMedia
-        objectFit="contain"
-        className={classes.media}
-        image={images}
-        title="Contemplative Reptile"
-      ></CardMedia>
+      <CardMedia className={classes.media} title="Hotel image"></CardMedia>
     </Card>
   );
 };
