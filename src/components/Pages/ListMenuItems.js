@@ -71,9 +71,14 @@ const ListMenuItems = ({ resid, id }) => {
     setLoading(true);
     if (mount) {
       dispatch(menuItems([id])).then((res) => {
-        const len = res.data.data;
-        setData(Object.values(len));
-        setLoading(false);
+        if (res.data.data[0] != null) {
+          const len = res.data.data;
+          setData(Object.values(len));
+          setLoading(false);
+        } else {
+          setData([]);
+          setLoading(false);
+        }
       });
     }
     return () => {
@@ -83,11 +88,9 @@ const ListMenuItems = ({ resid, id }) => {
 
   const handleConfirm = (e) => {
     body["dishId"] = e;
-    console.log(body);
     setLoading(true);
     //not working
     dispatch(deleteDish(body)).then((res) => {
-      console.log("res", res);
       if (res.status === 201) {
         setnotify({
           msg: "Dish Deleted",
@@ -112,7 +115,6 @@ const ListMenuItems = ({ resid, id }) => {
     noImage,
   ];
 
-  console.log(Data);
   return (
     <>
       {Loading ? (

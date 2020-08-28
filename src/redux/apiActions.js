@@ -39,7 +39,6 @@ export const deleteMenu = (id) => {
   return fireRequest("deleteMenu", [id]);
 };
 export const deleteDish = (body) => {
-  console.log(body);
   return fireRequest("deleteDish", [], body);
 };
 export const viewMenu = (id) => {
