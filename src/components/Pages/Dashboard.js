@@ -103,7 +103,6 @@ const DashboardPage = () => {
       popup: false,
     });
   };
-  console.log(Data);
 
   return (
     <>
@@ -130,11 +129,7 @@ const DashboardPage = () => {
             return (
               <Grid key={index + 1} item xs={12} md={6} lg={4}>
                 <Card className={classes.root}>
-                  <CardMedia
-                    objectFit="contain"
-                    className={classes.media}
-                    title="Hotel Image"
-                  >
+                  <CardMedia className={classes.media} title="Hotel Image">
                     <Carousal images={value.photos ? [value.photos] : Images} />
                   </CardMedia>
                   <A href={`/hotel/${value.id}`}>

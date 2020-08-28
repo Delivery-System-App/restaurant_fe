@@ -63,7 +63,6 @@ function EditHotel({ id }) {
     if (validInputs()) {
       setLoading(true);
       const data = new FormData();
-      console.log(image);
       if (image !== "" && image !== "CLEARED" && image !== "CLEARALL") {
         data.append("file", image[0]);
         data.append("upload_preset", "delivery-app");
@@ -76,7 +75,6 @@ function EditHotel({ id }) {
           .then((data) => {
             setForm({ ...Form, photos: data.secure_url });
             setUrl(data.secure_url);
-            console.log(data.secure_url);
             handleSubmit(data.secure_url);
           })
           .catch((err) => {
@@ -130,7 +128,6 @@ function EditHotel({ id }) {
         ...Form,
         photos: secureUrl,
       };
-      console.log(Result);
       dispatch(updateHotel([id + "/update-Restaurant"], Result)).then((res) => {
         if (res.status === 200) {
           setLoading(false);
