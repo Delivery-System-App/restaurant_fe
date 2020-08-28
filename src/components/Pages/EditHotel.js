@@ -3,7 +3,6 @@ import { updateHotel, allHotels } from "../../redux/apiActions";
 import { useDispatch } from "react-redux";
 import HotelForm from "./HotelForm";
 import { phonePreg } from "../../utils/validation";
-import Loader from "../../utils/Loader";
 import Notify from "../../utils/Notify";
 
 function EditHotel({ id }) {
@@ -26,6 +25,8 @@ function EditHotel({ id }) {
   const [Form, setForm] = useState(initForm);
   const [Loading, setLoading] = useState(false);
   const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
+  const [iurl, setUrl] = useState("");
+  const [image, setImage] = useState("");
   useEffect(() => {
     setLoading(true);
     let mount = true;
@@ -46,7 +47,8 @@ function EditHotel({ id }) {
     };
   }, [dispatch, id]);
   const setFiles = (files) => {
-    setForm({ ...Form, photos: files });
+    //    setForm({ ...Form, photos: files });
+    setImage(files);
   };
   const handleChange = (e) => {
     setnotify({
@@ -57,19 +59,50 @@ function EditHotel({ id }) {
     setForm({ ...Form, [name]: value });
   };
 
-  const optionalValues = ["photos"];
-
+  const uploadImage = () => {
+    if (validInputs()) {
+      setLoading(true);
+      const data = new FormData();
+      console.log(image);
+      if (image !== "" && image !== "CLEARED" && image !== "CLEARALL") {
+        data.append("file", image[0]);
+        data.append("upload_preset", "delivery-app");
+        data.append("cloud_name", "dnpows3tq");
+        fetch("https://api.cloudinary.com/v1_1/dnpows3tq/image/upload", {
+          method: "post",
+          body: data,
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            setForm({ ...Form, photos: data.secure_url });
+            setUrl(data.secure_url);
+            console.log(data.secure_url);
+            handleSubmit(data.secure_url);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        handleSubmit("");
+      }
+    }
+  };
   const validInputs = () => {
     let formValid = true;
     let err = Object.assign({}, initError);
     const { contact } = Form;
-
-    Object.keys(Form).forEach((key) => {
-      if (Form[key] === "" && !optionalValues.includes(key)) {
-        formValid = false;
-        err[key] = "This field is required";
-      }
-    });
+    if (Form.name === "") {
+      formValid = false;
+      err["name"] = "This field is required";
+    }
+    if (Form.address === "") {
+      formValid = false;
+      err["address"] = "This field is required";
+    }
+    if (Form.number === "") {
+      formValid = false;
+      err["number"] = "This field is required";
+    }
 
     if (!phonePreg(contact)) {
       formValid = false;
@@ -79,10 +112,10 @@ function EditHotel({ id }) {
     setError(err);
     return formValid;
   };
-  const handleSubmit = () => {
+  const handleSubmit = (secureUrl) => {
     if (validInputs()) {
       setLoading(true);
-      let formData = new FormData();
+      /*   let formData = new FormData();
       Object.keys(Form).forEach((key) => {
         if (key === "photos" && Form[key] !== "") {
           Form[key].forEach((el) => {
@@ -92,8 +125,13 @@ function EditHotel({ id }) {
           formData.append(key, Form[key]);
         }
       });
-
-      dispatch(updateHotel([id + "/update-Restaurant"], Form)).then((res) => {
+      */
+      const Result = {
+        ...Form,
+        photos: secureUrl,
+      };
+      console.log(Result);
+      dispatch(updateHotel([id + "/update-Restaurant"], Result)).then((res) => {
         if (res.status === 200) {
           setLoading(false);
           setnotify({
@@ -114,22 +152,17 @@ function EditHotel({ id }) {
 
   return (
     <>
-      {Loading ? (
-        <Loader />
-      ) : (
-        <>
-          <Notify props={notify} closeAlert={closeAlert} />
-          <HotelForm
-            Form={Form}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-            setFiles={setFiles}
-            Error={Error}
-            type={"Update"}
-            Helper={"Adding new will remove previous ones"}
-          />
-        </>
-      )}
+      <Notify props={notify} closeAlert={closeAlert} />
+      <HotelForm
+        Form={Form}
+        handleChange={handleChange}
+        handleSubmit={uploadImage}
+        setFiles={setFiles}
+        Error={Error}
+        type={"Update"}
+        Loading={Loading}
+        Helper={"Adding new will remove previous ones"}
+      />
     </>
   );
 }

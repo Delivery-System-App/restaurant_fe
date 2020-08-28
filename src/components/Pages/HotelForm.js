@@ -80,6 +80,8 @@ const HotelForm = ({
   type,
   Helper,
   Loading,
+  Images,
+  imageCleared,
 }) => {
   const classes = useStyles();
 
@@ -135,7 +137,8 @@ const HotelForm = ({
           <Grid item xs={12}>
             <Uploader
               setFiles={setFiles}
-              clear={Form.photos}
+              clearImage={Images}
+              imageCleared={imageCleared}
               formLoading={false}
             />
             {Helper}

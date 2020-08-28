@@ -68,11 +68,14 @@ export default function AddHotel() {
     setError(err);
     return formValid;
   };
+  const imageCleared = () => {
+    setImage("CLEARED");
+  };
   const handleSubmit = () => {
     if (validInputs()) {
       let formData = new FormData();
       setForm(Initform);
-      setImage("");
+      setImage("CLEARALL");
       Object.keys(Form).forEach((key) => {
         if (key === "photos" && Form[key] !== "") {
           formData.append(key, Form[key]);
@@ -80,7 +83,6 @@ export default function AddHotel() {
           formData.append(key, Form[key]);
         }
       });
-
       dispatch(addHotel(Form)).then((res) => {
         if (res) {
           if (res.status === 201) {
@@ -113,7 +115,7 @@ export default function AddHotel() {
     if (validInputs()) {
       setLoading(true);
       const data = new FormData();
-      if (image) {
+      if (image !== "" && image !== "CLEARED" && image !== "CLEARALL") {
         data.append("file", image[0]);
         data.append("upload_preset", "delivery-app");
         data.append("cloud_name", "dnpows3tq");
@@ -125,6 +127,7 @@ export default function AddHotel() {
           .then((data) => {
             setForm({ ...Form, photos: data.secure_url });
             setUrl(data.secure_url);
+            handleSubmit();
           })
           .catch((err) => {
             console.log(err);
@@ -143,10 +146,12 @@ export default function AddHotel() {
         handleChange={handleChange}
         handleSubmit={uploadImage}
         setFiles={setFiles}
+        Images={image}
         Error={Error}
         type={"Add"}
         Helper={""}
         Loading={Loading}
+        imageCleared={imageCleared}
       />
     </>
   );
