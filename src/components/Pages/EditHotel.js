@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import HotelForm from "./HotelForm";
 import { phonePreg } from "../../utils/validation";
 import Notify from "../../utils/Notify";
+import { imageUploader } from "../../utils/helper";
 
 function EditHotel({ id }) {
   const dispatch = useDispatch();
@@ -62,27 +63,7 @@ function EditHotel({ id }) {
   const uploadImage = () => {
     if (validInputs()) {
       setLoading(true);
-      const data = new FormData();
-      if (image !== "" && image !== "CLEARED" && image !== "CLEARALL") {
-        data.append("file", image[0]);
-        data.append("upload_preset", "delivery-app");
-        data.append("cloud_name", "dnpows3tq");
-        fetch("https://api.cloudinary.com/v1_1/dnpows3tq/image/upload", {
-          method: "post",
-          body: data,
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            setForm({ ...Form, photos: data.secure_url });
-            setUrl(data.secure_url);
-            handleSubmit(data.secure_url);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      } else {
-        handleSubmit("");
-      }
+      imageUploader(image, handleSubmit);
     }
   };
   const validInputs = () => {

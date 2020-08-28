@@ -10,7 +10,7 @@ import { addDish } from "../../redux/apiActions";
 import { useDispatch } from "react-redux";
 import Notify from "../../utils/Notify";
 import useHeading from "./useHeading";
-
+import { imageUploader } from "../../utils/helper";
 const useStyles = makeStyles((theme) => ({
   form: {
     maxWidth: "500px",
@@ -124,7 +124,7 @@ const AddMenu = ({ id }) => {
       setLoading(true);
       if (image) {
         setLoading(true);
-        uploadImage();
+        uploadPhoto();
       } else {
         setDishes("");
       }
@@ -148,6 +148,10 @@ const AddMenu = ({ id }) => {
   const validateForm = () => {
     let formValid = true;
     let err = Object.assign({}, initError);
+    if (menuName === "") {
+      err["name"] = "This field is required";
+      formValid = false;
+    }
 
     Object.keys(Form).forEach((key) => {
       if (Form[key] === "" && !optionalValues.includes(key)) {
@@ -202,27 +206,9 @@ const AddMenu = ({ id }) => {
     });
   };
 
-  const uploadImage = () => {
-    const data = new FormData();
-    if (image !== "" && image !== "CLEARED" && image !== "CLEARALL") {
-      data.append("file", image[0]);
-      data.append("upload_preset", "delivery-app");
-      data.append("cloud_name", "dnpows3tq");
-      fetch("https://api.cloudinary.com/v1_1/dnpows3tq/image/upload", {
-        method: "post",
-        body: data,
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setForm({ ...Form, photos: data.secure_url });
-          setDishes(data.secure_url);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      setDishes("");
-    }
+  const uploadPhoto = () => {
+    imageUploader(image, setDishes);
+    //setDishes(uploadImage(image));
   };
 
   return (
@@ -234,6 +220,11 @@ const AddMenu = ({ id }) => {
         <form className={classes.form}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
+              {previousDishes.length > 0 && (
+                <Typography style={{ fontSize: "12px" }}>
+                  Cant change Menu name
+                </Typography>
+              )}
               <TextField
                 required
                 id="name"
@@ -242,6 +233,7 @@ const AddMenu = ({ id }) => {
                 onChange={handleMenuName}
                 label="Menu name"
                 fullWidth
+                disabled={previousDishes.length > 0}
                 autoComplete="name"
                 error={Error["name"]}
                 helperText={Error["name"]}
