@@ -4,6 +4,8 @@ import Loader from "../../utils/Loader";
 import Notify from "../../utils/Notify";
 import { menuItems, updateDish } from "../../redux/apiActions";
 import Uploader from "./UploadImage";
+import { imageUploader } from "../../utils/helper";
+
 import {
   makeStyles,
   Card,
@@ -42,6 +44,7 @@ function EditDishItem({ dishid, menuid, resid }) {
   const [Form, setForm] = useState(initForm);
   const [Loading, setLoading] = useState(false);
   const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
+  const [image, setImage] = useState("");
   useEffect(() => {
     setLoading(true);
     let mount = true;
@@ -61,9 +64,10 @@ function EditDishItem({ dishid, menuid, resid }) {
     return () => {
       mount = false;
     };
-  }, [dispatch]);
+  }, [dispatch, dishid, menuid]);
   const setFiles = (files) => {
-    setForm({ ...Form, photos: files });
+    // setForm({ ...Form, photos: files });
+    setImage(files);
   };
   const handleChange = (e) => {
     setnotify({
@@ -86,10 +90,21 @@ function EditDishItem({ dishid, menuid, resid }) {
     setError(err);
     return formValid;
   };
-  const handleSubmit = () => {
+  const handleSubmit = (secureUrl) => {
     if (validInputs()) {
       setLoading(true);
-      let formData = new FormData();
+      let Result;
+      if (secureUrl !== "") {
+        Result = {
+          ...Form,
+          photos: secureUrl,
+        };
+      } else {
+        Result = {
+          ...Form,
+        };
+      }
+      /* let formData = new FormData();
       Object.keys(Form).forEach((key) => {
         if (key === "photos" && Form[key] !== "") {
           //needs to be done
@@ -100,14 +115,14 @@ function EditDishItem({ dishid, menuid, resid }) {
         } else {
           formData.append(key, Form[key]);
         }
-      });
+      });*/
 
       dispatch(
         updateDish({
           resId: resid,
           menuId: menuid,
           dishId: dishid,
-          ...Form,
+          ...Result,
         })
       ).then((res) => {
         if (res.status === 200) {
@@ -126,6 +141,13 @@ function EditDishItem({ dishid, menuid, resid }) {
     setnotify({
       popup: false,
     });
+  };
+
+  const uploadImage = () => {
+    if (validInputs()) {
+      setLoading(true);
+      imageUploader(image, handleSubmit);
+    }
   };
   return (
     <>
@@ -176,7 +198,7 @@ function EditDishItem({ dishid, menuid, resid }) {
                 </Grid>
                 <Grid item xs={12}>
                   <Button
-                    onClick={handleSubmit}
+                    onClick={uploadImage}
                     fullWidth
                     variant="contained"
                     color="primary"

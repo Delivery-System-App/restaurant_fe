@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   Grid,
   Card,
-  CardActionArea,
   CardMedia,
   CardContent,
   Typography,
@@ -112,6 +111,8 @@ const ListMenuItems = ({ resid, id }) => {
     "https://us.123rf.com/450wm/indianfoodimages/indianfoodimages1808/indianfoodimages180800087/106450537-group-of-south-indian-food-like-masala-dosa-uttapam-idli-idly-wada-vada-sambar-appam-semolina-halwa-.jpg?ver=6",
     noImage,
   ];
+
+  console.log(Data);
   return (
     <>
       {Loading ? (
@@ -159,7 +160,7 @@ const ListMenuItems = ({ resid, id }) => {
                       confirmDialog={"Delete"}
                       buttonText={"Delete"}
                       id={value.dishId}
-                      sentence={`You are about to delete the item ${value.name} ?`}
+                      sentence={`You are about to delete the item ${value.dishname} ?`}
                     />
                   </CardActions>
                 </Card>
