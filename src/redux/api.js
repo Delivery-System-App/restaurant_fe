@@ -39,7 +39,7 @@ export default {
   },
   deleteDish: {
     path: "/api/v1/menu/deletedish",
-    method: "DELETE",
+    method: "post",
     noAuth: false,
   },
   viewMenu: {
