@@ -88,7 +88,7 @@ const ListMenuItems = ({ resid, id }) => {
     //not working
     dispatch(deleteDish(body)).then((res) => {
       console.log("res", res);
-      if (res.status === 200) {
+      if (res.status === 201) {
         setnotify({
           msg: "Dish Deleted",
           type: "success",

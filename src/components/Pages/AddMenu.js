@@ -179,6 +179,7 @@ const AddMenu = ({ id }) => {
       } else {
         Dish = [...previousDishes];
       }
+      setPreviousDishes([]);
       setError(initError);
       const Result = {
         name: menuName,
