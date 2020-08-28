@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { phonePreg } from "../../utils/validation";
 import { addHotel } from "../../redux/apiActions";
 import { useDispatch } from "react-redux";
@@ -28,7 +28,6 @@ export default function AddHotel() {
   const [Form, setForm] = useState(Initform);
   const [Error, setError] = useState(initError);
   const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
-  const [iurl, setUrl] = useState("");
   const [image, setImage] = useState("");
   const [Loading, setLoading] = useState(false);
 

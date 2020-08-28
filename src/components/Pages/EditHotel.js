@@ -105,10 +105,17 @@ function EditHotel({ id }) {
         }
       });
       */
-      const Result = {
-        ...Form,
-        photos: secureUrl,
-      };
+      let Result;
+      if (secureUrl !== "") {
+        Result = {
+          ...Form,
+          photos: secureUrl,
+        };
+      } else {
+        Result = {
+          ...Form,
+        };
+      }
       dispatch(updateHotel([id + "/update-Restaurant"], Result)).then((res) => {
         if (res.status === 200) {
           setLoading(false);
