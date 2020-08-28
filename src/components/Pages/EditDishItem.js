@@ -92,9 +92,11 @@ function EditDishItem({ dishid, menuid, resid }) {
       let formData = new FormData();
       Object.keys(Form).forEach((key) => {
         if (key === "photos" && Form[key] !== "") {
-          Form[key].forEach((el) => {
-            formData.append(key, el);
-          });
+          //needs to be done
+          // Form[key].forEach((el) => {
+          //   formData.append(key, el);
+          // });
+          formData.append(key, Form[key]);
         } else {
           formData.append(key, Form[key]);
         }
