@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { viewMenu } from "../../redux/apiActions";
+import { viewMenu, deleteMenu } from "../../redux/apiActions";
 import { A } from "hookrouter";
 import Confirm from "./ConfirmPage";
 import Loader from "../../utils/Loader";
@@ -14,6 +14,7 @@ import {
   CardActionArea,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import Notify from "../../utils/Notify";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -54,18 +55,50 @@ const useStyles = makeStyles((theme) => ({
 const ViewMenu = ({ id }) => {
   const [Data, setData] = useState([]);
   const [Loading, setLoading] = useState(false);
+  const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
+  const [reRender, setreRender] = useState(Math.random());
   const classes = useStyles();
   const dispatch = useDispatch();
   useEffect(() => {
+    let mount = true;
     setLoading(true);
-    dispatch(viewMenu([id])).then((res) => {
-      if (res.data) {
-        const len = res.data.data;
-        setData(Object.values(len));
+    if (mount) {
+      dispatch(viewMenu([id])).then((res) => {
+        if (res.data) {
+          const len = res.data.data;
+          setData(Object.values(len));
+          setLoading(false);
+        } else {
+          setData([]);
+          setLoading(false);
+        }
+      });
+    }
+    return () => {
+      mount = false;
+    };
+  }, [dispatch, reRender]);
+
+  const handleConfirm = (e) => {
+    setLoading(true);
+    dispatch(deleteMenu([e])).then((res) => {
+      if (res.status === 200) {
+        setnotify({
+          msg: "Menu Deleted",
+          type: "success",
+          popup: true,
+        });
+        setreRender(Math.random());
       }
-      setLoading(false);
     });
-  }, [id, dispatch]);
+  };
+
+  const closeAlert = () => {
+    setnotify({
+      popup: false,
+    });
+  };
+
   return (
     <>
       {Loading ? (
@@ -124,9 +157,7 @@ const ViewMenu = ({ id }) => {
                           </Button>
                         </A>
                         <Confirm
-                          handleConfirm={(e) => {
-                            console.log(e);
-                          }}
+                          handleConfirm={handleConfirm}
                           cancelDialog={"Cancel"}
                           confirmDialog={"Delete"}
                           buttonText={"Delete"}
@@ -142,6 +173,7 @@ const ViewMenu = ({ id }) => {
           </Grid>
         </div>
       )}
+      <Notify props={notify} closeAlert={closeAlert} />
     </>
   );
 };

@@ -151,6 +151,7 @@ export const APIRequest = (
 
         // 4xx Errors
         if (error.response.status > 400 && error.response.status < 500) {
+          // console.log(error.response.status);
           if (error.response.status === 404) {
             return error;
           } else if (error.response.data && error.response.data.detail) {

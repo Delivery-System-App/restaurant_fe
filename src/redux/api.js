@@ -32,6 +32,11 @@ export default {
     method: "DELETE",
     noAuth: false,
   },
+  deleteMenu: {
+    path: "/api/v1/menu",
+    method: "DELETE",
+    noAuth: false,
+  },
   viewMenu: {
     path: "/api/v1/menu/menu",
     method: "get",
