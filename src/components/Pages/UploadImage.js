@@ -1,16 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function UploadImage({
   setFiles,
   limit = 5,
   prevImages = [],
   formLoading = false,
+  clearImage = false,
+  imageCleared,
 }) {
-  const [images, setImages] = useState({
+  const initImage = {
     preview: [],
     raw: [],
-  });
+  };
+  const [images, setImages] = useState(initImage);
   const [err, setErr] = useState("");
+  useEffect(() => {
+    if (clearImage === "CLEARALL") {
+      setImages(initImage);
+      imageCleared();
+    }
+  }, [clearImage, initImage]);
 
   const handleChange = (e) => {
     if (!formLoading) {

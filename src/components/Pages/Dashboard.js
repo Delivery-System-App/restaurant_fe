@@ -103,6 +103,7 @@ const DashboardPage = () => {
       popup: false,
     });
   };
+  console.log(Data);
 
   return (
     <>
@@ -134,7 +135,7 @@ const DashboardPage = () => {
                     className={classes.media}
                     title="Hotel Image"
                   >
-                    <Carousal images={Images} />
+                    <Carousal images={value.photos ? [value.photos] : Images} />
                   </CardMedia>
                   <A href={`/hotel/${value.id}`}>
                     <CardContent>
