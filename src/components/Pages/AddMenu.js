@@ -106,14 +106,14 @@ const AddMenu = ({ id }) => {
       setImage("CLEARALL");
     } else {
       setPreviousDishes([...previousDishes, { ...Form }]);
-      setnotify({
-        msg: "Added dish",
-        type: "success",
-        popup: true,
-      });
       setForm(Initform);
       setLoading(false);
     }
+    setnotify({
+      msg: "Added dish",
+      type: "success",
+      popup: true,
+    });
   };
   const imageCleared = () => {
     setImage("CLEARED");
