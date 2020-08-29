@@ -31,6 +31,9 @@ const Carousal = ({ images }) => {
   }
 
   const [index, setIndex] = useState(0);
+  if (typeof images === "string") {
+    images = [images];
+  }
   const content = images[index];
   const numSlides = images.length;
 

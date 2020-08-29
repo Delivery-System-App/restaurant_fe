@@ -139,7 +139,7 @@ const HotelForm = ({
               setFiles={setFiles}
               clearImage={Images}
               imageCleared={imageCleared}
-              formLoading={false}
+              formLoading={Loading}
             />
             {Helper}
           </Grid>

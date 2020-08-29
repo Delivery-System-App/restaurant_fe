@@ -87,22 +87,31 @@ export function stringFromDate(date) {
 }
 
 export const imageUploader = (image, returnFunction) => {
-  const data = new FormData();
+  var linkArray = [];
+  const addLink = (e) => {
+    linkArray = linkArray.concat(e);
+    if (linkArray.length === image.length) {
+      returnFunction(linkArray);
+    }
+  };
   if (image !== "" && image !== "CLEARED" && image !== "CLEARALL") {
-    data.append("file", image[0]);
-    data.append("upload_preset", "delivery-app");
-    data.append("cloud_name", "dnpows3tq");
-    fetch("https://api.cloudinary.com/v1_1/dnpows3tq/image/upload", {
-      method: "post",
-      body: data,
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        returnFunction(data.secure_url);
+    for (var i = 0; i < image.length; i++) {
+      const data = new FormData();
+      data.append("file", image[i]);
+      data.append("upload_preset", "delivery-app");
+      data.append("cloud_name", "dnpows3tq");
+      fetch("https://api.cloudinary.com/v1_1/dnpows3tq/image/upload", {
+        method: "post",
+        body: data,
       })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then((res) => res.json())
+        .then((data) => {
+          addLink(data.secure_url);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   } else {
     returnFunction("");
   }

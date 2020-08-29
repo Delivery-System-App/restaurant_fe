@@ -51,7 +51,6 @@ function EditDishItem({ dishid, menuid, resid }) {
     if (mount) {
       dispatch(menuItems([menuid])).then((res) => {
         if (res) {
-          console.log(res);
           const len = res.data.data;
           const Resp = Object.values(len);
           const result = Resp.filter((obj) => obj.dishId === dishid);
@@ -194,7 +193,7 @@ function EditDishItem({ dishid, menuid, resid }) {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <Uploader setFiles={setFiles} formLoading={false} />
+                  <Uploader setFiles={setFiles} formLoading={Loading} />
                 </Grid>
                 <Grid item xs={12}>
                   <Button

@@ -67,7 +67,6 @@ export default function AddHotel() {
   };
   const handleSubmit = (secureUrl) => {
     if (validInputs()) {
-      //let formData = new FormData();
       const Result = {
         ...Form,
         photos: secureUrl,

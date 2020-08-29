@@ -276,7 +276,7 @@ const AddDishToMenu = ({ menuname, resid, menuid }) => {
               <Uploader
                 setFiles={setFiles}
                 imageCleared={imageCleared}
-                formLoading={false}
+                formLoading={Loading}
                 clearImage={image}
               />
             </Grid>
