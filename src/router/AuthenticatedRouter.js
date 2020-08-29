@@ -11,6 +11,7 @@ import AddMenu from "../components/Pages/AddMenu";
 import ListMenuItems from "../components/Pages/ListMenuItems";
 import EditDishItem from "../components/Pages/EditDishItem";
 import UpdateProfile from "../components/Pages/UpdateProfile";
+import AddDishToMenu from "../components/Pages/AddDishToMenu";
 
 const routes = {
   "/": () => <Dashboard />,
@@ -19,13 +20,16 @@ const routes = {
   "/edithotel/:id": ({ id }) => <EditHotel id={id} />,
   "/hotel/:id": ({ id }) => <ViewMenu id={id} />,
   "/hotel/:id/addmenu": ({ id }) => <AddMenu id={id} />,
-  "/hotel/:resid/:id/listmenuitems": ({ resid, id }) => (
-    <ListMenuItems resid={resid} id={id} />
+  "/hotel/:resid/:id/:menuname": ({ resid, id, menuname }) => (
+    <ListMenuItems resid={resid} id={id} menuname={menuname} />
   ),
   "/editdish/:resid/:menuid/:dishid": ({ resid, dishid, menuid }) => (
     <EditDishItem dishid={dishid} menuid={menuid} resid={resid} />
   ),
   "/updateprofile": () => <UpdateProfile />,
+  "/:resid/addmenudishes/:menuname/:id": ({ menuname, resid, id }) => (
+    <AddDishToMenu menuname={menuname} resid={resid} menuid={id} />
+  ),
 };
 
 const AuthenticatedRouter = () => {

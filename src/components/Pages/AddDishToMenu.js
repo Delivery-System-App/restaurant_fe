@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
@@ -6,7 +6,7 @@ import { Button, InputAdornment, CircularProgress } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Card } from "@material-ui/core";
 import Uploader from "./UploadImage";
-import { addDish } from "../../redux/apiActions";
+import { addDish, addMoreDish } from "../../redux/apiActions";
 import { useDispatch } from "react-redux";
 import Notify from "../../utils/Notify";
 import useHeading from "./useHeading";
@@ -72,7 +72,7 @@ const LoaderButton = ({ Loading, handleSubmit, type }) => {
   );
 };
 
-const AddMenu = ({ id }) => {
+const AddDishToMenu = ({ menuname, resid, menuid }) => {
   useHeading("Add Menu");
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -93,6 +93,10 @@ const AddMenu = ({ id }) => {
   const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
   const [image, setImage] = useState("");
   const [Loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setMenuName(menuname);
+  }, []);
 
   const setDishes = (secureUrl) => {
     if (secureUrl) {
@@ -148,10 +152,10 @@ const AddMenu = ({ id }) => {
   const validateForm = () => {
     let formValid = true;
     let err = Object.assign({}, initError);
-    if (menuName === "") {
-      err["name"] = "This field is required";
-      formValid = false;
-    }
+    // if (menuName === "") {
+    //   err["name"] = "This field is required";
+    //   formValid = false;
+    // }
 
     Object.keys(Form).forEach((key) => {
       if (Form[key] === "" && !optionalValues.includes(key)) {
@@ -182,15 +186,16 @@ const AddMenu = ({ id }) => {
       setPreviousDishes([]);
       setError(initError);
       const Result = {
-        name: menuName,
+        menuId: menuid,
+        resId: resid,
         dish: Dish,
       };
 
-      dispatch(addDish([id], Result)).then((res) => {
+      dispatch(addMoreDish(Result)).then((res) => {
         if (res) {
-          if (res.status === 201) {
+          if (res.status === 200) {
             setnotify({
-              msg: "Added menu",
+              msg: `Added dishes to ${menuname}`,
               type: "success",
               popup: true,
             });
@@ -216,28 +221,24 @@ const AddMenu = ({ id }) => {
     <>
       <Card className={classes.form}>
         <Typography variant="h6" gutterBottom>
-          Add Menu
+          Add Dishes To The Menu
         </Typography>
         <form className={classes.form}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
-              {previousDishes.length > 0 && (
-                <Typography style={{ fontSize: "12px" }}>
-                  Cant change Menu name
-                </Typography>
-              )}
+              <Typography style={{ fontSize: "12px" }}>
+                Cant change Menu name
+              </Typography>
               <TextField
-                required
-                id="name"
-                name="name"
+                id="menuname"
+                name="menuname"
                 value={menuName}
-                onChange={handleMenuName}
                 label="Menu name"
                 fullWidth
-                disabled={previousDishes.length > 0}
-                autoComplete="name"
-                error={Error["name"]}
-                helperText={Error["name"]}
+                disabled
+                autoComplete="menuName"
+                error={Error["menuName"]}
+                helperText={Error["menuName"]}
               />
             </Grid>
             <Grid item xs={12}>
@@ -315,4 +316,4 @@ const AddMenu = ({ id }) => {
   );
 };
 
-export default AddMenu;
+export default AddDishToMenu;

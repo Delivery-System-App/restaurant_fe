@@ -52,3 +52,7 @@ export const menuItems = (id) => {
 export const updateDish = (body) => {
   return fireRequest("updateDish", [], body);
 };
+
+export const addMoreDish = (body) => {
+  return fireRequest("addMoreDish", [], body);
+};

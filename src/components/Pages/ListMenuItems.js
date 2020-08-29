@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ListMenuItems = ({ resid, id }) => {
+const ListMenuItems = ({ resid, id, menuname }) => {
   //getting menuid as props
   const body = {
     resId: resid,
@@ -117,6 +117,21 @@ const ListMenuItems = ({ resid, id }) => {
 
   return (
     <>
+      <Grid item container justify="center" style={{ marginBottom: "20px" }}>
+        <Button variant="outlined" color="primary" style={{ outline: "none" }}>
+          <A
+            href={`/${resid}/addmenudishes/${menuname}/${id}`}
+            className={classes.link}
+            style={{
+              color: "#757de8",
+              fontSize: "16px",
+              textDecoration: "none",
+            }}
+          >
+            Add Dishes To The Menu
+          </A>
+        </Button>
+      </Grid>
       {Loading ? (
         <Loader />
       ) : (
@@ -135,7 +150,7 @@ const ListMenuItems = ({ resid, id }) => {
                   </CardMedia>
                   <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
-                      {value.dishname}
+                      {value.name}
                     </Typography>
                     <Typography
                       variant="body2"
@@ -162,7 +177,7 @@ const ListMenuItems = ({ resid, id }) => {
                       confirmDialog={"Delete"}
                       buttonText={"Delete"}
                       id={value.dishId}
-                      sentence={`You are about to delete the item ${value.dishname} ?`}
+                      sentence={`You are about to delete the item ${value.name} ?`}
                     />
                   </CardActions>
                 </Card>

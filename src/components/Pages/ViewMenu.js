@@ -133,7 +133,7 @@ const ViewMenu = ({ id }) => {
                 return (
                   <Grid key={value.id} item xs={12} md={6} lg={4}>
                     <Card className={classes.root}>
-                      <A href={`/hotel/${id}/${value.id}/listmenuitems`}>
+                      <A href={`/hotel/${id}/${value.id}/${value.name}`}>
                         <CardActionArea>
                           <CardContent>
                             <Typography
@@ -147,7 +147,7 @@ const ViewMenu = ({ id }) => {
                         </CardActionArea>
                       </A>
                       <CardActions>
-                        <A href={`/hotel/${id}/${value.id}/listmenuitems`}>
+                        <A href={`/hotel/${id}/${value.id}/${value.name}`}>
                           <Button
                             size="small"
                             color="primary"

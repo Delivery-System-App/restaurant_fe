@@ -67,4 +67,9 @@ export default {
     method: "POST",
     noAuth: false,
   },
+  addMoreDish: {
+    path: "/api/v1/menu/addmoredish",
+    method: "PATCH",
+    noAuth: false,
+  },
 };
