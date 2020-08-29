@@ -1,5 +1,5 @@
 import React from "react";
-import { useRoutes } from "hookrouter";
+import { useRoutes, useRedirect } from "hookrouter";
 import Dashboard from "../components/Pages/Dashboard";
 import ProfilePage from "../components/Pages/ProfilePage";
 import NotFoundPage from "../components/Pages/NotFoundPage";
@@ -14,7 +14,7 @@ import UpdateProfile from "../components/Pages/UpdateProfile";
 import AddDishToMenu from "../components/Pages/AddDishToMenu";
 
 const routes = {
-  "/": () => <Dashboard />,
+  "/dashboard": () => <Dashboard />,
   "/user/:user": ({ user }) => <ProfilePage user={user} />,
   "/addhotel": () => <AddHotel />,
   "/edithotel/:id": ({ id }) => <EditHotel id={id} />,
@@ -34,7 +34,8 @@ const routes = {
 
 const AuthenticatedRouter = () => {
   const page = useRoutes(routes);
-
+  useRedirect("/", "/dashboard");
+  useRedirect("/login", "/dashboard");
   return page ? <AuthenticatedNavbar page={page} /> : <NotFoundPage />;
 };
 
