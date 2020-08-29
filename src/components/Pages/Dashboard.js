@@ -65,11 +65,7 @@ const DashboardPage = () => {
   const [Loading, setLoading] = useState(false);
   const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
   const [reRender, setreRender] = useState(Math.random());
-  const Images = [
-    "https://cf.bstatic.com/images/hotel/max1024x768/167/167102395.jpg",
-    noImage,
-    "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80",
-  ];
+
   useEffect(() => {
     let mount = true;
     setLoading(true);
@@ -130,7 +126,7 @@ const DashboardPage = () => {
               <Grid key={index + 1} item xs={12} md={6} lg={4}>
                 <Card className={classes.root}>
                   <CardMedia className={classes.media} title="Hotel Image">
-                    <Carousal images={value.photos ? [value.photos] : Images} />
+                    <Carousal images={value.photos ? value.photos : noImage} />
                   </CardMedia>
                   <A href={`/hotel/${value.id}`}>
                     <CardContent>

@@ -110,10 +110,6 @@ const ListMenuItems = ({ resid, id, menuname }) => {
   };
 
   const noImage = require("../../assets/images/noimage.jpg");
-  const Images = [
-    "https://us.123rf.com/450wm/indianfoodimages/indianfoodimages1808/indianfoodimages180800087/106450537-group-of-south-indian-food-like-masala-dosa-uttapam-idli-idly-wada-vada-sambar-appam-semolina-halwa-.jpg?ver=6",
-    noImage,
-  ];
 
   return (
     <>
@@ -146,7 +142,7 @@ const ListMenuItems = ({ resid, id, menuname }) => {
                     className={classes.media}
                     title="Hotel Image"
                   >
-                    <Carousal images={value.photos ? [value.photos] : Images} />
+                    <Carousal images={value.photos ? value.photos : noImage} />
                   </CardMedia>
                   <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">

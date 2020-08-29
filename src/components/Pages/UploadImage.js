@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 export default function UploadImage({
   setFiles,
-  limit = 5,
+  limit = 3,
   prevImages = [],
   formLoading = false,
   clearImage = false,
