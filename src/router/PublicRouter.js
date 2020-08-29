@@ -9,9 +9,9 @@ import PublicNavbar from "../components/Navbar/PublicNavbar";
 import ErrorPage from "../components/Pages/ErrorPage";
 
 const routes = {
-  "/": () => <HomePage />,
+  "/home": () => <HomePage />,
   "/about": () => <AboutPage />,
-  "/login": () => <LoginPage />,
+  "/": () => <LoginPage />,
   "/register": () => <RegisterPage />,
   "/error": () => <ErrorPage />,
 };

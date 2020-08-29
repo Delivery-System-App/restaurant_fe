@@ -63,7 +63,7 @@ export default {
     noAuth: false,
   },
   updateProfile: {
-    path: "/api/v1/auth/updateUser",
+    path: "/api/v1/auth/updateuser",
     method: "POST",
     noAuth: false,
   },

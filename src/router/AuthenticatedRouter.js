@@ -34,7 +34,6 @@ const routes = {
 
 const AuthenticatedRouter = () => {
   const page = useRoutes(routes);
-
   return page ? <AuthenticatedNavbar page={page} /> : <NotFoundPage />;
 };
 

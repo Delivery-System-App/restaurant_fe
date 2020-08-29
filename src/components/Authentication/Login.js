@@ -9,7 +9,7 @@ import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { A, navigate, useQueryParams } from "hookrouter";
+import { A, useQueryParams } from "hookrouter";
 import { login } from "../../redux/apiActions";
 import { useDispatch } from "react-redux";
 import { validateEmailAddress } from "../../utils/validation";
@@ -77,11 +77,6 @@ const Login = () => {
         }
         if (res && statusCode === 201) {
           localStorage.setItem("access_token", res.access_token);
-          if (queryParams && queryParams.redirect) {
-            navigate("/");
-          } else {
-            //     navigate("/");
-          }
           window.location.reload();
         }
       });
