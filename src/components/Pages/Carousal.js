@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, makeStyles, CardMedia } from "@material-ui/core";
 import { ChevronRight, ChevronLeft } from "@material-ui/icons";
 
@@ -31,11 +31,16 @@ const Carousal = ({ images }) => {
   }
 
   const [index, setIndex] = useState(0);
+  const [Len, setLen] = useState(0);
   if (typeof images === "string") {
     images = [images];
   }
+
   const content = images[index];
   const numSlides = images.length;
+  useEffect(() => {
+    setLen(numSlides);
+  }, [images, numSlides]);
 
   const onArrowClick = (direction) => {
     const increment = direction === "left" ? -1 : 1;
@@ -44,13 +49,19 @@ const Carousal = ({ images }) => {
   };
   return (
     <div className="flex">
-      <div style={{ width: "10%", marginTop: "60px" }} className="text-left">
+      <div
+        style={{ width: "10%", marginTop: "60px" }}
+        className={`${Len > 1 ? "block" : "text-transparent"} text-left`}
+      >
         <Arrow direction="left" clickFunction={() => onArrowClick("left")} />
       </div>
       <div style={{ width: "80%" }}>
         <CarouselSlide images={content} />
       </div>
-      <div style={{ width: "10%", marginTop: "60px" }} className="text-right">
+      <div
+        style={{ width: "10%", marginTop: "60px" }}
+        className={`${Len > 1 ? "block" : "text-transparent"} text-right`}
+      >
         <Arrow direction="right" clickFunction={() => onArrowClick("right")} />
       </div>
     </div>
