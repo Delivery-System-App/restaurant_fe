@@ -51,11 +51,11 @@ function EditDishItem({ dishid, menuid, resid }) {
     if (mount) {
       dispatch(menuItems([menuid])).then((res) => {
         if (res) {
+          console.log(res);
           const len = res.data.data;
           const Resp = Object.values(len);
           const result = Resp.filter((obj) => obj.dishId === dishid);
-          const { dishname, price, photos } = result[0];
-          const name = dishname;
+          const { name, price, photos } = result[0];
           setForm({ name, price, photos });
         }
         setLoading(false);
