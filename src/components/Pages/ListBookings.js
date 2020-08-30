@@ -1,5 +1,5 @@
 import React from "react";
-const Listbookings = () => {
-  return <h1>bookings list</h1>;
+const Listbookings = ({ resid }) => {
+  return <h1>bookings list for restaurant id: #{resid}</h1>;
 };
 export default Listbookings;
