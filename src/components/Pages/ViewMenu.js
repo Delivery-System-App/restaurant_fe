@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { viewMenu, deleteMenu } from "../../redux/apiActions";
+import { viewMenu, deleteMenu, deleteDish } from "../../redux/apiActions";
 import { A } from "hookrouter";
 import Confirm from "./ConfirmPage";
 import Loader from "../../utils/Loader";
@@ -110,6 +110,7 @@ const ViewMenu = ({ id }) => {
 
   return (
     <>
+      <SearchBar searchChange={handleSearchChange} />
       {Loading ? (
         <Loader />
       ) : (
@@ -120,32 +121,24 @@ const ViewMenu = ({ id }) => {
             justify="center"
             style={{ marginBottom: "20px" }}
           >
-            <div className="flex">
-              <Button
-                variant="outlined"
-                color="primary"
-                style={{ outline: "none", marginRight: "1px" }}
+            <Button
+              variant="outlined"
+              color="primary"
+              style={{ outline: "none" }}
+            >
+              <A
+                href={`/hotel/${id}/addmenu`}
+                className={classes.link}
+                style={{
+                  color: "#757de8",
+                  fontSize: "16px",
+                  textDecoration: "none",
+                }}
               >
-                <A
-                  href={`/hotel/${id}/addmenu`}
-                  className={classes.link}
-                  style={{
-                    color: "#757de8",
-                    fontSize: "16px",
-                    textDecoration: "none",
-                  }}
-                >
-                  Add Menu
-                </A>
-              </Button>
-              <div className="ml-1">
-                <Addbutton
-                  title="View booking"
-                  href={`/hotel/${id}/bookings`}
-                />
-              </div>
-            </div>
-            <SearchBar searchChange={handleSearchChange} />
+                Add Menu
+              </A>
+            </Button>
+            <Addbutton title="View booking" href={`/hotel/${id}/bookings`} />
             <Grid container className={classes.container}>
               {Data.map((value) => {
                 return (
