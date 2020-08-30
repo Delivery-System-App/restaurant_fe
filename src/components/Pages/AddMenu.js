@@ -168,17 +168,34 @@ const AddMenu = ({ id }) => {
     setError(err);
     return formValid;
   };
-  const handleSubmit = () => {
+
+  const handleConfirm = () => {
+    if (validateForm()) {
+      setLoading(true);
+      if (image) {
+        imageUploader(image, handleSubmit);
+      } else {
+        handleSubmit("");
+      }
+    }
+  };
+
+  const handleSubmit = (secureUrl) => {
     if (
       validateForm() ||
       (previousDishes.length !== 0 && Form.name === "" && Form.price === "")
     ) {
       let Dish;
       if (validateForm()) {
-        Dish = [...previousDishes, { ...Form }];
+        const Result = {
+          ...Form,
+          photos: secureUrl,
+        };
+        Dish = [...previousDishes, { ...Result }];
       } else {
         Dish = [...previousDishes];
       }
+      console.log(Form, Dish);
       setPreviousDishes([]);
       setError(initError);
       const Result = {
@@ -196,6 +213,8 @@ const AddMenu = ({ id }) => {
             });
           }
           setForm(Initform);
+          setLoading(false);
+          setImage("CLEARALL");
           setMenuName("");
         }
       });
@@ -297,7 +316,7 @@ const AddMenu = ({ id }) => {
                 />
               </div>
               <Button
-                onClick={handleSubmit}
+                onClick={handleConfirm}
                 fullWidth
                 variant="contained"
                 color="primary"
