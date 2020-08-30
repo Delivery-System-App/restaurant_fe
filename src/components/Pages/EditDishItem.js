@@ -5,6 +5,7 @@ import Notify from "../../utils/Notify";
 import { menuItems, updateDish } from "../../redux/apiActions";
 import Uploader from "./UploadImage";
 import { imageUploader } from "../../utils/helper";
+import BackButton from "../buttons/BackButton";
 
 import {
   makeStyles,
@@ -153,6 +154,7 @@ function EditDishItem({ dishid, menuid, resid }) {
         <Loader />
       ) : (
         <>
+          <BackButton />
           <Notify props={notify} closeAlert={closeAlert} />
           <Card className={classes.form}>
             <Typography variant="h6" gutterBottom>

@@ -10,6 +10,7 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import Confirm from "./ConfirmPage";
+import BackButton from "../buttons/BackButton";
 import { useDispatch } from "react-redux";
 import { menuItems, deleteDish } from "../../redux/apiActions";
 import Loader from "../../utils/Loader";
@@ -120,6 +121,7 @@ const ListMenuItems = ({ resid, id, menuname }) => {
 
   return (
     <>
+      <BackButton />
       <Grid item container justify="center" style={{ marginBottom: "5px" }}>
         <Button variant="outlined" color="primary" style={{ outline: "none" }}>
           <A

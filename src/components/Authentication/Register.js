@@ -243,7 +243,7 @@ const Register = () => {
             </Button>
             <Grid container justify="flex-end">
               <Grid item>
-                <A href="/login" className={classes.link}>
+                <A href="/" className={classes.link}>
                   <Link component="button" variant="body2">
                     Already have an account? Sign in
                   </Link>
