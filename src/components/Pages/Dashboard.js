@@ -109,7 +109,7 @@ const DashboardPage = () => {
 
   return (
     <>
-      <Grid item container justify="center" style={{ marginBottom: "20px" }}>
+      <Grid item container justify="center" style={{ marginBottom: "5px" }}>
         <Button variant="outlined" color="primary" style={{ outline: "none" }}>
           <A
             href="/addhotel"

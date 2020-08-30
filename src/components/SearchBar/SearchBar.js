@@ -18,17 +18,11 @@ const useStyles = makeStyles((theme) => ({
 const SearchBar = ({ searchChange }) => {
   const classes = useStyles();
   return (
-    <div
-      //   item
-      //   container
-      //   justify="center"
-      className={classes.searchContainer}
-      style={{ marginBottom: "10px" }}
-    >
+    <div className={classes.searchContainer} style={{ marginBottom: "10px" }}>
       <SearchIcon className={classes.searchIcon} />
       <TextField
         className={classes.searchInput}
-        label="Search Hotels"
+        label="Search"
         variant="standard"
         onChange={searchChange}
       />

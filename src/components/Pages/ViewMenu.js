@@ -17,6 +17,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import Notify from "../../utils/Notify";
 import Addbutton from "../buttons/AddButton";
+import SearchBar from "../SearchBar/SearchBar";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -59,6 +60,8 @@ const ViewMenu = ({ id }) => {
   const [Loading, setLoading] = useState(false);
   const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
   const [reRender, setreRender] = useState(Math.random());
+  const [filter, setFilter] = useState("");
+
   const classes = useStyles();
   const dispatch = useDispatch();
   useEffect(() => {
@@ -95,6 +98,10 @@ const ViewMenu = ({ id }) => {
     });
   };
 
+  const handleSearchChange = (e) => {
+    setFilter(e.target.value);
+  };
+
   const closeAlert = () => {
     setnotify({
       popup: false,
@@ -103,6 +110,7 @@ const ViewMenu = ({ id }) => {
 
   return (
     <>
+      <SearchBar searchChange={handleSearchChange} />
       {Loading ? (
         <Loader />
       ) : (
@@ -131,46 +139,47 @@ const ViewMenu = ({ id }) => {
               </A>
             </Button>
             <Addbutton title="View booking" href={`/hotel/${id}/bookings`} />
-
             <Grid container className={classes.container}>
               {Data.map((value) => {
                 return (
-                  <Grid key={value.id} item xs={12} md={6} lg={4}>
-                    <Card className={classes.root}>
-                      <A href={`/hotel/${id}/${value.id}/${value.name}`}>
-                        <CardActionArea>
-                          <CardContent>
-                            <Typography
-                              gutterBottom
-                              variant="h5"
-                              component="h2"
-                            >
-                              {value.name}
-                            </Typography>
-                          </CardContent>
-                        </CardActionArea>
-                      </A>
-                      <CardActions>
+                  value.name.toLowerCase().includes(filter.toLowerCase()) && (
+                    <Grid key={value.id} item xs={12} md={6} lg={4}>
+                      <Card className={classes.root}>
                         <A href={`/hotel/${id}/${value.id}/${value.name}`}>
-                          <Button
-                            size="small"
-                            color="primary"
-                            style={{ outline: "none" }}
-                          >
-                            View Menu
-                          </Button>
+                          <CardActionArea>
+                            <CardContent>
+                              <Typography
+                                gutterBottom
+                                variant="h5"
+                                component="h2"
+                              >
+                                {value.name}
+                              </Typography>
+                            </CardContent>
+                          </CardActionArea>
                         </A>
-                        <Confirm
-                          handleConfirm={handleConfirm}
-                          cancelDialog={"Cancel"}
-                          confirmDialog={"Delete"}
-                          buttonText={"Delete"}
-                          id={value.id}
-                          sentence={`You are about to delete the full menu list ${value.name} ?`}
-                        />
-                      </CardActions>
-                    </Card>
-                  </Grid>
+                        <CardActions>
+                          <A href={`/hotel/${id}/${value.id}/${value.name}`}>
+                            <Button
+                              size="small"
+                              color="primary"
+                              style={{ outline: "none" }}
+                            >
+                              View Menu
+                            </Button>
+                          </A>
+                          <Confirm
+                            handleConfirm={handleConfirm}
+                            cancelDialog={"Cancel"}
+                            confirmDialog={"Delete"}
+                            buttonText={"Delete"}
+                            id={value.id}
+                            sentence={`You are about to delete the full menu list ${value.name} ?`}
+                          />
+                        </CardActions>
+                      </Card>
+                    </Grid>
+                  )
                 );
               })}
             </Grid>
