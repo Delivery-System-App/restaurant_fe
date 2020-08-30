@@ -110,7 +110,6 @@ const ViewMenu = ({ id }) => {
 
   return (
     <>
-      <SearchBar searchChange={handleSearchChange} />
       {Loading ? (
         <Loader />
       ) : (
@@ -121,24 +120,32 @@ const ViewMenu = ({ id }) => {
             justify="center"
             style={{ marginBottom: "20px" }}
           >
-            <Button
-              variant="outlined"
-              color="primary"
-              style={{ outline: "none" }}
-            >
-              <A
-                href={`/hotel/${id}/addmenu`}
-                className={classes.link}
-                style={{
-                  color: "#757de8",
-                  fontSize: "16px",
-                  textDecoration: "none",
-                }}
+            <div className="flex">
+              <Button
+                variant="outlined"
+                color="primary"
+                style={{ outline: "none", marginRight: "1px" }}
               >
-                Add Menu
-              </A>
-            </Button>
-            <Addbutton title="View booking" href={`/hotel/${id}/bookings`} />
+                <A
+                  href={`/hotel/${id}/addmenu`}
+                  className={classes.link}
+                  style={{
+                    color: "#757de8",
+                    fontSize: "16px",
+                    textDecoration: "none",
+                  }}
+                >
+                  Add Menu
+                </A>
+              </Button>
+              <div className="ml-1">
+                <Addbutton
+                  title="View booking"
+                  href={`/hotel/${id}/bookings`}
+                />
+              </div>
+            </div>
+            <SearchBar searchChange={handleSearchChange} />
             <Grid container className={classes.container}>
               {Data.map((value) => {
                 return (
