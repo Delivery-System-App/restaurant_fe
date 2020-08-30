@@ -14,6 +14,7 @@ const SearchBar = ({ searchChange }) => {
         <FormControl style={{ width: "100%" }}>
           <InputLabel htmlFor="input">Search</InputLabel>
           <Input
+            autoFocus={true}
             id="input"
             onChange={searchChange}
             startAdornment={
