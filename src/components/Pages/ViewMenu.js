@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { viewMenu, deleteMenu, deleteDish } from "../../redux/apiActions";
+import { viewMenu, deleteMenu } from "../../redux/apiActions";
 import { A } from "hookrouter";
 import Confirm from "./ConfirmPage";
 import Loader from "../../utils/Loader";
