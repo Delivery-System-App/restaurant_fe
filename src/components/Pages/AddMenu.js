@@ -11,6 +11,8 @@ import { useDispatch } from "react-redux";
 import Notify from "../../utils/Notify";
 import useHeading from "./useHeading";
 import { imageUploader } from "../../utils/helper";
+import BackButton from "../buttons/BackButton";
+
 const useStyles = makeStyles((theme) => ({
   form: {
     maxWidth: "500px",
@@ -235,6 +237,7 @@ const AddMenu = ({ id }) => {
 
   return (
     <>
+      <BackButton />
       <Card className={classes.form}>
         <Typography variant="h6" gutterBottom>
           Add Menu

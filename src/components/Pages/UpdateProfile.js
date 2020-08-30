@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { validatePassword, phonePreg } from "../../utils/validation";
 import Notify from "../../utils/Notify";
 import UseHeading from "./useHeading";
+import BackButton from "../buttons/BackButton";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -139,6 +140,7 @@ const UpdateProfile = () => {
 
   return (
     <>
+      <BackButton />
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>

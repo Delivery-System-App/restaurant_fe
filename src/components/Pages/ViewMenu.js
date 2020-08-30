@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { viewMenu, deleteMenu, deleteDish } from "../../redux/apiActions";
+import { viewMenu, deleteMenu } from "../../redux/apiActions";
 import { A } from "hookrouter";
 import Confirm from "./ConfirmPage";
 import Loader from "../../utils/Loader";
+import BackButton from "../buttons/BackButton";
 import {
   Grid,
   Button,
@@ -12,7 +13,6 @@ import {
   CardContent,
   CardActions,
   CardActionArea,
-  ButtonGroup,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Notify from "../../utils/Notify";
@@ -114,6 +114,7 @@ const ViewMenu = ({ id }) => {
         <Loader />
       ) : (
         <div>
+          <BackButton />
           <Grid
             item
             container
@@ -124,6 +125,7 @@ const ViewMenu = ({ id }) => {
               <Button
                 variant="outlined"
                 color="primary"
+                size="medium"
                 style={{ outline: "none", marginRight: "1px" }}
               >
                 <A
