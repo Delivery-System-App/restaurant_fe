@@ -16,7 +16,7 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Notify from "../../utils/Notify";
-import Addbutton from "../../buttons/AddButton";
+import Addbutton from "../buttons/AddButton";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
