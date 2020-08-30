@@ -16,6 +16,7 @@ import Loader from "../../utils/Loader";
 import { A } from "hookrouter";
 import Carousal from "./Carousal";
 import Notify from "../../utils/Notify";
+import SearchBar from "../SearchBar/SearchBar";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -66,6 +67,8 @@ const ListMenuItems = ({ resid, id, menuname }) => {
   const [Loading, setLoading] = useState(false);
   const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
   const [reRender, setreRender] = useState(Math.random());
+  const [filter, setFilter] = useState("");
+
   useEffect(() => {
     let mount = true;
     setLoading(true);
@@ -85,6 +88,10 @@ const ListMenuItems = ({ resid, id, menuname }) => {
       mount = false;
     };
   }, [reRender, dispatch]);
+
+  const handleSearchChange = (e) => {
+    setFilter(e.target.value);
+  };
 
   const handleConfirm = (e) => {
     body["dishId"] = e;
@@ -113,7 +120,7 @@ const ListMenuItems = ({ resid, id, menuname }) => {
 
   return (
     <>
-      <Grid item container justify="center" style={{ marginBottom: "20px" }}>
+      <Grid item container justify="center" style={{ marginBottom: "5px" }}>
         <Button variant="outlined" color="primary" style={{ outline: "none" }}>
           <A
             href={`/${resid}/addmenudishes/${menuname}/${id}`}
@@ -128,56 +135,61 @@ const ListMenuItems = ({ resid, id, menuname }) => {
           </A>
         </Button>
       </Grid>
+      <SearchBar searchChange={handleSearchChange} />
       {Loading ? (
         <Loader />
       ) : (
         <Grid container className={classes.container}>
           {Data.map((value, index) => {
             return (
-              <Grid key={index + 1} item xs={12} md={6} lg={4}>
-                <Card className={classes.root}>
-                  {/* <A href={`/hotel/${value.id}`}> */}
-                  <CardMedia
-                    objectFit="contain"
-                    className={classes.media}
-                    title="Hotel Image"
-                  >
-                    <Carousal images={value.photos ? value.photos : noImage} />
-                  </CardMedia>
-                  <CardContent>
-                    <Typography gutterBottom variant="h5" component="h2">
-                      {value.name}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="textSecondary"
-                      component="p"
+              value.name.toLowerCase().includes(filter.toLowerCase()) && (
+                <Grid key={index + 1} item xs={12} md={6} lg={4}>
+                  <Card className={classes.root}>
+                    {/* <A href={`/hotel/${value.id}`}> */}
+                    <CardMedia
+                      objectFit="contain"
+                      className={classes.media}
+                      title="Hotel Image"
                     >
-                      Price:{value.price}
-                    </Typography>
-                  </CardContent>
-                  {/* </A> */}
-                  <CardActions>
-                    <A href={`/editdish/${resid}/${id}/${value.dishId}`}>
-                      <Button
-                        size="small"
-                        color="primary"
-                        style={{ outline: "none" }}
+                      <Carousal
+                        images={value.photos ? value.photos : noImage}
+                      />
+                    </CardMedia>
+                    <CardContent>
+                      <Typography gutterBottom variant="h5" component="h2">
+                        {value.name}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="textSecondary"
+                        component="p"
                       >
-                        Edit Item
-                      </Button>
-                    </A>
-                    <Confirm
-                      handleConfirm={handleConfirm}
-                      cancelDialog={"Cancel"}
-                      confirmDialog={"Delete"}
-                      buttonText={"Delete"}
-                      id={value.dishId}
-                      sentence={`You are about to delete the item ${value.name} ?`}
-                    />
-                  </CardActions>
-                </Card>
-              </Grid>
+                        Price:{value.price}
+                      </Typography>
+                    </CardContent>
+                    {/* </A> */}
+                    <CardActions>
+                      <A href={`/editdish/${resid}/${id}/${value.dishId}`}>
+                        <Button
+                          size="small"
+                          color="primary"
+                          style={{ outline: "none" }}
+                        >
+                          Edit Item
+                        </Button>
+                      </A>
+                      <Confirm
+                        handleConfirm={handleConfirm}
+                        cancelDialog={"Cancel"}
+                        confirmDialog={"Delete"}
+                        buttonText={"Delete"}
+                        id={value.dishId}
+                        sentence={`You are about to delete the item ${value.name} ?`}
+                      />
+                    </CardActions>
+                  </Card>
+                </Grid>
+              )
             );
           })}
         </Grid>
