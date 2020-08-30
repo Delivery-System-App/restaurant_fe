@@ -1,5 +1,13 @@
 import React from "react";
-import { Grid, TextField, makeStyles, fade } from "@material-ui/core";
+import {
+  Grid,
+  Input,
+  makeStyles,
+  InputLabel,
+  fade,
+  InputAdornment,
+  FormControl,
+} from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 const useStyles = makeStyles((theme) => ({
   searchContainer: {
@@ -14,18 +22,26 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     margin: "5px",
   },
+  root: {
+    //width: "300px",
+  },
 }));
 const SearchBar = ({ searchChange }) => {
   const classes = useStyles();
   return (
-    <div className={classes.searchContainer} style={{ marginBottom: "10px" }}>
-      <SearchIcon className={classes.searchIcon} />
-      <TextField
-        className={classes.searchInput}
-        label="Search"
-        variant="standard"
-        onChange={searchChange}
-      />
+    <div className="w-full my-2 text-center">
+      <FormControl className={classes.root}>
+        <InputLabel htmlFor="input">Search</InputLabel>
+        <Input
+          id="input"
+          onChange={searchChange}
+          startAdornment={
+            <InputAdornment position="start">
+              <SearchIcon />
+            </InputAdornment>
+          }
+        />
+      </FormControl>
     </div>
   );
 };
