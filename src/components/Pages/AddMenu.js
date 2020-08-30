@@ -177,8 +177,6 @@ const AddMenu = ({ id }) => {
       } else {
         handleSubmit("");
       }
-    } else {
-      handleSubmit("");
     }
   };
 
