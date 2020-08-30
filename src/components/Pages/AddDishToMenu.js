@@ -276,7 +276,7 @@ const AddDishToMenu = ({ menuname, resid, menuid }) => {
               <Uploader
                 setFiles={setFiles}
                 imageCleared={imageCleared}
-                formLoading={Loading}
+                formLoading={false}
                 clearImage={image}
               />
             </Grid>
@@ -288,7 +288,7 @@ const AddDishToMenu = ({ menuname, resid, menuid }) => {
                 color="secondary"
                 className={classes.submit}
               >
-                Add More Dishes
+                Add More Dishes 
               </Button>*/}
               <div className="text-center">
                 <LoaderButton

@@ -65,7 +65,6 @@ function EditDishItem({ dishid, menuid, resid }) {
     };
   }, [dispatch, dishid, menuid]);
   const setFiles = (files) => {
-    // setForm({ ...Form, photos: files });
     setImage(files);
   };
   const handleChange = (e) => {
@@ -193,7 +192,7 @@ function EditDishItem({ dishid, menuid, resid }) {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <Uploader setFiles={setFiles} formLoading={Loading} />
+                  <Uploader setFiles={setFiles} formLoading={false} />
                 </Grid>
                 <Grid item xs={12}>
                   <Button
