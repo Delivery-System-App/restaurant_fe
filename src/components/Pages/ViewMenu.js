@@ -12,9 +12,11 @@ import {
   CardContent,
   CardActions,
   CardActionArea,
+  ButtonGroup,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Notify from "../../utils/Notify";
+import Addbutton from "../../buttons/AddButton";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -128,6 +130,8 @@ const ViewMenu = ({ id }) => {
                 Add Menu
               </A>
             </Button>
+            <Addbutton title="View booking" href={`/hotel/${id}/bookings`} />
+
             <Grid container className={classes.container}>
               {Data.map((value) => {
                 return (
