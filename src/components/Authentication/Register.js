@@ -63,8 +63,10 @@ const Register = () => {
 
   function changeHandler(e) {
     const { name, value } = e.target;
+    const fieldValue = { ...form };
+    fieldValue[name] = name === "email" ? value.toLowerCase() : value;
     setError(initError);
-    setForm({ ...form, [name]: value });
+    setForm(fieldValue);
   }
 
   function validInputs() {
