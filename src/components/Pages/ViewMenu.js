@@ -5,6 +5,7 @@ import { A } from "hookrouter";
 import Confirm from "./ConfirmPage";
 import Loader from "../../utils/Loader";
 import BackButton from "../buttons/BackButton";
+import useHeading from "./useHeading";
 import {
   Grid,
   Button,
@@ -56,6 +57,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ViewMenu = ({ id }) => {
+  useHeading("Menu");
   const [Data, setData] = useState([]);
   const [Loading, setLoading] = useState(false);
   const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
@@ -110,11 +112,11 @@ const ViewMenu = ({ id }) => {
 
   return (
     <>
+      <BackButton />
       {Loading ? (
         <Loader />
       ) : (
         <div>
-          <BackButton />
           <Grid
             item
             container

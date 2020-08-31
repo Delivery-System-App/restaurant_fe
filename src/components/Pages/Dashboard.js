@@ -61,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
 
 const DashboardPage = () => {
   const classes = useStyles();
-  useHeading("My Hotels");
+  useHeading("My Restaurants");
   const [Data, setData] = useState([]);
   const dispatch = useDispatch();
   const [Loading, setLoading] = useState(false);
