@@ -18,6 +18,7 @@ import { A } from "hookrouter";
 import Carousal from "./Carousal";
 import Notify from "../../utils/Notify";
 import SearchBar from "../SearchBar/SearchBar";
+import useHeading from "./useHeading";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -58,6 +59,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ListMenuItems = ({ resid, id, menuname }) => {
   //getting menuid as props
+  useHeading("Dishes");
   const body = {
     resId: resid,
     menuId: id,

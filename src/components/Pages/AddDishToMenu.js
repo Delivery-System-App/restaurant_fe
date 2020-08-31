@@ -75,7 +75,7 @@ const LoaderButton = ({ Loading, handleSubmit, type }) => {
 };
 
 const AddDishToMenu = ({ menuname, resid, menuid }) => {
-  useHeading("Add Menu");
+  useHeading("Add Dishes");
   const classes = useStyles();
   const dispatch = useDispatch();
   const Initform = {

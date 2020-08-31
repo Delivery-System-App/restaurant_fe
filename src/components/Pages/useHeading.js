@@ -5,7 +5,7 @@ import { changeHeading } from "../../redux/actions";
 const useHeading = (heading) => {
   const dispatch = useDispatch();
   useEffect(() => {
-    document.title = heading;
+    //document.title = heading;
     dispatch(changeHeading(heading));
   }, [heading, dispatch]);
 };

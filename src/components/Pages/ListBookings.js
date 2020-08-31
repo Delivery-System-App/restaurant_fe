@@ -1,7 +1,9 @@
 import React from "react";
 import BackButton from "../buttons/BackButton";
+import useHeading from "./useHeading";
 
 const Listbookings = ({ resid }) => {
+  useHeading("Bookings");
   return (
     <>
       <BackButton />

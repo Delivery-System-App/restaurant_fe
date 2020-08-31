@@ -6,6 +6,7 @@ import { menuItems, updateDish } from "../../redux/apiActions";
 import Uploader from "./UploadImage";
 import { imageUploader } from "../../utils/helper";
 import BackButton from "../buttons/BackButton";
+import useHeading from "./useHeading";
 
 import {
   makeStyles,
@@ -29,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function EditDishItem({ dishid, menuid, resid }) {
+  useHeading("Edit Dish");
   const dispatch = useDispatch();
   const classes = useStyles();
   const initError = {
@@ -150,11 +152,11 @@ function EditDishItem({ dishid, menuid, resid }) {
   };
   return (
     <>
+      <BackButton />
       {Loading ? (
         <Loader />
       ) : (
         <>
-          <BackButton />
           <Notify props={notify} closeAlert={closeAlert} />
           <Card className={classes.form}>
             <Typography variant="h6" gutterBottom>
