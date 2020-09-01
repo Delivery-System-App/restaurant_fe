@@ -56,3 +56,11 @@ export const updateDish = (body) => {
 export const addMoreDish = (body) => {
   return fireRequest("addMoreDish", [], body);
 };
+
+export const hotelBookingDetails = (id) => {
+  return fireRequest("hotelBookingDetails", [id]);
+};
+
+export const bookingDetailsById = (id) => {
+  return fireRequest("bookingDetailsById", [id]);
+};

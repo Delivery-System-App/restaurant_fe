@@ -72,4 +72,14 @@ export default {
     method: "PATCH",
     noAuth: false,
   },
+  hotelBookingDetails: {
+    path: "/api/v1/booking/All_Bookings",
+    method: "GET",
+    noAuth: false,
+  },
+  bookingDetailsById: {
+    path: "/api/v1/booking/GetBookingDetail",
+    method: "GET",
+    noAuth: false,
+  },
 };

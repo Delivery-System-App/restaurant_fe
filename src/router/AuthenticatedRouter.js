@@ -13,6 +13,7 @@ import EditDishItem from "../components/Pages/EditDishItem";
 import UpdateProfile from "../components/Pages/UpdateProfile";
 import AddDishToMenu from "../components/Pages/AddDishToMenu";
 import Listbookings from "../components/Pages/ListBookings";
+import BookingDetails from "../components/Pages/BookingDetails";
 
 const routes = {
   "/": () => <Dashboard />,
@@ -32,6 +33,7 @@ const routes = {
     <AddDishToMenu menuname={menuname} resid={resid} menuid={id} />
   ),
   "/hotel/:resid/bookings": ({ resid }) => <Listbookings resid={resid} />,
+  "/bookings/:bookid": ({ bookid }) => <BookingDetails bookid={bookid} />,
 };
 
 const AuthenticatedRouter = () => {
