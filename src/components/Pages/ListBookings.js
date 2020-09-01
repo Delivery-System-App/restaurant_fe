@@ -19,11 +19,13 @@ const Listbookings = ({ resid }) => {
     CANCEL_STATUS: false,
   });
   const applyFilter = (res, type) => {
-    setFilteredValue(
-      res.data.filter((el) => {
-        return el.deliveryStatus === type;
-      })
-    );
+    if (res.data) {
+      setFilteredValue(
+        res.data.filter((el) => {
+          return el.deliveryStatus === type;
+        })
+      );
+    }
   };
   useEffect(() => {
     window.scrollTo(0, 0);
