@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardContent } from "@material-ui/core";
+import BackButton from "../buttons/BackButton";
 import { bookingDetailsById } from "../../redux/apiActions";
 import { useDispatch } from "react-redux";
 
@@ -17,6 +18,8 @@ const BookingDetails = ({ bookid }) => {
     }, [dispatch, bookid]);
     return (
         <div>
+            <BackButton />
+            <br /> <br />
             <h1>Booking details of {bookid}</h1><br /><br />
             <Card>
                 <CardContent>
