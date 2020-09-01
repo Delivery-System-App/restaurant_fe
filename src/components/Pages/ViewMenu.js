@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { viewMenu, deleteMenu, deleteDish } from "../../redux/apiActions";
+import { viewMenu, deleteMenu } from "../../redux/apiActions";
 import { A } from "hookrouter";
 import Confirm from "./ConfirmPage";
 import Loader from "../../utils/Loader";
+import BackButton from "../buttons/BackButton";
+import useHeading from "./useHeading";
 import {
   Grid,
   Button,
@@ -12,7 +14,6 @@ import {
   CardContent,
   CardActions,
   CardActionArea,
-  ButtonGroup,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Notify from "../../utils/Notify";
@@ -56,6 +57,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ViewMenu = ({ id }) => {
+  useHeading("Menu");
   const [Data, setData] = useState([]);
   const [Loading, setLoading] = useState(false);
   const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
@@ -110,6 +112,7 @@ const ViewMenu = ({ id }) => {
 
   return (
     <>
+      <BackButton />
       {Loading ? (
         <Loader />
       ) : (
@@ -124,6 +127,7 @@ const ViewMenu = ({ id }) => {
               <Button
                 variant="outlined"
                 color="primary"
+                size="medium"
                 style={{ outline: "none", marginRight: "1px" }}
               >
                 <A

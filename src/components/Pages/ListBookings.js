@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import BackButton from "../buttons/BackButton";
+import useHeading from "./useHeading";
 import { hotelBookingDetails } from "../../redux/apiActions";
 import { useDispatch } from "react-redux";
 import { DELIVERY_STATUS } from "../Common/constants";
@@ -6,7 +8,7 @@ import { navigate } from "hookrouter";
 
 
 const Listbookings = ({ resid }) => {
-
+  useHeading("Bookings");
   const dispatch = useDispatch();
   const [details, setdetails] = useState({});
 
@@ -98,6 +100,8 @@ const Listbookings = ({ resid }) => {
   }
   return (
     <div>
+      <BackButton />
+      <br /><br />
       <div className="flex items-center justify-between flex-wrap">
         <div className="flex py-2 px-2">
           <div

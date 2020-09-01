@@ -10,6 +10,7 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import Confirm from "./ConfirmPage";
+import BackButton from "../buttons/BackButton";
 import { useDispatch } from "react-redux";
 import { menuItems, deleteDish } from "../../redux/apiActions";
 import Loader from "../../utils/Loader";
@@ -17,6 +18,7 @@ import { A } from "hookrouter";
 import Carousal from "./Carousal";
 import Notify from "../../utils/Notify";
 import SearchBar from "../SearchBar/SearchBar";
+import useHeading from "./useHeading";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -57,6 +59,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ListMenuItems = ({ resid, id, menuname }) => {
   //getting menuid as props
+  useHeading("Dishes");
   const body = {
     resId: resid,
     menuId: id,
@@ -120,6 +123,7 @@ const ListMenuItems = ({ resid, id, menuname }) => {
 
   return (
     <>
+      <BackButton />
       <Grid item container justify="center" style={{ marginBottom: "5px" }}>
         <Button variant="outlined" color="primary" style={{ outline: "none" }}>
           <A

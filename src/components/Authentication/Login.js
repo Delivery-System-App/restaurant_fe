@@ -54,7 +54,9 @@ const Login = () => {
   }, []);
   function changeHandler(e) {
     const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
+    const fieldValue = { ...form };
+    fieldValue[name] = name === "email" ? value.toLowerCase() : value;
+    setForm(fieldValue);
   }
 
   function submitHandler(e) {

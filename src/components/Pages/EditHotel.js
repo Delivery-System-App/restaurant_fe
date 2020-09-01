@@ -5,6 +5,7 @@ import HotelForm from "./HotelForm";
 import { phonePreg } from "../../utils/validation";
 import Notify from "../../utils/Notify";
 import { imageUploader } from "../../utils/helper";
+import BackButton from "../buttons/BackButton";
 
 function EditHotel({ id }) {
   const dispatch = useDispatch();
@@ -137,6 +138,7 @@ function EditHotel({ id }) {
 
   return (
     <>
+      <BackButton />
       <Notify props={notify} closeAlert={closeAlert} />
       <HotelForm
         Form={Form}

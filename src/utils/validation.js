@@ -9,8 +9,8 @@ export const isNumber = (number) => {
 };
 
 export const validatePassword = (password) => {
-  const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@!%*?%#`^()_=+{}[|\\\];:'"<>,./?~&])[A-Za-z\d$@!%*?%#`^()_=+{}[|\\\];:'"<>,./?~&]{8,49}/;
-  return pattern.test(password);
+const pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
+return pattern.test(password);
 };
 
 export const validateLocationCoordinates = (location) => {

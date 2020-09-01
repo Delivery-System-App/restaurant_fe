@@ -6,6 +6,7 @@ import HotelForm from "./HotelForm";
 import Notify from "../../utils/Notify";
 import useHeading from "./useHeading";
 import { imageUploader } from "../../utils/helper";
+import BackButton from "../buttons/BackButton";
 
 export default function AddHotel() {
   useHeading("Add Hotel");
@@ -109,6 +110,7 @@ export default function AddHotel() {
 
   return (
     <>
+      <BackButton />
       <Notify props={notify} closeAlert={closeAlert} />
       <HotelForm
         Form={Form}

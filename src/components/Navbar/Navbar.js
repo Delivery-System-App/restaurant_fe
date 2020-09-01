@@ -86,7 +86,7 @@ const Navbar = ({ drawer, page }) => {
       <ListItem className={classes.drawerHead}>
         <AppIcon className={classes.icon} />
         <Typography variant="h6" component="h1">
-          {process.env.REACT_APP_NAME}
+          Skosh
         </Typography>
       </ListItem>
       <Divider />
