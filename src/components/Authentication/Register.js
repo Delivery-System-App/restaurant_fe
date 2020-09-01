@@ -12,7 +12,11 @@ import Container from "@material-ui/core/Container";
 import { A } from "hookrouter";
 import { register } from "../../redux/apiActions";
 import { useDispatch } from "react-redux";
-import { validateEmailAddress, validatePassword } from "../../utils/validation";
+import {
+  validateEmailAddress,
+  validatePassword,
+  phonePreg,
+} from "../../utils/validation";
 import Notify from "../../utils/Notify";
 
 const useStyles = makeStyles((theme) => ({
@@ -72,7 +76,7 @@ const Register = () => {
   function validInputs() {
     let formValid = true;
     let err = Object.assign({}, initError);
-    const { password, confirm, email } = form;
+    const { password, confirm, email, number } = form;
     Object.keys(form).forEach((key) => {
       if (form[key] === "") {
         formValid = false;
@@ -85,6 +89,10 @@ const Register = () => {
     }
     if (!validateEmailAddress(email)) {
       err["email"] = "Enter a valid email";
+      formValid = false;
+    }
+    if (!phonePreg(number)) {
+      err["number"] = "Invalid Number";
       formValid = false;
     }
     if (password.length < 8) {
@@ -122,7 +130,7 @@ const Register = () => {
             setForm(initForm);
           } else {
             setnotify({
-              msg: "Error in registering",
+              msg: "User exists, Please login!",
               type: "error",
               popup: true,
             });
@@ -186,6 +194,8 @@ const Register = () => {
                   fullWidth
                   id="number"
                   label="Mobile No"
+                  error={error["number"]}
+                  helperText={error["number"]}
                 />
               </Grid>
               <Grid item xs={12}>
