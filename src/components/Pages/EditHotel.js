@@ -27,7 +27,6 @@ function EditHotel({ id }) {
   const [Form, setForm] = useState(initForm);
   const [Loading, setLoading] = useState(false);
   const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
-  const [iurl, setUrl] = useState("");
   const [image, setImage] = useState("");
   useEffect(() => {
     setLoading(true);

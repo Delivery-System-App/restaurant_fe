@@ -83,10 +83,10 @@ const Listbookings = ({ resid }) => {
     );
   } else {
     bookingList = (
-      <tr className="bg-white">
+      <tr className="bg-white ">
         <td
           colSpan={3}
-          className="px-5 py-5 border-b border-gray-200 text-center"
+          className="px-5 py-5 border-b border-gray-200 text-center "
         >
           <p className="text-gray-500 whitespace-no-wrap">
             No bookings available
@@ -132,7 +132,7 @@ const Listbookings = ({ resid }) => {
       </div>
       <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
         <div className="inline-block min-w-full">
-          <table className="min-w-full leading-normal shadow rounded-lg overflow-hidden">
+          <table className="min-w-full leading-normal shadow rounded-lg overflow-hidden ">
             <thead>
               <tr>
                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-blue-400 text-left text-xs font-semibold text-white uppercase tracking-wider">

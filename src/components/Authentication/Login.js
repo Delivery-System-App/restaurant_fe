@@ -51,6 +51,7 @@ const Login = () => {
 
   useEffect(() => {
     setQueryParams(queryParams);
+    //eslint-disable-next-line
   }, []);
   function changeHandler(e) {
     const { name, value } = e.target;

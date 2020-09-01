@@ -12,14 +12,12 @@ import Carousal from "./Carousal";
 
 import {
   Card,
-  CardActionArea,
   CardActions,
   CardContent,
   Button,
   Typography,
   CardMedia,
 } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
 import SearchBar from "../SearchBar/SearchBar";
 const noImage = require("../../assets/images/noimage.jpg");
 const useStyles = makeStyles((theme) => ({

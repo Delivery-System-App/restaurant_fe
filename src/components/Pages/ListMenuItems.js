@@ -90,6 +90,7 @@ const ListMenuItems = ({ resid, id, menuname }) => {
     return () => {
       mount = false;
     };
+    //eslint-disable-next-line
   }, [reRender, dispatch]);
 
   const handleSearchChange = (e) => {

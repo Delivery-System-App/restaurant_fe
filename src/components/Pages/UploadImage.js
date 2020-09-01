@@ -19,6 +19,7 @@ export default function UploadImage({
       setImages(initImage);
       imageCleared();
     }
+    //eslint-disable-next-line
   }, [clearImage, initImage]);
 
   const handleChange = (e) => {

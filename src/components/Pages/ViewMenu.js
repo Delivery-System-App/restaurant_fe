@@ -84,6 +84,7 @@ const ViewMenu = ({ id }) => {
     return () => {
       mount = false;
     };
+    //eslint-disable-next-line
   }, [dispatch, reRender]);
 
   const handleConfirm = (e) => {

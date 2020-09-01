@@ -95,9 +95,9 @@ const AddDishToMenu = ({ menuname, resid, menuid }) => {
   const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
   const [image, setImage] = useState("");
   const [Loading, setLoading] = useState(false);
-
   useEffect(() => {
     setMenuName(menuname);
+    //eslint-disable-next-line
   }, []);
 
   const setDishes = (secureUrl) => {
@@ -141,10 +141,10 @@ const AddDishToMenu = ({ menuname, resid, menuid }) => {
     // setForm({ ...Form, photos: files });
     setImage(files);
   };
-  const handleMenuName = (e) => {
-    const { value } = e.target;
-    setMenuName(value);
-  };
+  // const handleMenuName = (e) => {
+  //   const { value } = e.target;
+  //   setMenuName(value);
+  // };
   const handleChange = (e) => {
     setError(initError);
     const { value, name } = e.target;
