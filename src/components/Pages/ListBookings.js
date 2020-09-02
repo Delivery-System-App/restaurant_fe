@@ -5,6 +5,7 @@ import { hotelBookingDetails } from "../../redux/apiActions";
 import { useDispatch } from "react-redux";
 import { DELIVERY_STATUS } from "../Common/constants";
 import { navigate } from "hookrouter";
+import { Button, Grid, Typography } from "@material-ui/core";
 
 const Listbookings = ({ resid }) => {
   useHeading("Bookings");
@@ -30,9 +31,11 @@ const Listbookings = ({ resid }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
     dispatch(hotelBookingDetails(resid)).then((resp) => {
-      const { data: res } = resp;
-      setdetails(res);
-      applyFilter(res, "Pending");
+      if (resp) {
+        const { data: res } = resp;
+        setdetails(res);
+        applyFilter(res, "Pending");
+      }
     });
   }, [dispatch, resid]);
   function setFilter(type, value) {
@@ -45,38 +48,32 @@ const Listbookings = ({ resid }) => {
       filters.CANCEL_STATUS === false ? (
         <tr key={e.bookId} onClick={() => navigate(`/bookings/${e.bookId}`)}>
           <td className="px-5 py-5 border-b border-gray-200 text-sm ">
-            <div className="flex items-center">
-              <div className="ml-3">
-                <p className="text-gray-900 whitespace-no-wrap">{++i}</p>
+            <Typography className="flex items-center">
+              <div className="ml-2">
+                <p className="whitespace-no-wrap">{++i}</p>
               </div>
-            </div>
+            </Typography>
           </td>
           <td className="px-5 py-5 border-b border-gray-200 text-sm ">
-            <div className="flex items-center">
-              <div className="ml-3">
-                <p className="text-gray-900 whitespace-no-wrap">
-                  {e.user.name}
-                </p>
+            <Typography className="flex items-center">
+              <div className="ml-2">
+                <p className="whitespace-no-wrap">{e.user.name}</p>
               </div>
-            </div>
+            </Typography>
           </td>
           <td className="px-5 py-5 border-b border-gray-200 text-sm ">
-            <div className="flex items-center">
-              <div className="ml-3">
-                <p className="text-gray-900 whitespace-no-wrap">
-                  {e.deliveryAdd}
-                </p>
+            <Typography className="flex items-center">
+              <div className="ml-2">
+                <p className="whitespace-no-wrap">{e.deliveryAdd}</p>
               </div>
-            </div>
+            </Typography>
           </td>
           <td className="px-5 py-5 border-b border-gray-200 text-sm ">
-            <div className="flex items-center">
-              <div className="ml-3">
-                <p className="text-gray-900 whitespace-no-wrap">
-                  {e.payStatus}
-                </p>
+            <Typography className="flex items-center">
+              <div className="ml-2">
+                <p className="whitespace-no-wrap">{e.payStatus}</p>
               </div>
-            </div>
+            </Typography>
           </td>
         </tr>
       ) : (
@@ -104,33 +101,35 @@ const Listbookings = ({ resid }) => {
       <br />
       <div className="flex items-center justify-between flex-wrap">
         <div className="flex py-2 px-2">
-          <div
-            className={`text-xs md:text-sm py-1 border border-gray-400 mx-1 cursor-pointer px-2 rounded-full ${
-              filters.CANCEL_STATUS ? "bg-red-600 text-white" : "bg-gray-100"
-            }`}
+          <Button
             onClick={() => setFilter("CANCEL_STATUS", !filters.CANCEL_STATUS)}
+            variant="contained"
+            size="small"
+            color={`${filters.CANCEL_STATUS ? "secondary" : "default"}`}
           >
-            Show Cancelled Orders
-          </div>
+            Cancelled Orders
+          </Button>
         </div>
-        <div className="flex py-2 px-2">
+        <Grid className="flex">
           {Object.values(DELIVERY_STATUS).map((status) => (
-            <div
-              key={status.type}
-              className={`flex items-center text-xs md:text-sm py-1 border border-gray-400 mx-1 cursor-pointer px-2 rounded-full ${
-                filters.DEL_STATUS === status.type
-                  ? "bg-indigo-600 text-white"
-                  : "bg-gray-100"
-              }`}
-              onClick={() => {
-                setFilter("DEL_STATUS", status.type);
-                applyFilter(details, status.string);
-              }}
-            >
-              {status.string}
+            <div className="mx-1">
+              <Button
+                key={status.type}
+                variant="contained"
+                size="small"
+                color={`${
+                  filters.DEL_STATUS === status.type ? "primary" : "default"
+                }`}
+                onClick={() => {
+                  setFilter("DEL_STATUS", status.type);
+                  applyFilter(details, status.string);
+                }}
+              >
+                {status.string}
+              </Button>
             </div>
           ))}
-        </div>
+        </Grid>
       </div>
       <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
         <div className="inline-block min-w-full">

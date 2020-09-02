@@ -71,7 +71,7 @@ const ViewMenu = ({ id }) => {
     setLoading(true);
     if (mount) {
       dispatch(viewMenu([id])).then((res) => {
-        if (res.data) {
+        if (res && res.data) {
           const len = res.data.data;
           setData(Object.values(len));
           setLoading(false);
