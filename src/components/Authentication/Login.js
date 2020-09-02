@@ -65,22 +65,24 @@ const Login = () => {
     const { email } = form;
     if (validateEmailAddress(email)) {
       dispatch(login(form)).then((resp) => {
-        const { data: res } = resp;
-        const { status: statusCode } = resp;
+        if (resp) {
+          const { data: res } = resp;
+          const { status: statusCode } = resp;
 
-        // set captha logic needed
+          // set captha logic needed
 
-        // TODO: change status code to 200 (backend was sending 201 on login)
-        if (resp.data === undefined) {
-          setnotify({
-            msg: "Invalid credentials",
-            type: "error",
-            popup: !notify.popup,
-          });
-        }
-        if (res && statusCode === 201) {
-          localStorage.setItem("access_token", res.access_token);
-          window.location.reload();
+          // TODO: change status code to 200 (backend was sending 201 on login)
+          if (resp.data === undefined) {
+            setnotify({
+              msg: "Invalid credentials",
+              type: "error",
+              popup: !notify.popup,
+            });
+          }
+          if (res && statusCode === 201) {
+            localStorage.setItem("access_token", res.access_token);
+            window.location.reload();
+          }
         }
       });
       // localStorage.setItem(`${process.env.REACT_APP_NAME}_token`, "yay man");

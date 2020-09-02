@@ -43,12 +43,14 @@ const Listbookings = ({ resid }) => {
     CANCEL_STATUS: false,
   });
   const applyFilter = (res, type) => {
-    if (res.data) {
-      setFilteredValue(
-        res.data.filter((el) => {
-          return el.deliveryStatus === type;
-        })
-      );
+    if (res) {
+      if (res.data) {
+        setFilteredValue(
+          res.data.filter((el) => {
+            return el.deliveryStatus === type;
+          })
+        );
+      }
     }
   };
   useEffect(() => {
