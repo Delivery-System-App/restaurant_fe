@@ -17,7 +17,7 @@ import {
   TableRow,
   Paper,
 } from "@material-ui/core";
-import { withStyles, makeStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -33,6 +33,7 @@ const Listbookings = ({ resid }) => {
   useHeading("Bookings");
   const dispatch = useDispatch();
   const [details, setdetails] = useState({});
+  const [Loading, setLoading] = useState(false);
 
   let bookingList = useState();
   const [filteredValue, setFilteredValue] = useState([]);
@@ -52,12 +53,14 @@ const Listbookings = ({ resid }) => {
   };
   useEffect(() => {
     window.scrollTo(0, 0);
+    setLoading(true);
     dispatch(hotelBookingDetails(resid)).then((resp) => {
       if (resp) {
         const { data: res } = resp;
         setdetails(res);
         applyFilter(res, "Pending");
       }
+      setLoading(false);
     });
   }, [dispatch, resid]);
   function setFilter(type, value) {
@@ -106,16 +109,27 @@ const Listbookings = ({ resid }) => {
         (bookingList = <tr></tr>)
       )
     );
+  } else if (Loading) {
+    bookingList = (
+      <TableRow>
+        <TableCell
+          colSpan={4}
+          className="px-5 py-5 border-b border-gray-200 text-center "
+        >
+          <Typography>Loading bookings....</Typography>
+        </TableCell>
+      </TableRow>
+    );
   } else {
     bookingList = (
-      <tr>
+      <TableRow>
         <TableCell
           colSpan={4}
           className="px-5 py-5 border-b border-gray-200 text-center "
         >
           <Typography>No bookings available</Typography>
         </TableCell>
-      </tr>
+      </TableRow>
     );
   }
   return (
@@ -156,7 +170,7 @@ const Listbookings = ({ resid }) => {
         </Grid>
       </Grid>
 
-      <Paper style={{ width: "100%" }}>
+      <Paper style={{ width: "100%", marginTop: "15px" }}>
         <TableContainer style={{ maxHeight: 440 }} component={Paper}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>

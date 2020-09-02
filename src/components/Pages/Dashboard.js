@@ -91,14 +91,15 @@ const DashboardPage = () => {
   const handleConfirm = (e) => {
     setLoading(true);
     dispatch(deleteHotel([e])).then((res) => {
-      if (res.status === 200) {
-        setnotify({
-          msg: "Hotel Deleted",
-          type: "success",
-          popup: true,
-        });
-        setreRender(Math.random());
-      }
+      if (res)
+        if (res.status === 200) {
+          setnotify({
+            msg: "Hotel Deleted",
+            type: "success",
+            popup: true,
+          });
+          setreRender(Math.random());
+        }
     });
   };
   const closeAlert = () => {
