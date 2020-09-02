@@ -5,11 +5,35 @@ import { hotelBookingDetails } from "../../redux/apiActions";
 import { useDispatch } from "react-redux";
 import { DELIVERY_STATUS } from "../Common/constants";
 import { navigate } from "hookrouter";
+import {
+  Button,
+  Grid,
+  Typography,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableContainer,
+  Table,
+  TableRow,
+  Paper,
+} from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
+
+const StyledTableCell = withStyles((theme) => ({
+  head: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  body: {
+    fontSize: 14,
+  },
+}))(TableCell);
 
 const Listbookings = ({ resid }) => {
   useHeading("Bookings");
   const dispatch = useDispatch();
   const [details, setdetails] = useState({});
+  const [Loading, setLoading] = useState(false);
 
   let bookingList = useState();
   const [filteredValue, setFilteredValue] = useState([]);
@@ -29,10 +53,14 @@ const Listbookings = ({ resid }) => {
   };
   useEffect(() => {
     window.scrollTo(0, 0);
+    setLoading(true);
     dispatch(hotelBookingDetails(resid)).then((resp) => {
-      const { data: res } = resp;
-      setdetails(res);
-      applyFilter(res, "Pending");
+      if (resp) {
+        const { data: res } = resp;
+        setdetails(res);
+        applyFilter(res, "Pending");
+      }
+      setLoading(false);
     });
   }, [dispatch, resid]);
   function setFilter(type, value) {
@@ -43,58 +71,65 @@ const Listbookings = ({ resid }) => {
     let i = 0;
     bookingList = filteredValue.map((e) =>
       filters.CANCEL_STATUS === false ? (
-        <tr key={e.bookId} onClick={() => navigate(`/bookings/${e.bookId}`)}>
-          <td className="px-5 py-5 border-b border-gray-200 text-sm ">
-            <div className="flex items-center">
-              <div className="ml-3">
-                <p className="text-gray-900 whitespace-no-wrap">{++i}</p>
+        <TableRow
+          key={e.bookId}
+          hover
+          onClick={() => navigate(`/bookings/${e.bookId}`)}
+        >
+          <TableCell className="px-5 py-5 border-b border-gray-200 text-sm ">
+            <Typography className="flex items-center">
+              <div className="ml-2">
+                <p className="whitespace-no-wrap">{++i}</p>
               </div>
-            </div>
-          </td>
-          <td className="px-5 py-5 border-b border-gray-200 text-sm ">
-            <div className="flex items-center">
-              <div className="ml-3">
-                <p className="text-gray-900 whitespace-no-wrap">
-                  {e.user.name}
-                </p>
+            </Typography>
+          </TableCell>
+          <TableCell className="px-5 py-5 border-b border-gray-200 text-sm ">
+            <Typography className="flex items-center">
+              <div className="ml-2">
+                <p className="whitespace-no-wrap">{e.user.name}</p>
               </div>
-            </div>
-          </td>
-          <td className="px-5 py-5 border-b border-gray-200 text-sm ">
-            <div className="flex items-center">
-              <div className="ml-3">
-                <p className="text-gray-900 whitespace-no-wrap">
-                  {e.deliveryAdd}
-                </p>
+            </Typography>
+          </TableCell>
+          <TableCell className="px-5 py-5 border-b border-gray-200 text-sm ">
+            <Typography className="flex items-center">
+              <div className="ml-2">
+                <p className="whitespace-no-wrap">{e.deliveryAdd}</p>
               </div>
-            </div>
-          </td>
-          <td className="px-5 py-5 border-b border-gray-200 text-sm ">
-            <div className="flex items-center">
-              <div className="ml-3">
-                <p className="text-gray-900 whitespace-no-wrap">
-                  {e.payStatus}
-                </p>
+            </Typography>
+          </TableCell>
+          <TableCell className="px-5 py-5 border-b border-gray-200 text-sm ">
+            <Typography className="flex items-center">
+              <div className="ml-2">
+                <p className="whitespace-no-wrap">{e.payStatus}</p>
               </div>
-            </div>
-          </td>
-        </tr>
+            </Typography>
+          </TableCell>
+        </TableRow>
       ) : (
         (bookingList = <tr></tr>)
       )
     );
-  } else {
+  } else if (Loading) {
     bookingList = (
-      <tr className="bg-white ">
-        <td
-          colSpan={3}
+      <TableRow>
+        <TableCell
+          colSpan={4}
           className="px-5 py-5 border-b border-gray-200 text-center "
         >
-          <p className="text-gray-500 whitespace-no-wrap">
-            No bookings available
-          </p>
-        </td>
-      </tr>
+          <Typography>Loading bookings....</Typography>
+        </TableCell>
+      </TableRow>
+    );
+  } else {
+    bookingList = (
+      <TableRow>
+        <TableCell
+          colSpan={4}
+          className="px-5 py-5 border-b border-gray-200 text-center "
+        >
+          <Typography>No bookings available</Typography>
+        </TableCell>
+      </TableRow>
     );
   }
   return (
@@ -102,59 +137,54 @@ const Listbookings = ({ resid }) => {
       <BackButton />
       <br />
       <br />
-      <div className="flex items-center justify-between flex-wrap">
-        <div className="flex py-2 px-2">
-          <div
-            className={`text-xs md:text-sm py-1 border border-gray-400 mx-1 cursor-pointer px-2 rounded-full ${
-              filters.CANCEL_STATUS ? "bg-red-600 text-white" : "bg-gray-100"
-            }`}
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm={6}>
+          <Button
             onClick={() => setFilter("CANCEL_STATUS", !filters.CANCEL_STATUS)}
+            variant="contained"
+            size="small"
+            color={`${filters.CANCEL_STATUS ? "secondary" : "default"}`}
           >
-            Show Cancelled Orders
-          </div>
-        </div>
-        <div className="flex py-2 px-2">
+            Cancelled Orders
+          </Button>
+        </Grid>
+        <Grid item className="flex" xs={12} sm={6}>
           {Object.values(DELIVERY_STATUS).map((status) => (
-            <div
-              key={status.type}
-              className={`flex items-center text-xs md:text-sm py-1 border border-gray-400 mx-1 cursor-pointer px-2 rounded-full ${
-                filters.DEL_STATUS === status.type
-                  ? "bg-indigo-600 text-white"
-                  : "bg-gray-100"
-              }`}
-              onClick={() => {
-                setFilter("DEL_STATUS", status.type);
-                applyFilter(details, status.string);
-              }}
-            >
-              {status.string}
+            <div className="mx-1">
+              <Button
+                key={status.type}
+                variant="contained"
+                size="small"
+                color={`${
+                  filters.DEL_STATUS === status.type ? "primary" : "default"
+                }`}
+                onClick={() => {
+                  setFilter("DEL_STATUS", status.type);
+                  applyFilter(details, status.string);
+                }}
+              >
+                {status.string}
+              </Button>
             </div>
           ))}
-        </div>
-      </div>
-      <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
-        <div className="inline-block min-w-full">
-          <table className="min-w-full leading-normal shadow rounded-lg overflow-hidden ">
-            <thead>
-              <tr>
-                <th className="px-5 py-3 border-b-2 border-gray-200 bg-blue-400 text-left text-xs font-semibold text-white uppercase tracking-wider">
-                  Book ID
-                </th>
-                <th className="px-5 py-3 border-b-2 border-gray-200 bg-blue-400 text-left text-xs font-semibold text-white uppercase tracking-wider">
-                  Customer
-                </th>
-                <th className="px-5 py-3 border-b-2 border-gray-200 bg-blue-400 text-left text-xs font-semibold text-white uppercase tracking-wider">
-                  Delivery Address
-                </th>
-                <th className="px-5 py-3 border-b-2 border-gray-200 bg-blue-400 text-left text-xs font-semibold text-white uppercase tracking-wider">
-                  Payment Status
-                </th>
-              </tr>
-            </thead>
-            <tbody className={"cursor-pointer"}>{bookingList}</tbody>
-          </table>
-        </div>
-      </div>
+        </Grid>
+      </Grid>
+
+      <Paper style={{ width: "100%", marginTop: "15px" }}>
+        <TableContainer style={{ maxHeight: 440 }} component={Paper}>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>Book Id</StyledTableCell>
+                <StyledTableCell>Customer</StyledTableCell>
+                <StyledTableCell>Address</StyledTableCell>
+                <StyledTableCell>Payment</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody className={"cursor-pointer"}>{bookingList}</TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
     </div>
   );
 };

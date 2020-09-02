@@ -72,9 +72,11 @@ const DashboardPage = () => {
     setLoading(true);
     if (mount) {
       dispatch(allHotels()).then((res) => {
-        const len = res.data.data;
-        setData(Object.values(len));
-        setLoading(false);
+        if (res) {
+          const len = res.data.data;
+          setData(Object.values(len));
+          setLoading(false);
+        }
       });
     }
     return () => {
@@ -89,14 +91,15 @@ const DashboardPage = () => {
   const handleConfirm = (e) => {
     setLoading(true);
     dispatch(deleteHotel([e])).then((res) => {
-      if (res.status === 200) {
-        setnotify({
-          msg: "Hotel Deleted",
-          type: "success",
-          popup: true,
-        });
-        setreRender(Math.random());
-      }
+      if (res)
+        if (res.status === 200) {
+          setnotify({
+            msg: "Hotel Deleted",
+            type: "success",
+            popup: true,
+          });
+          setreRender(Math.random());
+        }
     });
   };
   const closeAlert = () => {
