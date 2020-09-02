@@ -5,7 +5,29 @@ import { hotelBookingDetails } from "../../redux/apiActions";
 import { useDispatch } from "react-redux";
 import { DELIVERY_STATUS } from "../Common/constants";
 import { navigate } from "hookrouter";
-import { Button, Grid, Typography } from "@material-ui/core";
+import {
+  Button,
+  Grid,
+  Typography,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableContainer,
+  Table,
+  TableRow,
+  Paper,
+} from "@material-ui/core";
+import { withStyles, makeStyles } from "@material-ui/core/styles";
+
+const StyledTableCell = withStyles((theme) => ({
+  head: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  body: {
+    fontSize: 14,
+  },
+}))(TableCell);
 
 const Listbookings = ({ resid }) => {
   useHeading("Bookings");
@@ -46,51 +68,53 @@ const Listbookings = ({ resid }) => {
     let i = 0;
     bookingList = filteredValue.map((e) =>
       filters.CANCEL_STATUS === false ? (
-        <tr key={e.bookId} onClick={() => navigate(`/bookings/${e.bookId}`)}>
-          <td className="px-5 py-5 border-b border-gray-200 text-sm ">
+        <TableRow
+          key={e.bookId}
+          hover
+          onClick={() => navigate(`/bookings/${e.bookId}`)}
+        >
+          <TableCell className="px-5 py-5 border-b border-gray-200 text-sm ">
             <Typography className="flex items-center">
               <div className="ml-2">
                 <p className="whitespace-no-wrap">{++i}</p>
               </div>
             </Typography>
-          </td>
-          <td className="px-5 py-5 border-b border-gray-200 text-sm ">
+          </TableCell>
+          <TableCell className="px-5 py-5 border-b border-gray-200 text-sm ">
             <Typography className="flex items-center">
               <div className="ml-2">
                 <p className="whitespace-no-wrap">{e.user.name}</p>
               </div>
             </Typography>
-          </td>
-          <td className="px-5 py-5 border-b border-gray-200 text-sm ">
+          </TableCell>
+          <TableCell className="px-5 py-5 border-b border-gray-200 text-sm ">
             <Typography className="flex items-center">
               <div className="ml-2">
                 <p className="whitespace-no-wrap">{e.deliveryAdd}</p>
               </div>
             </Typography>
-          </td>
-          <td className="px-5 py-5 border-b border-gray-200 text-sm ">
+          </TableCell>
+          <TableCell className="px-5 py-5 border-b border-gray-200 text-sm ">
             <Typography className="flex items-center">
               <div className="ml-2">
                 <p className="whitespace-no-wrap">{e.payStatus}</p>
               </div>
             </Typography>
-          </td>
-        </tr>
+          </TableCell>
+        </TableRow>
       ) : (
         (bookingList = <tr></tr>)
       )
     );
   } else {
     bookingList = (
-      <tr className="bg-white ">
-        <td
-          colSpan={3}
+      <tr>
+        <TableCell
+          colSpan={4}
           className="px-5 py-5 border-b border-gray-200 text-center "
         >
-          <p className="text-gray-500 whitespace-no-wrap">
-            No bookings available
-          </p>
-        </td>
+          <Typography>No bookings available</Typography>
+        </TableCell>
       </tr>
     );
   }
@@ -99,8 +123,8 @@ const Listbookings = ({ resid }) => {
       <BackButton />
       <br />
       <br />
-      <div className="flex items-center justify-between flex-wrap">
-        <div className="flex py-2 px-2">
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm={6}>
           <Button
             onClick={() => setFilter("CANCEL_STATUS", !filters.CANCEL_STATUS)}
             variant="contained"
@@ -109,8 +133,8 @@ const Listbookings = ({ resid }) => {
           >
             Cancelled Orders
           </Button>
-        </div>
-        <Grid className="flex">
+        </Grid>
+        <Grid item className="flex" xs={12} sm={6}>
           {Object.values(DELIVERY_STATUS).map((status) => (
             <div className="mx-1">
               <Button
@@ -130,30 +154,23 @@ const Listbookings = ({ resid }) => {
             </div>
           ))}
         </Grid>
-      </div>
-      <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
-        <div className="inline-block min-w-full">
-          <table className="min-w-full leading-normal shadow rounded-lg overflow-hidden ">
-            <thead>
-              <tr>
-                <th className="px-5 py-3 border-b-2 border-gray-200 bg-blue-400 text-left text-xs font-semibold text-white uppercase tracking-wider">
-                  Book ID
-                </th>
-                <th className="px-5 py-3 border-b-2 border-gray-200 bg-blue-400 text-left text-xs font-semibold text-white uppercase tracking-wider">
-                  Customer
-                </th>
-                <th className="px-5 py-3 border-b-2 border-gray-200 bg-blue-400 text-left text-xs font-semibold text-white uppercase tracking-wider">
-                  Delivery Address
-                </th>
-                <th className="px-5 py-3 border-b-2 border-gray-200 bg-blue-400 text-left text-xs font-semibold text-white uppercase tracking-wider">
-                  Payment Status
-                </th>
-              </tr>
-            </thead>
-            <tbody className={"cursor-pointer"}>{bookingList}</tbody>
-          </table>
-        </div>
-      </div>
+      </Grid>
+
+      <Paper style={{ width: "100%" }}>
+        <TableContainer style={{ maxHeight: 440 }} component={Paper}>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>Book Id</StyledTableCell>
+                <StyledTableCell>Customer</StyledTableCell>
+                <StyledTableCell>Address</StyledTableCell>
+                <StyledTableCell>Payment</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody className={"cursor-pointer"}>{bookingList}</TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
     </div>
   );
 };
