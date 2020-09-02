@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import GroupAddIcon from "@material-ui/icons/GroupAdd";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import Navbar from "./Navbar";
 import { navigate } from "hookrouter";
@@ -12,6 +13,11 @@ const AuthenticatedNavbar = ({ page }) => {
       path: "/",
       text: "Dashboard",
       icon: <DashboardIcon />,
+    },
+    {
+      path: "/customers",
+      text: "Customers",
+      icon: <GroupAddIcon />,
     },
     {
       path: "/user/profile",

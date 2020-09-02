@@ -14,9 +14,13 @@ import UpdateProfile from "../components/Pages/UpdateProfile";
 import AddDishToMenu from "../components/Pages/AddDishToMenu";
 import Listbookings from "../components/Pages/ListBookings";
 import BookingDetails from "../components/Pages/BookingDetails";
+import AddCustomer from "../../src/components/Pages/Customers/AddCustomer";
+import CustomerDashboard from "../components/Pages/Customers/CustomerDashboard";
 
 const routes = {
   "/": () => <Dashboard />,
+  "/customers": () => <CustomerDashboard />,
+  "/addcustomers": () => <AddCustomer />,
   "/user/:user": ({ user }) => <ProfilePage user={user} />,
   "/addhotel": () => <AddHotel />,
   "/edithotel/:id": ({ id }) => <EditHotel id={id} />,
