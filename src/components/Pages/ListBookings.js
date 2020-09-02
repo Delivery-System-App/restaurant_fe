@@ -18,6 +18,9 @@ import {
   Paper,
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
+import moment from "moment";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -43,16 +46,35 @@ const Listbookings = ({ resid }) => {
     CANCEL_STATUS: false,
   });
   const applyFilter = (res, type) => {
-    if (res) {
-      if (res.data) {
-        setFilteredValue(
-          res.data.filter((el) => {
-            return el.deliveryStatus === type;
-          })
-        );
-      }
+    if (res.data) {
+
+      setFilteredValue(
+        res.data.filter((el) => {
+          return el.deliveryStatus === type && moment(new Date(el.createdAt)).format("DD-MM-YYYY") === moment(selectedDate).format("DD-MM-YYYY");
+        })
+      );
     }
   };
+  const applyDateFilter = (res, date) => {
+    setSelectedDate(date);
+    if (res.data) {
+      setFilteredValue(
+        res.data.filter((el) => {
+          console.log("del", filters.DEL_STATUS);
+          console.log("status", el.deliveryStatus);
+          return moment(new Date(el.createdAt)).format("DD-MM-YYYY") === moment(date).format("DD-MM-YYYY") && filters.DEL_STATUS === el.deliveryStatus;
+        })
+      );
+    }
+  };
+
+  const [selectedDate, setSelectedDate] = React.useState(new Date());
+
+  const handleDateChange = (date) => {
+    applyDateFilter(details, date);
+  };
+
+
   useEffect(() => {
     window.scrollTo(0, 0);
     setLoading(true);
@@ -61,6 +83,7 @@ const Listbookings = ({ resid }) => {
         const { data: res } = resp;
         setdetails(res);
         applyFilter(res, "Pending");
+        applyDateFilter(res, new Date());
       }
       setLoading(false);
     });
@@ -68,10 +91,10 @@ const Listbookings = ({ resid }) => {
   function setFilter(type, value) {
     setFilters({ ...filters, [type]: value });
   }
-
-  if (details && details.status === true) {
+  if (filteredValue.length > 0) {
     let i = 0;
     bookingList = filteredValue.map((e) =>
+
       filters.CANCEL_STATUS === false ? (
         <TableRow
           key={e.bookId}
@@ -100,8 +123,8 @@ const Listbookings = ({ resid }) => {
           </TableCell>
         </TableRow>
       ) : (
-        (bookingList = <tr></tr>)
-      )
+          (bookingList = <tr></tr>)
+        )
     );
   } else if (Loading) {
     bookingList = (
@@ -132,7 +155,7 @@ const Listbookings = ({ resid }) => {
       <br />
       <br />
       <div>
-        <Grid container spacing={2}>
+        <Grid container spacing={3}>
           <Grid item xs={12} sm={6}>
             <Button
               onClick={() => setFilter("CANCEL_STATUS", !filters.CANCEL_STATUS)}
@@ -154,7 +177,7 @@ const Listbookings = ({ resid }) => {
                   style={{ outline: "none" }}
                   color={`${
                     filters.DEL_STATUS === status.type ? "primary" : "default"
-                  }`}
+                    }`}
                   onClick={() => {
                     setFilter("DEL_STATUS", status.type);
                     applyFilter(details, status.string);
@@ -165,7 +188,23 @@ const Listbookings = ({ resid }) => {
               </div>
             ))}
           </Grid>
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <Grid justify="space-around" >
+              <KeyboardDatePicker
+                margin="normal"
+                id="date-picker-dialog"
+                label="Date picker dialog"
+                format="dd/MM/yyyy"
+                value={selectedDate}
+                onChange={handleDateChange}
+                KeyboardButtonProps={{
+                  'aria-label': 'change date',
+                }}
+              />
+            </Grid>
+          </MuiPickersUtilsProvider>
         </Grid>
+
       </div>
       <div style={{ overflow: "hidden" }}>
         <Paper style={{ width: "100%", margin: "0px auto", marginTop: "15px" }}>
