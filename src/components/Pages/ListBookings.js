@@ -76,32 +76,24 @@ const Listbookings = ({ resid }) => {
           hover
           onClick={() => navigate(`/bookings/${e.bookId}`)}
         >
-          <TableCell className="px-5 py-5 border-b border-gray-200 text-sm ">
-            <Typography className="flex items-center">
-              <div className="ml-2">
-                <p className="whitespace-no-wrap">{++i}</p>
-              </div>
+          <TableCell className=" border-b border-gray-200 text-sm ">
+            <Typography className="items-center">
+              <div className="ml-2">{++i}</div>
             </Typography>
           </TableCell>
-          <TableCell className="px-5 py-5 border-b border-gray-200 text-sm ">
-            <Typography className="flex items-center">
-              <div className="ml-2">
-                <p className="whitespace-no-wrap">{e.user.name}</p>
-              </div>
+          <TableCell className=" border-b border-gray-200 text-sm ">
+            <Typography className="items-center">
+              <div className="ml-2">{e.user.name}</div>
             </Typography>
           </TableCell>
-          <TableCell className="px-5 py-5 border-b border-gray-200 text-sm ">
-            <Typography className="flex items-center">
-              <div className="ml-2">
-                <p className="whitespace-no-wrap">{e.deliveryAdd}</p>
-              </div>
+          <TableCell className="border-b border-gray-200 text-sm ">
+            <Typography className="items-center">
+              <div className="ml-2">{e.deliveryAdd}</div>
             </Typography>
           </TableCell>
-          <TableCell className="px-5 py-5 border-b border-gray-200 text-sm ">
-            <Typography className="flex items-center">
-              <div className="ml-2">
-                <p className="whitespace-no-wrap">{e.payStatus}</p>
-              </div>
+          <TableCell className=" border-b border-gray-200 text-sm ">
+            <Typography className="items-center">
+              <div className="ml-2">{e.payStatus}</div>
             </Typography>
           </TableCell>
         </TableRow>
@@ -114,7 +106,7 @@ const Listbookings = ({ resid }) => {
       <TableRow>
         <TableCell
           colSpan={4}
-          className="px-5 py-5 border-b border-gray-200 text-center "
+          className=" border-b border-gray-200 text-center "
         >
           <Typography>Loading bookings....</Typography>
         </TableCell>
@@ -125,7 +117,7 @@ const Listbookings = ({ resid }) => {
       <TableRow>
         <TableCell
           colSpan={4}
-          className="px-5 py-5 border-b border-gray-200 text-center "
+          className=" border-b border-gray-200 text-center "
         >
           <Typography>No bookings available</Typography>
         </TableCell>
@@ -137,54 +129,57 @@ const Listbookings = ({ resid }) => {
       <BackButton />
       <br />
       <br />
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={6}>
-          <Button
-            onClick={() => setFilter("CANCEL_STATUS", !filters.CANCEL_STATUS)}
-            variant="contained"
-            size="small"
-            color={`${filters.CANCEL_STATUS ? "secondary" : "default"}`}
-          >
-            Cancelled Orders
-          </Button>
+      <div>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <Button
+              onClick={() => setFilter("CANCEL_STATUS", !filters.CANCEL_STATUS)}
+              variant="contained"
+              size="small"
+              color={`${filters.CANCEL_STATUS ? "secondary" : "default"}`}
+            >
+              Cancelled Orders
+            </Button>
+          </Grid>
+          <Grid item className="flex" xs={12} sm={6}>
+            {Object.values(DELIVERY_STATUS).map((status) => (
+              <div className="mx-1">
+                <Button
+                  key={status.type}
+                  variant="contained"
+                  size="small"
+                  color={`${
+                    filters.DEL_STATUS === status.type ? "primary" : "default"
+                  }`}
+                  onClick={() => {
+                    setFilter("DEL_STATUS", status.type);
+                    applyFilter(details, status.string);
+                  }}
+                >
+                  {status.string}
+                </Button>
+              </div>
+            ))}
+          </Grid>
         </Grid>
-        <Grid item className="flex" xs={12} sm={6}>
-          {Object.values(DELIVERY_STATUS).map((status) => (
-            <div className="mx-1">
-              <Button
-                key={status.type}
-                variant="contained"
-                size="small"
-                color={`${
-                  filters.DEL_STATUS === status.type ? "primary" : "default"
-                }`}
-                onClick={() => {
-                  setFilter("DEL_STATUS", status.type);
-                  applyFilter(details, status.string);
-                }}
-              >
-                {status.string}
-              </Button>
-            </div>
-          ))}
-        </Grid>
-      </Grid>
-
-      <Paper style={{ width: "100%", marginTop: "15px" }}>
-        <TableContainer style={{ maxHeight: 440 }} component={Paper}>
-          <Table stickyHeader aria-label="sticky table">
-            <TableHead>
-              <TableRow>
-                <StyledTableCell>Book Id</StyledTableCell>
-                <StyledTableCell>Customer</StyledTableCell>
-                <StyledTableCell>Address</StyledTableCell>
-                <StyledTableCell>Payment</StyledTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody className={"cursor-pointer"}>{bookingList}</TableBody>
-          </Table>
-        </TableContainer>
-      </Paper>
+      </div>
+      <div style={{ overflow: "hidden" }}>
+        <Paper style={{ width: "100%", margin: "0px auto", marginTop: "15px" }}>
+          <TableContainer style={{ maxHeight: 440 }} component={Paper}>
+            <Table stickyHeader aria-label="sticky table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell>Book Id</StyledTableCell>
+                  <StyledTableCell>Customer</StyledTableCell>
+                  <StyledTableCell>Address</StyledTableCell>
+                  <StyledTableCell>Payment</StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody className={"cursor-pointer"}>{bookingList}</TableBody>
+            </Table>
+          </TableContainer>
+        </Paper>
+      </div>
     </div>
   );
 };

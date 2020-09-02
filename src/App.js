@@ -3,6 +3,7 @@ import Router from "./router/Router";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import { useSelector, useDispatch } from "react-redux";
 import { changeTheme } from "./redux/actions";
+import "./new.css";
 
 function App() {
   const dispatch = useDispatch();
