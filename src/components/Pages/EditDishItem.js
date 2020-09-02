@@ -231,6 +231,7 @@ function EditDishItem({ dishid, menuid, resid }) {
                     variant="contained"
                     color="primary"
                     className={classes.submit}
+                    style={{ outline: "none" }}
                   >
                     Submit Menu
                   </Button>

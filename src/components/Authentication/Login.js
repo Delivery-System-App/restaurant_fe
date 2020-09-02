@@ -145,6 +145,7 @@ const Login = () => {
               variant="contained"
               color="primary"
               className={classes.submit}
+              style={{ outline: "none" }}
             >
               Sign In
             </Button>

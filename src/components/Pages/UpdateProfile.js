@@ -220,6 +220,7 @@ const UpdateProfile = () => {
               color="primary"
               className={classes.submit}
               onClick={submitHandler}
+              style={{ outline: "none" }}
             >
               Update Profile
             </Button>

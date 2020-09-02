@@ -64,6 +64,7 @@ const LoaderButton = ({ Loading, handleSubmit, type }) => {
         onClick={handleSubmit}
         fullwidth
         className={classes.submit}
+        style={{ outline: "none" }}
       >
         {type}
       </Button>
@@ -301,6 +302,7 @@ const AddDishToMenu = ({ menuname, resid, menuid }) => {
                 />
               </div>
               <Button
+                style={{ outline: "none" }}
                 onClick={handleSubmit}
                 fullWidth
                 variant="contained"

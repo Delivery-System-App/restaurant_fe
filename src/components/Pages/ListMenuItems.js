@@ -77,13 +77,15 @@ const ListMenuItems = ({ resid, id, menuname }) => {
     setLoading(true);
     if (mount) {
       dispatch(menuItems([id])).then((res) => {
-        if (res.data.data[0] != null) {
-          const len = res.data.data;
-          setData(Object.values(len));
-          setLoading(false);
-        } else {
-          setData([]);
-          setLoading(false);
+        if (res) {
+          if (res.data.data[0] != null) {
+            const len = res.data.data;
+            setData(Object.values(len));
+            setLoading(false);
+          } else {
+            setData([]);
+            setLoading(false);
+          }
         }
       });
     }
@@ -172,13 +174,23 @@ const ListMenuItems = ({ resid, id, menuname }) => {
                       >
                         Price:{value.price}
                       </Typography>
-                      <Typography
-                        variant="body2"
-                        color="textSecondary"
-                        component="p"
-                      >
-                        {value.status ? value.status : null}
-                      </Typography>
+                      {value.status ? (
+                        <Typography
+                          variant="body2"
+                          color="textSecondary"
+                          component="p"
+                        >
+                          {value.status}
+                        </Typography>
+                      ) : (
+                        <Typography
+                          variant="body2"
+                          className="text-transparent"
+                          component="p"
+                        >
+                          NULL
+                        </Typography>
+                      )}
                     </CardContent>
                     {/* </A> */}
                     <CardActions>

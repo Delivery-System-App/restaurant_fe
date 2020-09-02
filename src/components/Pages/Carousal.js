@@ -27,7 +27,11 @@ const Carousal = ({ images }) => {
     const { direction, clickFunction } = props;
     const icon = direction === "left" ? <ChevronLeft /> : <ChevronRight />;
 
-    return <button onClick={clickFunction}>{icon}</button>;
+    return (
+      <button style={{ outline: "none" }} onClick={clickFunction}>
+        {icon}
+      </button>
+    );
   }
 
   const [index, setIndex] = useState(0);
