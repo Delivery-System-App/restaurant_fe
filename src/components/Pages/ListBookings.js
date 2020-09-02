@@ -162,6 +162,7 @@ const Listbookings = ({ resid }) => {
               variant="contained"
               size="small"
               color={`${filters.CANCEL_STATUS ? "secondary" : "default"}`}
+              style={{ outline: "none" }}
             >
               Cancelled Orders
             </Button>
@@ -173,6 +174,7 @@ const Listbookings = ({ resid }) => {
                   key={status.type}
                   variant="contained"
                   size="small"
+                  style={{ outline: "none" }}
                   color={`${
                     filters.DEL_STATUS === status.type ? "primary" : "default"
                     }`}
