@@ -117,13 +117,15 @@ function EditHotel({ id }) {
         };
       }
       dispatch(updateHotel([id + "/update-Restaurant"], Result)).then((res) => {
-        if (res.status === 200) {
-          setLoading(false);
-          setnotify({
-            msg: "Hotel updated",
-            type: "success",
-            popup: true,
-          });
+        if (res) {
+          if (res.status === 200) {
+            setLoading(false);
+            setnotify({
+              msg: "Hotel updated",
+              type: "success",
+              popup: true,
+            });
+          }
         }
         setLoading(false);
       });

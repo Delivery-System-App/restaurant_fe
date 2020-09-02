@@ -246,6 +246,7 @@ const Register = () => {
             </Grid>
             <Button
               type="submit"
+              style={{ outline: "none" }}
               fullWidth
               variant="contained"
               color="primary"

@@ -64,6 +64,7 @@ const LoaderButton = ({ Loading, handleSubmit, type }) => {
         onClick={handleSubmit}
         fullwidth
         className={classes.submit}
+        style={{ outline: "none" }}
       >
         {type}
       </Button>
@@ -326,6 +327,7 @@ const AddMenu = ({ id }) => {
                 variant="contained"
                 color="primary"
                 className={classes.submit}
+                style={{ outline: "none" }}
               >
                 Submit Menu
               </Button>

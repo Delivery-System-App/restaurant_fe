@@ -8,6 +8,7 @@ const BackButton = () => {
       <Button
         variant="contained"
         color="primary"
+        style={{ outline: "none" }}
         size="small"
         className="fixed"
         startIcon={<ArrowBack />}

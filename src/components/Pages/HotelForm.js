@@ -61,6 +61,7 @@ const LoaderButton = ({ Loading, handleSubmit, type }) => {
         onClick={handleSubmit}
         fullwidth
         className={classes.submit}
+        style={{ outline: "none" }}
       >
         {type} Hotel
       </Button>

@@ -33,7 +33,7 @@ export default function ConfirmPage({
     <div>
       <Button
         variant="contained"
-        style={{ padding: "4px" }}
+        style={{ padding: "4px", outline: "none" }}
         color="secondary"
         onClick={handleClickOpen}
       >
@@ -52,10 +52,19 @@ export default function ConfirmPage({
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button
+            style={{ outline: "none" }}
+            onClick={handleClose}
+            color="primary"
+          >
             {cancelDialog}
           </Button>
-          <Button onClick={Confirmed} color="secondary" autoFocus>
+          <Button
+            style={{ outline: "none" }}
+            onClick={Confirmed}
+            color="secondary"
+            autoFocus
+          >
             {confirmDialog}
           </Button>
         </DialogActions>

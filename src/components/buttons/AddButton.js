@@ -22,6 +22,7 @@ const Addbutton = ({ title, href }) => {
           color: "#757de8",
           fontSize: "16px",
           textDecoration: "none",
+          outline: "none",
         }}
       >
         {title}
