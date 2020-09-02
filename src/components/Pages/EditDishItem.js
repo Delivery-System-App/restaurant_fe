@@ -7,6 +7,7 @@ import Uploader from "./UploadImage";
 import { imageUploader } from "../../utils/helper";
 import BackButton from "../buttons/BackButton";
 import useHeading from "./useHeading";
+import Select from "@material-ui/core/Select";
 
 import {
   makeStyles,
@@ -16,6 +17,9 @@ import {
   TextField,
   InputAdornment,
   Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
 } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
@@ -27,6 +31,13 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
 }));
 
 function EditDishItem({ dishid, menuid, resid }) {
@@ -37,11 +48,13 @@ function EditDishItem({ dishid, menuid, resid }) {
     name: "",
     price: "",
     photos: "",
+    status: "",
   };
   let initForm = {
     name: "",
     price: "",
     photos: "",
+    status: "",
   };
   const [Error, setError] = useState(initError);
   const [Form, setForm] = useState(initForm);
@@ -57,8 +70,8 @@ function EditDishItem({ dishid, menuid, resid }) {
           const len = res.data.data;
           const Resp = Object.values(len);
           const result = Resp.filter((obj) => obj.dishId === dishid);
-          const { name, price, photos } = result[0];
-          setForm({ name, price, photos });
+          const { name, price, photos, status } = result[0];
+          setForm({ name, price, photos, status });
         }
         setLoading(false);
       });
@@ -78,7 +91,7 @@ function EditDishItem({ dishid, menuid, resid }) {
     const { value, name } = e.target;
     setForm({ ...Form, [name]: value });
   };
-  const optionalValues = ["photos", "name", "price"];
+  const optionalValues = ["photos", "name", "price", "status"];
   const validInputs = () => {
     let formValid = true;
     let err = Object.assign({}, initError);
@@ -178,6 +191,19 @@ function EditDishItem({ dishid, menuid, resid }) {
                     helperText={Error["name"]}
                   />
                 </Grid>
+                <FormControl className={classes.formControl}>
+                  <InputLabel id="demo-simple-select-label">Status</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    name="status"
+                    value={Form.status}
+                    onChange={handleChange}
+                  >
+                    <MenuItem value={"AVAILABLE"}>AVAILABLE</MenuItem>
+                    <MenuItem value={"NOT AVAILABLE"}>NOT AVAILABLE</MenuItem>
+                  </Select>
+                </FormControl>
                 <Grid item xs={12}>
                   <TextField
                     label="Price"

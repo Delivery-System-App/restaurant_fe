@@ -164,12 +164,20 @@ const ListMenuItems = ({ resid, id, menuname }) => {
                       <Typography gutterBottom variant="h5" component="h2">
                         {value.name}
                       </Typography>
+
                       <Typography
                         variant="body2"
                         color="textSecondary"
                         component="p"
                       >
                         Price:{value.price}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="textSecondary"
+                        component="p"
+                      >
+                        {value.status ? value.status : null}
                       </Typography>
                     </CardContent>
                     {/* </A> */}
