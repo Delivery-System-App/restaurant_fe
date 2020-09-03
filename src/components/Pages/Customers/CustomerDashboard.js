@@ -25,32 +25,6 @@ const StyledTableCell = withStyles((theme) => ({
   },
 }))(TableCell);
 const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  root: {
-    maxWidth: 345,
-    marginTop: 15,
-    margin: "0px auto",
-  },
-  media: {
-    height: 180,
-    marginTop: "5px",
-  },
-  form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
   link: {
     textDecoration: "none",
     color: "inherit",
@@ -187,10 +161,10 @@ const CustomerDashboard = () => {
               <Table stickyHeader aria-label="sticky table">
                 <TableHead>
                   <TableRow>
-                    <StyledTableCell>Book Id</StyledTableCell>
-                    <StyledTableCell>Customer</StyledTableCell>
-                    <StyledTableCell>Address</StyledTableCell>
-                    <StyledTableCell>Payment</StyledTableCell>
+                    <StyledTableCell>Customer Id</StyledTableCell>
+                    <StyledTableCell>Name</StyledTableCell>
+                    <StyledTableCell>Contact</StyledTableCell>
+                    <StyledTableCell>Email</StyledTableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody className={"cursor-pointer"}>
