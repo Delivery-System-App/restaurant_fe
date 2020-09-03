@@ -96,6 +96,7 @@ const Listbookings = ({ resid }) => {
       }
       setLoading(false);
     });
+    // eslint-disable-next-line
   }, [dispatch, resid]);
   function setFilter(type, value) {
     setFilters({ ...filters, [type]: value });

@@ -92,4 +92,9 @@ export default {
     method: "POST",
     noAuth: false,
   },
+  customerDetails: {
+    path: "/api/v1/customer/customerDetails",
+    method: "GET",
+    noAuth: false,
+  },
 };

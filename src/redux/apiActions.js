@@ -72,3 +72,7 @@ export const bookingDetailsById = (id) => {
 export const addCustomer = (body) => {
   return fireRequest("addCustomer", [], body);
 };
+
+export const customerDetails = () => {
+  return fireRequest("customerDetails", []);
+};
