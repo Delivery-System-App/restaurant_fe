@@ -69,7 +69,6 @@ export default function AddCustomer() {
         ...Form,
       };
       setForm(Initform);
-      console.log(Result);
       dispatch(addCustomer(Result)).then((res) => {
         if (res) {
           if (res.status === 201) {

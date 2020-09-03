@@ -158,7 +158,6 @@ const FormDialog = ({ open, handleClose, id, changeStatus }) => {
         handleClose("DELETED");
       }
     });
-    console.log(cusId);
   };
   return (
     <>
