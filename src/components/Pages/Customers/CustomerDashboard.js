@@ -106,6 +106,7 @@ const FormDialog = ({ open, handleClose, id, data }) => {
       Result = {
         ...form,
       };
+      handleClose();
       dispatch(updateCustomerDetails([id.id], Result)).then((res) => {
         if (res) {
           if (res.status === 201) {
