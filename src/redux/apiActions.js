@@ -32,6 +32,10 @@ export const addDish = (id, body) => {
   return fireRequest("addDish", [id], body);
 };
 
+export const updateMenu = (body) => {
+  return fireRequest("updateMenu", [], body);
+};
+
 export const deleteHotel = (id) => {
   return fireRequest("deleteHotel", [id]);
 };
