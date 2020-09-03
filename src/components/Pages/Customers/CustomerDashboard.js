@@ -14,17 +14,20 @@ import {
 } from "@material-ui/core";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import { useDispatch } from "react-redux";
-
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import { Button, Typography, TableCell, Paper, Table } from "@material-ui/core";
 import Loader from "../../../utils/Loader";
 import useHeading from "../useHeading";
 import SearchBar from "../../SearchBar/SearchBar";
+import ConfirmationBox from "./Confirmation";
 import {
   customerDetails,
   updateCustomerDetails,
+  deleteCustomer,
 } from "../../../redux/apiActions";
 import { phonePreg, validateEmailAddress } from "../../../utils/validation";
 import Notify from "../../../utils/Notify";
+import { ms } from "date-fns/locale";
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.common.black,
@@ -45,34 +48,42 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const FormDialog = ({ open, handleClose, id, data }) => {
+const FormDialog = ({ open, handleClose, id, changeStatus }) => {
   const initForm = {
     name: "",
     email: "",
     contact: "",
+    loyalty: "",
   };
   const initError = {
     name: "",
     email: "",
     contact: "",
+    loyalty: "",
   };
   const [form, setform] = useState(initForm);
   const [err, seterr] = useState(initError);
-  const [Loading, setLoading] = useState(false);
   const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
   const dispatch = useDispatch();
-
+  const [confOpen, setconfOpen] = useState(false);
+  const [data, setdata] = useState("");
   //modal doesn't close after successful updation
   //delete customer needs to be done
   //variable names needs to be improved
   //the list of users should re render after successful updation
   useEffect(() => {
     let mount = true;
-    if (mount) setform({ name: id.name, email: id.email, contact: id.contact });
+    if (mount)
+      setform({
+        name: id.name,
+        email: id.email,
+        contact: id.contact,
+        loyalty: id.loyalty,
+      });
     return () => {
       mount = false;
     };
-  }, [handleClose]);
+  }, [handleClose, id.contact, id.email, id.name, id.loyalty]);
   const handleChange = (e) => {
     setnotify({
       popup: false,
@@ -84,11 +95,19 @@ const FormDialog = ({ open, handleClose, id, data }) => {
   const validInputs = () => {
     let formValid = true;
     let err = Object.assign({}, initError);
-    const { contact, email } = form;
+    const { contact, email, name, loyalty } = form;
+    if (!name.replace(/\s/g, "").length) {
+      formValid = false;
+      err["name"] = "This field is required";
+    }
 
     if (!phonePreg(contact)) {
       formValid = false;
       err["contact"] = "Enter Valid phone number";
+    }
+    if (isNaN(loyalty) || loyalty === "") {
+      formValid = false;
+      err["loyalty"] = "Enter a number";
     }
     if (!validateEmailAddress(email)) {
       err["email"] = "Enter a valid email";
@@ -100,24 +119,29 @@ const FormDialog = ({ open, handleClose, id, data }) => {
   };
   const handleSubmit = () => {
     if (validInputs()) {
-      setLoading(true);
       let Result;
 
       Result = {
         ...form,
       };
+      handleClose("");
+      changeStatus(true, { popup: false });
       dispatch(updateCustomerDetails([id.id], Result)).then((res) => {
         if (res) {
           if (res.status === 201) {
-            setLoading(false);
-            setnotify({
-              msg: "Customer updated",
+            changeStatus(false, {
+              msg: "Updated user",
               type: "success",
               popup: true,
             });
           }
+        } else {
+          changeStatus(false, {
+            msg: "Error",
+            type: "error",
+            popup: true,
+          });
         }
-        setLoading(false);
       });
     }
   };
@@ -126,97 +150,127 @@ const FormDialog = ({ open, handleClose, id, data }) => {
       popup: false,
     });
   };
+  const handleCustomerDelete = (cusId) => {
+    setconfOpen(false);
+    handleClose("DELETING");
+    dispatch(deleteCustomer(cusId)).then((res) => {
+      if (res && res.data.success) {
+        handleClose("DELETED");
+      }
+    });
+  };
   return (
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="form-dialog-title"
-    >
-      <DialogTitle id="form-dialog-title">Edit Customer Details</DialogTitle>
-      <DialogContent>
-        {/* <DialogContentText>
-          The name of menu {data.name} will be changed
-        </DialogContentText> */}
-        {/* <TextField
-          autoFocus
-          margin="dense"
-          id="name"
-          type="text"
-          value={form.name}
-          // error={err}
-          // helperText={err}
-          onChange={(e) => {
-            // seterr("");
-            // setform(e.target.value);
-          }}
-          fullWidth
-        /> */}
-        <Grid container spacing={1}>
-          <Grid item xs={12}>
-            <TextField
-              id="name"
-              name="name"
-              onChange={handleChange}
-              label="Customer Name"
-              value={form.name}
-              fullWidth
-              error={err["name"]}
-              helperText={err["name"]}
-              autoComplete="new-password"
-            />
+    <>
+      <ConfirmationBox
+        open={confOpen}
+        data={data}
+        handleClose={() => {
+          setconfOpen(false);
+        }}
+        handleConfirm={handleCustomerDelete}
+      />
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="form-dialog-title"
+      >
+        <DialogTitle id="form-dialog-title">
+          <div className=" flex-column md:flex lg:flex">
+            <div className="w-full md:w-3/4 lg:w-3/4 text-left">
+              Edit Customer Details
+            </div>
+            <div className="w-full md:w-1/4 lg:w-1/4 text-right">
+              <Button
+                size="small"
+                color="secondary"
+                onClick={() => {
+                  setconfOpen(true);
+                  setdata({ cusId: id.id, cusName: id.name });
+                }}
+                style={{ outline: "none", borderRadius: "50%" }}
+              >
+                <DeleteForeverIcon color="secondary" />
+                Delete
+              </Button>
+            </div>
+          </div>
+        </DialogTitle>
+        <DialogContent>
+          <Grid container spacing={1}>
+            <Grid item xs={12}>
+              <TextField
+                id="name"
+                name="name"
+                onChange={handleChange}
+                label="Customer Name"
+                value={form.name}
+                fullWidth
+                error={err["name"]}
+                helperText={err["name"]}
+                autoComplete="new-password"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                id="contact"
+                name="contact"
+                onChange={handleChange}
+                label="Mobile Number"
+                value={form.contact}
+                fullWidth
+                error={err["contact"]}
+                helperText={err["contact"]}
+                autoComplete="new-password"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                id="email"
+                name="email"
+                onChange={handleChange}
+                label="Email"
+                value={form.email}
+                fullWidth
+                error={err["email"]}
+                helperText={err["email"]}
+                autoComplete="new-password"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                id="loyalty"
+                name="loyalty"
+                onChange={handleChange}
+                label="Loyalty"
+                value={form.loyalty}
+                type="text"
+                fullWidth
+                error={err["loyalty"]}
+                helperText={err["loyalty"]}
+                autoComplete="loyalty"
+              />
+            </Grid>
+            <Notify props={notify} closeAlert={closeAlert} />
           </Grid>
-          <Grid item xs={12}>
-            <TextField
-              id="contact"
-              name="contact"
-              onChange={handleChange}
-              label="Mobile Number"
-              value={form.contact}
-              fullWidth
-              error={err["contact"]}
-              helperText={err["contact"]}
-              autoComplete="new-password"
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              id="email"
-              name="email"
-              onChange={handleChange}
-              label="Email"
-              value={form.email}
-              fullWidth
-              error={err["email"]}
-              helperText={err["email"]}
-              autoComplete="new-password"
-            />
-          </Grid>
-          <Notify props={notify} closeAlert={closeAlert} />
-        </Grid>
-
-        {/* <Grid item xs={12}>
-          <TextField
-            required
-            id="email"
-            name="email"
-            label="Email"
-            value={Form.email}
-            fullWidth
-            onChange={handleChange}
-            error={Error["email"]}
-            helperText={Error["email"]}
-          />
-        </Grid> */}
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose} color="primary">
-          Cancel
-        </Button>
-        <Button onClick={handleSubmit} color="primary">
-          Change Name
-        </Button>
-      </DialogActions>
-    </Dialog>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            style={{ outline: "none" }}
+            onClick={handleClose}
+            color="primary"
+          >
+            Cancel
+          </Button>
+          <Button
+            style={{ outline: "none" }}
+            onClick={handleSubmit}
+            color="primary"
+          >
+            Submit
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };
 
@@ -230,11 +284,13 @@ const CustomerDashboard = () => {
   const [Loading, setLoading] = useState(false);
   const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
   const [filter, setFilter] = useState("");
+  const [Rerender, setRerender] = useState(Math.random());
   const [select, setselect] = useState({
     id: "",
     name: "",
     email: "",
     contact: "",
+    loyalty: "",
   });
 
   useEffect(() => {
@@ -252,13 +308,27 @@ const CustomerDashboard = () => {
     return () => {
       mount = false;
     };
-  }, [dispatch]);
+  }, [dispatch, Rerender]);
 
-  const handleClose = () => {
+  const handleClose = (msg) => {
     setOpen(false);
+    if (msg === "DELETING") {
+      setLoading(true);
+    }
+    if (msg === "DELETED") {
+      setLoading(false);
+      setnotify({ msg: "User deleted", type: "success", popup: true });
+      setRerender(Math.random());
+    }
   };
   const handleClickOpen = (id, e) => {
-    setselect({ id: id, name: e.name, email: e.email, contact: e.contact });
+    setselect({
+      id: id,
+      name: e.name,
+      email: e.email,
+      contact: e.contact,
+      loyalty: e.loyalty,
+    });
     setOpen(true);
   };
 
@@ -270,6 +340,14 @@ const CustomerDashboard = () => {
     setnotify({
       popup: false,
     });
+  };
+
+  const changeStatus = (LOADSTATUS, POPUPSTATUS) => {
+    setLoading(LOADSTATUS);
+    setnotify(POPUPSTATUS);
+    if (POPUPSTATUS.type === "success") {
+      setRerender(Math.random());
+    }
   };
 
   if (Data.length > 0) {
@@ -302,6 +380,11 @@ const CustomerDashboard = () => {
           <TableCell className=" border-b border-gray-200 text-sm ">
             <Typography className="items-center">
               <div className="ml-2">{e.email}</div>
+            </Typography>
+          </TableCell>
+          <TableCell className=" border-b border-gray-200 text-sm ">
+            <Typography className="items-center">
+              <div className="ml-2">{e.loyalty}</div>
             </Typography>
           </TableCell>
         </TableRow>
@@ -360,6 +443,7 @@ const CustomerDashboard = () => {
             handleClose={handleClose}
             id={select}
             data={Data}
+            changeStatus={changeStatus}
           />
           <div style={{ overflow: "hidden" }}>
             <Paper
@@ -373,6 +457,7 @@ const CustomerDashboard = () => {
                       <StyledTableCell>Name</StyledTableCell>
                       <StyledTableCell>Contact</StyledTableCell>
                       <StyledTableCell>Email</StyledTableCell>
+                      <StyledTableCell>Loyalty</StyledTableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody className={"cursor-pointer"}>
@@ -384,7 +469,7 @@ const CustomerDashboard = () => {
           </div>
         </>
       )}
-      <notify props={notify} closeAlert={closeAlert} />
+      <Notify props={notify} closeAlert={closeAlert} />
     </>
   );
 };
