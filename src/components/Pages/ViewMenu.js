@@ -71,7 +71,7 @@ const FormDialog = ({ open, handleClose, handleEditName, data }) => {
     return () => {
       mount = false;
     };
-  }, [data.name]);
+  }, [data.name, handleClose]);
   return (
     <Dialog
       open={open}
