@@ -76,3 +76,7 @@ export const addCustomer = (body) => {
 export const customerDetails = () => {
   return fireRequest("customerDetails", []);
 };
+
+export const updateCustomerDetails = (id, body) => {
+  return fireRequest("updateCustomerDetails", [id], body);
+};

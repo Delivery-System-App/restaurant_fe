@@ -97,4 +97,9 @@ export default {
     method: "GET",
     noAuth: false,
   },
+  updateCustomerDetails: {
+    path: "/api/v1/customer/updateCustomerDetails",
+    method: "POST",
+    noAuth: false,
+  },
 };
