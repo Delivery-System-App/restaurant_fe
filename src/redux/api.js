@@ -87,4 +87,9 @@ export default {
     method: "GET",
     noAuth: false,
   },
+  addCustomer: {
+    path: "/api/v1/customer/addCustomer",
+    method: "POST",
+    noAuth: false,
+  },
 };

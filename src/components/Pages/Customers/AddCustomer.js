@@ -5,6 +5,7 @@ import { phonePreg, validateEmailAddress } from "../../../utils/validation";
 import BackButton from "../../buttons/BackButton";
 import Notify from "../../../utils/Notify";
 import CustomerForm from "./CustomerForm";
+import { addCustomer } from "../../../redux/apiActions";
 
 export default function AddCustomer() {
   useHeading("Add Customer");
@@ -63,25 +64,25 @@ export default function AddCustomer() {
       };
       setForm(Initform);
       console.log(Result);
-      //   dispatch(addHotel(Result)).then((res) => {
-      //     if (res) {
-      //       if (res.status === 201) {
-      //         setLoading(false);
-      //         setnotify({
-      //           msg: "Hotel added",
-      //           type: "success",
-      //           popup: true,
-      //         });
-      //       } else {
-      //         setLoading(false);
-      //         setnotify({
-      //           msg: "Error",
-      //           type: "error",
-      //           popup: true,
-      //         });
-      //       }
-      //     }
-      //   });
+      dispatch(addCustomer(Result)).then((res) => {
+        if (res) {
+          if (res.status === 201) {
+            setLoading(false);
+            setnotify({
+              msg: "Customer added",
+              type: "success",
+              popup: true,
+            });
+          } else {
+            setLoading(false);
+            setnotify({
+              msg: "Error",
+              type: "error",
+              popup: true,
+            });
+          }
+        }
+      });
     }
   };
   const closeAlert = () => {
