@@ -14,11 +14,13 @@ export default function AddCustomer() {
     name: "",
     email: "",
     contact: "",
+    loyalty: "",
   };
   const initError = {
     name: "",
     email: "",
     contact: "",
+    loyalty: "",
   };
 
   const [Form, setForm] = useState(Initform);
@@ -36,7 +38,7 @@ export default function AddCustomer() {
   const validInputs = () => {
     let formValid = true;
     let err = Object.assign({}, initError);
-    const { contact, email } = Form;
+    const { contact, email, loyalty } = Form;
 
     Object.keys(Form).forEach((key) => {
       if (Form[key] === "" && !optionalValues.includes(key)) {
@@ -44,6 +46,10 @@ export default function AddCustomer() {
         err[key] = "This field is required";
       }
     });
+    if (isNaN(loyalty)) {
+      err["loyalty"] = "Enter a number";
+      formValid = false;
+    }
     if (!validateEmailAddress(email)) {
       err["email"] = "Enter a valid email";
       formValid = false;

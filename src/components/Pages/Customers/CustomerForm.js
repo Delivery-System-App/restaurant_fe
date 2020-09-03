@@ -103,7 +103,7 @@ const CustomerForm = ({
                 helperText={Error["name"]}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item sm={6} xs={12}>
               <TextField
                 required
                 id="contact"
@@ -116,8 +116,7 @@ const CustomerForm = ({
                 helperText={Error["contact"]}
               />
             </Grid>
-
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 required
                 id="email"
@@ -128,6 +127,19 @@ const CustomerForm = ({
                 onChange={handleChange}
                 error={Error["email"]}
                 helperText={Error["email"]}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                id="loyalty"
+                name="loyalty"
+                label="Loyalty factor"
+                value={Form.loyalty}
+                fullWidth
+                onChange={handleChange}
+                error={Error["loyalty"]}
+                helperText={Error["loyalty"]}
               />
             </Grid>
             <Grid item xs={12}>
