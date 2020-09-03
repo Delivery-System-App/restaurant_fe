@@ -317,7 +317,7 @@ const CustomerDashboard = () => {
     }
     if (msg === "DELETED") {
       setLoading(false);
-      setnotify({ msg: "User deleted", type: "success", popup: true });
+      setnotify({ msg: "Customer deleted", type: "success", popup: true });
       setRerender(Math.random());
     }
   };
