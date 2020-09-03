@@ -80,3 +80,7 @@ export const customerDetails = () => {
 export const updateCustomerDetails = (id, body) => {
   return fireRequest("updateCustomerDetails", [id], body);
 };
+
+export const deleteCustomer = (id) => {
+  return fireRequest("deleteCustomer", [id]);
+};

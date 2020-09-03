@@ -102,4 +102,9 @@ export default {
     method: "POST",
     noAuth: false,
   },
+  deleteCustomer: {
+    path: "/api/v1/customer/deleteCustomerDetails",
+    method: "DELETE",
+    noAuth: false,
+  },
 };
