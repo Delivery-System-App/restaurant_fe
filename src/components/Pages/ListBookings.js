@@ -18,8 +18,11 @@ import {
   Paper,
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
-import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
+import DateFnsUtils from "@date-io/date-fns";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
 import moment from "moment";
 
 const StyledTableCell = withStyles((theme) => ({
@@ -47,10 +50,13 @@ const Listbookings = ({ resid }) => {
   });
   const applyFilter = (res, type) => {
     if (res.data) {
-
       setFilteredValue(
         res.data.filter((el) => {
-          return el.deliveryStatus === type && moment(new Date(el.createdAt)).format("DD-MM-YYYY") === moment(selectedDate).format("DD-MM-YYYY");
+          return (
+            el.deliveryStatus === type &&
+            moment(new Date(el.createdAt)).format("DD-MM-YYYY") ===
+              moment(selectedDate).format("DD-MM-YYYY")
+          );
         })
       );
     }
@@ -62,7 +68,11 @@ const Listbookings = ({ resid }) => {
         res.data.filter((el) => {
           console.log("del", filters.DEL_STATUS);
           console.log("status", el.deliveryStatus);
-          return moment(new Date(el.createdAt)).format("DD-MM-YYYY") === moment(date).format("DD-MM-YYYY") && filters.DEL_STATUS === el.deliveryStatus;
+          return (
+            moment(new Date(el.createdAt)).format("DD-MM-YYYY") ===
+              moment(date).format("DD-MM-YYYY") &&
+            filters.DEL_STATUS === el.deliveryStatus
+          );
         })
       );
     }
@@ -73,7 +83,6 @@ const Listbookings = ({ resid }) => {
   const handleDateChange = (date) => {
     applyDateFilter(details, date);
   };
-
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -94,7 +103,6 @@ const Listbookings = ({ resid }) => {
   if (filteredValue.length > 0) {
     let i = 0;
     bookingList = filteredValue.map((e) =>
-
       filters.CANCEL_STATUS === false ? (
         <TableRow
           key={e.bookId}
@@ -123,8 +131,8 @@ const Listbookings = ({ resid }) => {
           </TableCell>
         </TableRow>
       ) : (
-          (bookingList = <tr></tr>)
-        )
+        (bookingList = <tr></tr>)
+      )
     );
   } else if (Loading) {
     bookingList = (
@@ -177,7 +185,7 @@ const Listbookings = ({ resid }) => {
                   style={{ outline: "none" }}
                   color={`${
                     filters.DEL_STATUS === status.type ? "primary" : "default"
-                    }`}
+                  }`}
                   onClick={() => {
                     setFilter("DEL_STATUS", status.type);
                     applyFilter(details, status.string);
@@ -189,7 +197,7 @@ const Listbookings = ({ resid }) => {
             ))}
           </Grid>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <Grid justify="space-around" >
+            <Grid justify="space-around">
               <KeyboardDatePicker
                 margin="normal"
                 id="date-picker-dialog"
@@ -198,13 +206,12 @@ const Listbookings = ({ resid }) => {
                 value={selectedDate}
                 onChange={handleDateChange}
                 KeyboardButtonProps={{
-                  'aria-label': 'change date',
+                  "aria-label": "change date",
                 }}
               />
             </Grid>
           </MuiPickersUtilsProvider>
         </Grid>
-
       </div>
       <div style={{ overflow: "hidden" }}>
         <Paper style={{ width: "100%", margin: "0px auto", marginTop: "15px" }}>

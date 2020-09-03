@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { viewMenu, deleteMenu } from "../../redux/apiActions";
+import { viewMenu, deleteMenu, updateMenu } from "../../redux/apiActions";
 import { A } from "hookrouter";
 import Confirm from "./ConfirmPage";
 import Loader from "../../utils/Loader";
@@ -14,6 +14,12 @@ import {
   CardContent,
   CardActions,
   CardActionArea,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  TextField,
+  DialogTitle,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Notify from "../../utils/Notify";
@@ -56,6 +62,62 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const FormDialog = ({ open, handleClose, handleEditName, data }) => {
+  const [form, setform] = useState(data.name);
+  const [err, seterr] = useState("");
+  useEffect(() => {
+    let mount = true;
+    if (mount) setform(data.name);
+    return () => {
+      mount = false;
+    };
+  }, [data.name]);
+  return (
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="form-dialog-title"
+    >
+      <DialogTitle id="form-dialog-title">Edit name</DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          The name of menu {data.name} will be changed
+        </DialogContentText>
+        <TextField
+          autoFocus
+          margin="dense"
+          id="name"
+          type="text"
+          value={form}
+          error={err}
+          helperText={err}
+          onChange={(e) => {
+            seterr("");
+            setform(e.target.value);
+          }}
+          fullWidth
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose} color="primary">
+          Cancel
+        </Button>
+        <Button
+          onClick={() => {
+            if (form.replace(/\s/g, "").length) handleEditName(data.id, form);
+            else {
+              seterr("This field is required");
+            }
+          }}
+          color="primary"
+        >
+          Change Name
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
 const ViewMenu = ({ id }) => {
   useHeading("Menu");
   const [Data, setData] = useState([]);
@@ -63,9 +125,10 @@ const ViewMenu = ({ id }) => {
   const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
   const [reRender, setreRender] = useState(Math.random());
   const [filter, setFilter] = useState("");
-
+  const [open, setOpen] = useState(false);
   const classes = useStyles();
   const dispatch = useDispatch();
+  const [select, setselect] = useState({ id: "", name: "" });
   useEffect(() => {
     let mount = true;
     setLoading(true);
@@ -87,6 +150,29 @@ const ViewMenu = ({ id }) => {
     //eslint-disable-next-line
   }, [dispatch, reRender]);
 
+  const handleClickOpen = (menuId, menuName) => {
+    setselect({ id: menuId, name: menuName });
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleEditName = (id, name) => {
+    setOpen(false);
+    setLoading(true);
+    dispatch(updateMenu({ menuId: id, name: name })).then((res) => {
+      if (res) {
+        if (res.data.success) {
+          setnotify({ msg: "Updated Menu name", type: "success", popup: true });
+          setreRender(Math.random());
+        } else {
+          setLoading(false);
+        }
+      } else {
+        setLoading(false);
+      }
+    });
+  };
   const handleConfirm = (e) => {
     setLoading(true);
     dispatch(deleteMenu([e])).then((res) => {
@@ -118,6 +204,12 @@ const ViewMenu = ({ id }) => {
         <Loader />
       ) : (
         <div>
+          <FormDialog
+            handleEditName={handleEditName}
+            data={select}
+            open={open}
+            handleClose={handleClose}
+          />
           <Grid
             item
             container
@@ -171,15 +263,16 @@ const ViewMenu = ({ id }) => {
                           </CardActionArea>
                         </A>
                         <CardActions>
-                          <A href={`/hotel/${id}/${value.id}/${value.name}`}>
-                            <Button
-                              size="small"
-                              color="primary"
-                              style={{ outline: "none" }}
-                            >
-                              View Menu
-                            </Button>
-                          </A>
+                          <Button
+                            size="small"
+                            color="primary"
+                            style={{ outline: "none" }}
+                            onClick={() =>
+                              handleClickOpen(value.id, value.name)
+                            }
+                          >
+                            Edit Name
+                          </Button>
                           <Confirm
                             handleConfirm={handleConfirm}
                             cancelDialog={"Cancel"}
