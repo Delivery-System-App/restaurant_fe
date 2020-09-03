@@ -102,7 +102,8 @@ const CustomerDashboard = () => {
     let i = 0;
     customersList = Data.map((e) =>
       e.name.toLowerCase().includes(filter.toLowerCase()) ||
-      e.email.includes(filter.toLowerCase()) ? (
+      e.email.includes(filter.toLowerCase()) ||
+      e.contact.includes(filter.toLowerCase()) ? (
         <TableRow
           key={e.id}
           hover
