@@ -62,6 +62,10 @@ const FormDialog = ({ open, handleClose, id, data }) => {
   const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
   const dispatch = useDispatch();
 
+  //modal doesn't close after successful updation
+  //delete customer needs to be done
+  //variable names needs to be improved
+  //the list of users should re render after successful updation
   useEffect(() => {
     let mount = true;
     if (mount) setform({ name: id.name, email: id.email, contact: id.contact });
