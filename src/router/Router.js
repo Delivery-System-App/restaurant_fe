@@ -19,7 +19,6 @@ const Router = () => {
         const res = await dispatch(getCurrentUser());
         if (res) {
           setUser(res.data.data);
-          navigate("/");
         } else {
           navigate("/error");
         }
