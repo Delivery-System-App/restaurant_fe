@@ -1,0 +1,6 @@
+button {
+  outline: none;
+}
+.MuiButtonBase-root {
+  background-color: red;
+}
