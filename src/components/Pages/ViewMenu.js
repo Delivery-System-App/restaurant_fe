@@ -163,8 +163,8 @@ const ViewMenu = ({ id }) => {
     dispatch(updateMenu({ menuId: id, name: name })).then((res) => {
       if (res) {
         if (res.data.success) {
-          setnotify({ msg: "Updated Menu name", type: "success", popup: true });
           setreRender(Math.random());
+          setnotify({ msg: "Updated Menu name", type: "success", popup: true });
         } else {
           setLoading(false);
         }

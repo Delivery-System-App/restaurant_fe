@@ -139,13 +139,9 @@ const AddDishToMenu = ({ menuname, resid, menuid }) => {
   };
 
   const setFiles = (files) => {
-    // setForm({ ...Form, photos: files });
     setImage(files);
   };
-  // const handleMenuName = (e) => {
-  //   const { value } = e.target;
-  //   setMenuName(value);
-  // };
+
   const handleChange = (e) => {
     setError(initError);
     const { value, name } = e.target;
@@ -155,10 +151,6 @@ const AddDishToMenu = ({ menuname, resid, menuid }) => {
   const validateForm = () => {
     let formValid = true;
     let err = Object.assign({}, initError);
-    // if (menuName === "") {
-    //   err["name"] = "This field is required";
-    //   formValid = false;
-    // }
 
     Object.keys(Form).forEach((key) => {
       if (Form[key] === "" && !optionalValues.includes(key)) {
@@ -176,8 +168,8 @@ const AddDishToMenu = ({ menuname, resid, menuid }) => {
     return formValid;
   };
   const handleConfirm = () => {
-    console.log(image);
     if (image && validateForm()) {
+      setLoading(true);
       imageUploader(image, handleSubmit);
     } else {
       handleSubmit("NULL");
@@ -188,10 +180,11 @@ const AddDishToMenu = ({ menuname, resid, menuid }) => {
       validateForm() ||
       (previousDishes.length !== 0 && Form.name === "" && Form.price === "")
     ) {
+      setLoading(true);
       let Dish;
       if (validateForm()) {
         let Result;
-        if (URL !== "") {
+        if (URL !== "NULL") {
           Result = {
             ...Form,
             photos: URL,
@@ -221,8 +214,10 @@ const AddDishToMenu = ({ menuname, resid, menuid }) => {
             });
           }
           setForm(Initform);
+          setImage("CLEARALL");
           setMenuName("");
         }
+        setLoading(false);
       });
     }
   };
