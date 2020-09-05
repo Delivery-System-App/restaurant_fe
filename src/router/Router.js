@@ -17,7 +17,7 @@ const Router = () => {
       const access = localStorage.getItem("access_token");
       if (access) {
         const res = await dispatch(getCurrentUser());
-        if (res) {
+        if (res.data.data.type === "owner") {
           setUser(res.data.data);
         } else {
           navigate("/error");
