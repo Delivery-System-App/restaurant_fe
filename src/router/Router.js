@@ -6,8 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCurrentUser } from "../redux/apiActions";
 import { navigate } from "hookrouter";
 import Loader from "../utils/Loader";
+import AdminRouter from "./AdminRouter";
 const Router = () => {
   const [user, setUser] = useState();
+  const [admin, setAdmin] = useState(false);
   const dispatch = useDispatch();
   const state = useSelector((reduxState) => reduxState);
   const currentUser = state.newapi.currentUser;
@@ -17,7 +19,8 @@ const Router = () => {
       const access = localStorage.getItem("access_token");
       if (access) {
         const res = await dispatch(getCurrentUser());
-        if (res.data.data.type === "owner") {
+        if (res.data.data.type === "owner" || res.data.data.type === "admin") {
+          res.data.data.type === "admin" ? setAdmin(true) : setAdmin(false);
           setUser(res.data.data);
         } else {
           navigate("/error");
@@ -31,7 +34,15 @@ const Router = () => {
   if (user !== null && (!currentUser || currentUser.isFetching)) {
     return <Loader />;
   }
-  return user ? <AuthenticatedRouter /> : <PublicRouter />;
+  return user ? (
+    admin ? (
+      <AdminRouter />
+    ) : (
+      <AuthenticatedRouter />
+    )
+  ) : (
+    <PublicRouter />
+  );
 };
 
 export default Router;
