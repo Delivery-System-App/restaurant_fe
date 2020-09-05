@@ -27,7 +27,6 @@ import {
 } from "../../../redux/apiActions";
 import { phonePreg, validateEmailAddress } from "../../../utils/validation";
 import Notify from "../../../utils/Notify";
-import { ms } from "date-fns/locale";
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.common.black,
