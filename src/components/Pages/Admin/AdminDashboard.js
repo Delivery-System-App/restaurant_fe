@@ -19,7 +19,6 @@ import {
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import Notify from "../../../utils/Notify";
-import { setDate } from "date-fns";
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.common.black,
@@ -174,7 +173,7 @@ const AdminDashboard = () => {
                   variant="contained"
                   color="secondary"
                   onClick={() => {
-                    updateStatus(e.id, -1);
+                    handleClick(e, -1);
                   }}
                 >
                   Reject
