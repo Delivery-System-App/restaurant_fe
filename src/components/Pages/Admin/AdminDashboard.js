@@ -106,7 +106,6 @@ const AdminDashboard = () => {
         } else {
           setreRender(Math.random());
           setnotify({ msg: "Rejected", type: "success", popup: true });
-          window.location.reload();
         }
       }
       setLoading(false);
