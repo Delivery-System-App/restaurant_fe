@@ -5,6 +5,7 @@ import { hotelBookingDetails } from "../../redux/apiActions";
 import { useDispatch } from "react-redux";
 import { DELIVERY_STATUS } from "../Common/constants";
 import { navigate } from "hookrouter";
+
 import {
   Button,
   Grid,
@@ -55,7 +56,7 @@ const Listbookings = ({ resid }) => {
           return (
             el.deliveryStatus === type &&
             moment(new Date(el.createdAt)).format("DD-MM-YYYY") ===
-              moment(selectedDate).format("DD-MM-YYYY")
+            moment(selectedDate).format("DD-MM-YYYY")
           );
         })
       );
@@ -66,11 +67,9 @@ const Listbookings = ({ resid }) => {
     if (res.data) {
       setFilteredValue(
         res.data.filter((el) => {
-          console.log("del", filters.DEL_STATUS);
-          console.log("status", el.deliveryStatus);
           return (
             moment(new Date(el.createdAt)).format("DD-MM-YYYY") ===
-              moment(date).format("DD-MM-YYYY") &&
+            moment(date).format("DD-MM-YYYY") &&
             filters.DEL_STATUS === el.deliveryStatus
           );
         })
@@ -132,8 +131,8 @@ const Listbookings = ({ resid }) => {
           </TableCell>
         </TableRow>
       ) : (
-        (bookingList = <tr></tr>)
-      )
+          (bookingList = <tr></tr>)
+        )
     );
   } else if (Loading) {
     bookingList = (
@@ -186,7 +185,7 @@ const Listbookings = ({ resid }) => {
                   style={{ outline: "none" }}
                   color={`${
                     filters.DEL_STATUS === status.type ? "primary" : "default"
-                  }`}
+                    }`}
                   onClick={() => {
                     setFilter("DEL_STATUS", status.type);
                     applyFilter(details, status.string);

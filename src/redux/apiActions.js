@@ -84,3 +84,11 @@ export const updateCustomerDetails = (id, body) => {
 export const deleteCustomer = (id) => {
   return fireRequest("deleteCustomer", [id]);
 };
+
+export const getAllhotels = () => {
+  return fireRequest("hotelsList", []);
+};
+
+export const pendingApproval = (id, body) => {
+  return fireRequest("pendingApproval", [id], body);
+};
