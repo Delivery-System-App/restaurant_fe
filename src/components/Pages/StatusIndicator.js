@@ -17,7 +17,7 @@ function StatusIndicator({ status }) {
   return (
     <Card
       style={{ backgroundColor: state.clr }}
-      className="px-2 py-2  rounded text-center"
+      className="rounded py-1 text-center"
     >
       <p style={{ color: "white" }}>{state.msg}</p>
     </Card>
