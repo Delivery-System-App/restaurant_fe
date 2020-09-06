@@ -27,7 +27,7 @@ export default function ConfirmationBox({
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleClose} color="primary">
-            Disagree
+            Cancel
           </Button>
           <Button
             onClick={() => handleConfirm(data.cusId)}
