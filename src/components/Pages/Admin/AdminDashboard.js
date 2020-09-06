@@ -42,14 +42,10 @@ const AdminDashboard = () => {
   });
 
   const applyFilter = (res, type) => {
-    console.log("log", res);
     if (res) {
-      console.log("log1", res);
       setFilteredValue(
         res.filter((el) => {
-          return (
-            el.approved === type
-          );
+          return el.approved === type;
         })
       );
     }
@@ -75,29 +71,21 @@ const AdminDashboard = () => {
 
   function updateStatus(id, value) {
     let body = {
-      approval: value
+      approval: value,
     };
     setLoading(true);
     dispatch(pendingApproval([id], body)).then((resp) => {
       if (resp.status === 201) {
-        console.log("update successfull");
         window.location.reload(false);
       }
       setLoading(false);
     });
   }
 
-  console.log("response", details);
-
   if (filteredValue.length > 0) {
     let i = 0;
-    hotelList = filteredValue.map((e) =>
-
-      <TableRow
-        key={e.bookId}
-        hover
-        onClick={() => navigate(`/`)}
-      >
+    hotelList = filteredValue.map((e) => (
+      <TableRow key={e.bookId} hover onClick={() => navigate(`/`)}>
         <TableCell className=" border-b border-gray-200 text-sm ">
           <Typography className="items-center">
             <div className="ml-2">{++i}</div>
@@ -125,28 +113,34 @@ const AdminDashboard = () => {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={() => { updateStatus(e.id, 1); }}>
+                  onClick={() => {
+                    updateStatus(e.id, 1);
+                  }}
+                >
                   Approve
                 </Button>
 
                 <Button
                   variant="contained"
                   color="secondary"
-                  onClick={() => { updateStatus(e.id, -1); }}>
+                  onClick={() => {
+                    updateStatus(e.id, -1);
+                  }}
+                >
                   Reject
                 </Button>
               </div>
             </Typography>
           </TableCell>
         ) : (
-            <TableCell className="border-b border-gray-200 text-sm ">
-              <Typography className="items-center">
-                <div className="ml-2">{e.location}</div>
-              </Typography>
-            </TableCell>
-          )}
+          <TableCell className="border-b border-gray-200 text-sm ">
+            <Typography className="items-center">
+              <div className="ml-2">{e.location}</div>
+            </Typography>
+          </TableCell>
+        )}
       </TableRow>
-    );
+    ));
   } else if (Loading) {
     hotelList = (
       <TableRow>
@@ -184,8 +178,10 @@ const AdminDashboard = () => {
                   size="small"
                   style={{ outline: "none" }}
                   color={`${
-                    filters.APPROVE_STATUS === status.string ? "primary" : "default"
-                    }`}
+                    filters.APPROVE_STATUS === status.string
+                      ? "primary"
+                      : "default"
+                  }`}
                   onClick={() => {
                     setFilter("APPROVE_STATUS", status.string);
                     applyFilter(details, status.string);
@@ -210,10 +206,9 @@ const AdminDashboard = () => {
                   <StyledTableCell>Contact</StyledTableCell>
                   {filters.APPROVE_STATUS === 0 ? (
                     <StyledTableCell> </StyledTableCell>
-                  ) :
-                    (
-                      <StyledTableCell >Location</StyledTableCell>
-                    )}
+                  ) : (
+                    <StyledTableCell>Location</StyledTableCell>
+                  )}
                 </TableRow>
               </TableHead>
               <TableBody className={"cursor-pointer"}>{hotelList}</TableBody>
@@ -223,6 +218,5 @@ const AdminDashboard = () => {
       </div>
     </div>
   );
-
 };
 export default AdminDashboard;
