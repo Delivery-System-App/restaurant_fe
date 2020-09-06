@@ -19,7 +19,10 @@ const Router = () => {
       const access = localStorage.getItem("access_token");
       if (access) {
         const res = await dispatch(getCurrentUser());
-        if (res.data.data.type === "owner" || res.data.data.type === "admin") {
+        if (
+          res &&
+          (res.data.data.type === "owner" || res.data.data.type === "admin")
+        ) {
           res.data.data.type === "admin" ? setAdmin(true) : setAdmin(false);
           setUser(res.data.data);
         } else {
