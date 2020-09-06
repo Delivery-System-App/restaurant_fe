@@ -156,26 +156,30 @@ const DashboardPage = () => {
                       </CardContent>
                     </A>
                     <CardActions>
-                      <A href={`/edithotel/${value.id}`}>
-                        <Button
-                          size="small"
-                          color="primary"
-                          style={{ outline: "none" }}
-                        >
-                          Edit Hotel
-                        </Button>
-                      </A>
-                      <Confirm
-                        handleConfirm={handleConfirm}
-                        cancelDialog={"Cancel"}
-                        confirmDialog={"Delete"}
-                        buttonText={"Delete"}
-                        id={value.id}
-                        sentence={`You are about to delete hotel ${value.name} ?`}
-                      />
-                      <div className="w-1/2 flex flex-row text-right">
-                        <div className="w-1/4 md:w-1/3 lg:w-1/3"></div>
-                        <div className="w-3/4 md:w-2/3 lg:w-2/3">
+                      <div className="w-2/3 flex">
+                        <div className="mr-2">
+                          <A href={`/edithotel/${value.id}`}>
+                            <Button
+                              size="small"
+                              color="primary"
+                              style={{ outline: "none" }}
+                            >
+                              Edit Hotel
+                            </Button>
+                          </A>
+                        </div>
+                        <Confirm
+                          handleConfirm={handleConfirm}
+                          cancelDialog={"Cancel"}
+                          confirmDialog={"Delete"}
+                          buttonText={"Delete"}
+                          id={value.id}
+                          sentence={`You are about to delete hotel ${value.name} ?`}
+                        />
+                      </div>
+                      <div className="w-1/3 flex flex-row text-right">
+                        <div className="w-1/5 md:w-1/4 lg:w-1/4"></div>
+                        <div className="w-4/5 md:w-3/4 lg:w-3/4">
                           <StatusIndicator status={value.approved} />
                         </div>
                       </div>
