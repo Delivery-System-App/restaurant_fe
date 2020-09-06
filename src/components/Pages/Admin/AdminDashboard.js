@@ -36,6 +36,7 @@ const AdminDashboard = () => {
   const [Loading, setLoading] = useState(false);
   const [notify, setnotify] = useState({ msg: "", type: "", popup: false });
   const [reRender, setreRender] = useState(Math.random());
+  const [filterValue, setfilterValue] = useState(null);
   const [open, setopen] = useState(false);
   const [data, setdata] = useState({
     action: "",
@@ -68,6 +69,10 @@ const AdminDashboard = () => {
         const { data: res } = resp;
         setdetails(res);
         applyFilter(res, 0);
+        if (filterValue !== null) {
+          setFilter("APPROVE_STATUS", filterValue);
+          applyFilter(res, filterValue);
+        }
       }
       setLoading(false);
     });
@@ -232,8 +237,13 @@ const AdminDashboard = () => {
                       : "default"
                   }`}
                   onClick={() => {
-                    setFilter("APPROVE_STATUS", status.string);
-                    applyFilter(details, status.string);
+                    setfilterValue(status.string);
+                    if (status.string !== 1) {
+                      setreRender(Math.random());
+                    } else {
+                      setFilter("APPROVE_STATUS", status.string);
+                      applyFilter(details, status.string);
+                    }
                   }}
                 >
                   {status.type}
