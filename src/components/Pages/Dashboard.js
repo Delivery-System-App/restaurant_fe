@@ -76,7 +76,6 @@ const DashboardPage = () => {
         if (res) {
           const len = res.data.data;
           setData(Object.values(len));
-          console.log(len);
           setLoading(false);
         }
       });
