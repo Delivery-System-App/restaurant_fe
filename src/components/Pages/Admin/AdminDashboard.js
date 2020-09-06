@@ -133,11 +133,26 @@ const AdminDashboard = () => {
             </Typography>
           </TableCell>
         ) : (
-          <TableCell className="border-b border-gray-200 text-sm ">
-            <Typography className="items-center">
-              <div className="ml-2">{e.location}</div>
-            </Typography>
-          </TableCell>
+          <>
+            <TableCell className="border-b border-gray-200 text-sm ">
+              <Typography className="items-center">
+                <div className="ml-2">{e.location}</div>
+              </Typography>
+            </TableCell>
+            <TableCell className=" border-b border-gray-200 text-sm ">
+              <Typography className="items-center">
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => {
+                    updateStatus(e.id, -1);
+                  }}
+                >
+                  Reject
+                </Button>
+              </Typography>
+            </TableCell>
+          </>
         )}
       </TableRow>
     ));
@@ -207,7 +222,10 @@ const AdminDashboard = () => {
                   {filters.APPROVE_STATUS === 0 ? (
                     <StyledTableCell> </StyledTableCell>
                   ) : (
-                    <StyledTableCell>Location</StyledTableCell>
+                    <>
+                      <StyledTableCell>Location</StyledTableCell>
+                      <StyledTableCell></StyledTableCell>
+                    </>
                   )}
                 </TableRow>
               </TableHead>
