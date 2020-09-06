@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { getAllhotels, pendingApproval } from "../../../redux/apiActions";
 import { APPROVAL_STATUS } from "../../Common/constants";
 import { navigate } from "hookrouter";
+import Confirm from "./Confirmation";
 import {
   Button,
   Grid,
@@ -17,7 +18,8 @@ import {
   Paper,
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
-
+import Notify from "../../../utils/Notify";
+import { setDate } from "date-fns";
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.common.black,
@@ -33,7 +35,15 @@ const AdminDashboard = () => {
   const dispatch = useDispatch();
   const [details, setdetails] = useState({});
   const [Loading, setLoading] = useState(false);
-
+  const [notify, setnotify] = useState({ msg: "", type: "", popup: false });
+  const [reRender, setreRender] = useState(Math.random());
+  const [open, setopen] = useState(false);
+  const [data, setdata] = useState({
+    action: "",
+    name: "",
+    id: "",
+    status: "",
+  });
   let hotelList = useState();
   const [filteredValue, setFilteredValue] = useState([]);
 
@@ -63,24 +73,44 @@ const AdminDashboard = () => {
       setLoading(false);
     });
     // eslint-disable-next-line
-  }, [dispatch]);
+  }, [dispatch, reRender]);
 
   function setFilter(type, value) {
     setFilters({ ...filters, [type]: value });
   }
 
+  const handleClick = (e, STATUS) => {
+    if (STATUS === 1) {
+      setdata({ type: "Approve", status: 1, name: e.name, id: e.id });
+    } else {
+      setdata({ type: "Reject", status: -1, name: e.name, id: e.id });
+    }
+    setopen(true);
+  };
+
   function updateStatus(id, value) {
+    setopen(false);
     let body = {
       approval: value,
     };
     setLoading(true);
     dispatch(pendingApproval([id], body)).then((resp) => {
       if (resp.status === 201) {
-        window.location.reload(false);
+        if (resp.data.message === "Approved") {
+          setreRender(Math.random());
+          setnotify({ msg: "Approved", type: "success", popup: true });
+        } else {
+          setreRender(Math.random());
+          setnotify({ msg: "Rejected", type: "success", popup: true });
+        }
       }
       setLoading(false);
     });
   }
+
+  const closeAlert = () => {
+    setnotify({ popup: false });
+  };
 
   if (filteredValue.length > 0) {
     let i = 0;
@@ -114,17 +144,16 @@ const AdminDashboard = () => {
                   variant="contained"
                   color="primary"
                   onClick={() => {
-                    updateStatus(e.id, 1);
+                    handleClick(e, 1);
                   }}
                 >
                   Approve
                 </Button>
-
                 <Button
                   variant="contained"
                   color="secondary"
                   onClick={() => {
-                    updateStatus(e.id, -1);
+                    handleClick(e, -1);
                   }}
                 >
                   Reject
@@ -182,6 +211,12 @@ const AdminDashboard = () => {
 
   return (
     <div>
+      <Confirm
+        data={data}
+        open={open}
+        handleClose={() => setopen(false)}
+        handleConfirm={updateStatus}
+      />
       <div>
         <Grid container spacing={3}>
           <Grid item className="flex" xs={12} sm={6}>
@@ -234,6 +269,7 @@ const AdminDashboard = () => {
           </TableContainer>
         </Paper>
       </div>
+      <Notify props={notify} closeAlert={closeAlert} />
     </div>
   );
 };

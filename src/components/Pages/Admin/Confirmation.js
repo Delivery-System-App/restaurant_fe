@@ -19,10 +19,12 @@ export default function ConfirmationBox({
         onClose={handleClose}
         aria-labelledby="responsive-dialog-title"
       >
-        <DialogTitle id="responsive-dialog-title">Delete customer</DialogTitle>
+        <DialogTitle id="responsive-dialog-title">
+          {data.type} Hotel
+        </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            You are about to delete {data.cusName}
+            You are about to {data.type} {data.name}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -30,11 +32,11 @@ export default function ConfirmationBox({
             Cancel
           </Button>
           <Button
-            onClick={() => handleConfirm(data.cusId)}
+            onClick={() => handleConfirm(data.id, data.status)}
             color="secondary"
             autoFocus
           >
-            Delete
+            {data.type}
           </Button>
         </DialogActions>
       </Dialog>
