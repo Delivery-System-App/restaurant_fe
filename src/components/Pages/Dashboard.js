@@ -9,6 +9,7 @@ import Loader from "../../utils/Loader";
 import Confirm from "./ConfirmPage";
 import Notify from "../../utils/Notify";
 import Carousal from "./Carousal";
+import StatusIndicator from "./StatusIndicator";
 
 import {
   Card,
@@ -75,6 +76,7 @@ const DashboardPage = () => {
         if (res) {
           const len = res.data.data;
           setData(Object.values(len));
+          console.log(len);
           setLoading(false);
         }
       });
@@ -172,6 +174,12 @@ const DashboardPage = () => {
                         id={value.id}
                         sentence={`You are about to delete hotel ${value.name} ?`}
                       />
+                      <div className="w-1/2 flex flex-row text-right">
+                        <div className="w-1/4 md:w-1/3 lg:w-1/3"></div>
+                        <div className="w-3/4 md:w-2/3 lg:w-2/3">
+                          <StatusIndicator status={value.approved} />
+                        </div>
+                      </div>
                     </CardActions>
                   </Card>
                 </Grid>
