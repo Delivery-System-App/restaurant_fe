@@ -101,6 +101,7 @@ const AdminDashboard = () => {
         } else {
           setreRender(Math.random());
           setnotify({ msg: "Rejected", type: "success", popup: true });
+          window.location.reload();
         }
       }
       setLoading(false);
@@ -114,7 +115,7 @@ const AdminDashboard = () => {
   if (filteredValue.length > 0) {
     let i = 0;
     hotelList = filteredValue.map((e) => (
-      <TableRow key={e.bookId} hover onClick={() => navigate(`/`)}>
+      <TableRow key={e.id} hover onClick={() => navigate(`/`)}>
         <TableCell className=" border-b border-gray-200 text-sm ">
           <Typography className="items-center">
             <div className="ml-2">{++i}</div>
