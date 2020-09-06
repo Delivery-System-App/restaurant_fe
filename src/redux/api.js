@@ -77,6 +77,8 @@ export default {
     method: "PATCH",
     noAuth: false,
   },
+
+  //booking
   hotelBookingDetails: {
     path: "/api/v1/booking/All_Bookings",
     method: "GET",
@@ -105,6 +107,17 @@ export default {
   deleteCustomer: {
     path: "/api/v1/customer/deleteCustomerDetails",
     method: "DELETE",
+    noAuth: false,
+  },
+
+  //admin
+  hotelsList: {
+    path: "/api/v1/restaurant/all-restaurant",
+    noAuth: true,
+  },
+  pendingApproval: {
+    path: "/api/v1/restaurant/PendingApproval",
+    method: "POST",
     noAuth: false,
   },
 };
