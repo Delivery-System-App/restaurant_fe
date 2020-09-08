@@ -129,7 +129,7 @@ const FormDialog = ({ open, handleClose, id, changeStatus }) => {
         if (res) {
           if (res.status === 201) {
             changeStatus(false, {
-              msg: "Updated user",
+              msg: "Updated customer",
               type: "success",
               popup: true,
             });

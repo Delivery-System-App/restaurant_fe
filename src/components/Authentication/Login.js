@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
 import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import Link from "@material-ui/core/Link";
-import Grid from "@material-ui/core/Grid";
+import {
+  Button,
+  TextField,
+  CircularProgress,
+  Link,
+  Grid,
+  CssBaseline,
+  Typography,
+  Container,
+} from "@material-ui/core";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
-import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
 import { A, useQueryParams } from "hookrouter";
 import { login } from "../../redux/apiActions";
 import { useDispatch } from "react-redux";
@@ -37,7 +40,56 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: "none",
     color: "inherit",
   },
+  wrapper: {
+    position: "relative",
+  },
+  buttonProgress: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    marginTop: -5,
+    marginLeft: -1,
+  },
 }));
+
+const LoaderButton = ({ Loading, handleSubmit }) => {
+  const classes = useStyles();
+  const [loading, setLoading] = React.useState(false);
+
+  React.useEffect(() => {
+    let mount = true;
+    if (mount) {
+      if (!Loading) {
+        setLoading(false);
+      } else {
+        setLoading(true);
+      }
+    }
+    return () => {
+      mount = false;
+    };
+  }, [Loading]);
+
+  return (
+    <div className={classes.wrapper}>
+      <Button
+        variant="contained"
+        color="primary"
+        disabled={loading}
+        fullWidth
+        onClick={handleSubmit}
+        fullwidth
+        className={classes.submit}
+        style={{ outline: "none" }}
+      >
+        Login
+      </Button>
+      {loading && (
+        <CircularProgress size={24} className={classes.buttonProgress} />
+      )}
+    </div>
+  );
+};
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -48,7 +100,7 @@ const Login = () => {
   const [form, setForm] = useState(initForm);
   const [queryParams, setQueryParams] = useQueryParams();
   const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
-
+  const [loading, setloading] = useState(false);
   useEffect(() => {
     setQueryParams(queryParams);
     //eslint-disable-next-line
@@ -64,15 +116,13 @@ const Login = () => {
     e.preventDefault();
     const { email } = form;
     if (validateEmailAddress(email)) {
+      setloading(true);
       dispatch(login(form)).then((resp) => {
         if (resp) {
           const { data: res } = resp;
           const { status: statusCode } = resp;
-
-          // set captha logic needed
-
-          // TODO: change status code to 200 (backend was sending 201 on login)
           if (resp.data === undefined) {
+            setloading(false);
             setnotify({
               msg: "Invalid credentials",
               type: "error",
@@ -81,13 +131,13 @@ const Login = () => {
           }
           if (res && statusCode === 201) {
             localStorage.setItem("access_token", res.access_token);
+            setloading(false);
             window.location.reload();
           }
+        } else {
+          setloading(false);
         }
       });
-      // localStorage.setItem(`${process.env.REACT_APP_NAME}_token`, "yay man");
-      // navigate("/");
-      //   window.location.reload();
     } else {
       setnotify({
         msg: "invalid email",
@@ -141,16 +191,7 @@ const Login = () => {
               id="password"
               autoComplete="current-password"
             />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              style={{ outline: "none" }}
-            >
-              Sign In
-            </Button>
+            <LoaderButton Loading={loading} handleSubmit={submitHandler} />
             <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2">

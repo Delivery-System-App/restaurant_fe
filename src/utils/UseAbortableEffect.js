@@ -16,5 +16,6 @@ export const useAbortableEffect = (effect, dependencies) => {
         cleanUpFn();
       }
     };
+    //eslint-disable-next-line
   }, [...dependencies]);
 };

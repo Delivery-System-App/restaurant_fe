@@ -68,6 +68,7 @@ const LoaderButton = ({ Loading, handleSubmit, type }) => {
       >
         {type}
       </Button>
+
       {loading && (
         <CircularProgress size={24} className={classes.buttonProgress} />
       )}
@@ -200,7 +201,6 @@ const AddMenu = ({ id }) => {
       } else {
         Dish = [...previousDishes];
       }
-      console.log(Form, Dish);
       setPreviousDishes([]);
       setError(initError);
       const Result = {
