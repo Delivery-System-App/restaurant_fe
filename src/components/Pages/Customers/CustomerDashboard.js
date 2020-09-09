@@ -91,10 +91,19 @@ const FormDialog = ({ open, handleClose, id, changeStatus }) => {
     const { value, name } = e.target;
     setform({ ...form, [name]: value });
   };
+
+  const optionalValues = ["email", "loyalty"];
+
   const validInputs = () => {
     let formValid = true;
     let err = Object.assign({}, initError);
     const { contact, email, name, loyalty } = form;
+    Object.keys(form).forEach((key) => {
+      if (form[key] === "" && !optionalValues.includes(key)) {
+        formValid = false;
+        err[key] = "This field is required";
+      }
+    });
     if (!name.replace(/\s/g, "").length) {
       formValid = false;
       err["name"] = "This field is required";
@@ -104,13 +113,17 @@ const FormDialog = ({ open, handleClose, id, changeStatus }) => {
       formValid = false;
       err["contact"] = "Enter Valid phone number";
     }
-    if (isNaN(loyalty) || loyalty === "") {
-      formValid = false;
-      err["loyalty"] = "Enter a number";
+    if (loyalty !== "") {
+      if (isNaN(loyalty) || loyalty === "") {
+        formValid = false;
+        err["loyalty"] = "Enter a number";
+      }
     }
-    if (!validateEmailAddress(email)) {
-      err["email"] = "Enter a valid email";
-      formValid = false;
+    if (email !== "") {
+      if (!validateEmailAddress(email)) {
+        err["email"] = "Enter a valid email";
+        formValid = false;
+      }
     }
 
     seterr(err);

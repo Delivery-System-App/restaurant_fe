@@ -33,7 +33,7 @@ export default function AddCustomer() {
     const { value, name } = e.target;
     setForm({ ...Form, [name]: value });
   };
-  const optionalValues = ["email"];
+  const optionalValues = ["email", "loyalty"];
 
   const validInputs = () => {
     let formValid = true;
@@ -50,9 +50,11 @@ export default function AddCustomer() {
       err["loyalty"] = "Enter a number";
       formValid = false;
     }
-    if (!validateEmailAddress(email)) {
-      err["email"] = "Enter a valid email";
-      formValid = false;
+    if (email !== "") {
+      if (!validateEmailAddress(email)) {
+        err["email"] = "Enter a valid email";
+        formValid = false;
+      }
     }
     if (!phonePreg(contact)) {
       formValid = false;
