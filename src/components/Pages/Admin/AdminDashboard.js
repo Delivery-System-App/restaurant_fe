@@ -19,6 +19,7 @@ import {
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import Notify from "../../../utils/Notify";
+import GetTotalRestaurants from "./GetTotalRestaurants";
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.common.black,
@@ -236,7 +237,9 @@ const AdminDashboard = () => {
       />
       <div>
         <Grid container spacing={3}>
-          <Grid item className="flex" xs={12} sm={6}>
+          <Grid item className="flex" xs={12} sm={4}>
+            <GetTotalRestaurants />
+
             {Object.values(APPROVAL_STATUS).map((status) => (
               <div className="mx-1">
                 <Button

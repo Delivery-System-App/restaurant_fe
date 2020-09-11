@@ -125,4 +125,9 @@ export default {
     method: "GET",
     noAuth: false,
   },
+  restaurantCount: {
+    path: "/api/v1/restaurant/restaurantnum",
+    method: "GET",
+    noAuth: true,
+  },
 };

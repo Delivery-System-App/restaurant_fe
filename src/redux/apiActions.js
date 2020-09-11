@@ -96,3 +96,7 @@ export const pendingApproval = (id, body) => {
 export const allCustomers = () => {
   return fireRequest("allCustomers");
 };
+
+export const restaurantCount = () => {
+  return fireRequest("restaurantCount");
+};
