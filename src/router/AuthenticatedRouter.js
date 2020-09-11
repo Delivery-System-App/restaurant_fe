@@ -24,10 +24,10 @@ const routes = {
   "/user/:user": ({ user }) => <ProfilePage user={user} />,
   "/addhotel": () => <AddHotel />,
   "/edithotel/:id": ({ id }) => <EditHotel id={id} />,
-  "/hotel/:id": ({ id }) => <ViewMenu id={id} />,
+  "/hotel/:id": ({ id }) => <ViewMenu id={id} usertype="owner" />,
   "/hotel/:id/addmenu": ({ id }) => <AddMenu id={id} />,
   "/hotel/:resid/:id/:menuname": ({ resid, id, menuname }) => (
-    <ListMenuItems resid={resid} id={id} menuname={menuname} />
+    <ListMenuItems usertype="owner" resid={resid} id={id} menuname={menuname} />
   ),
   "/editdish/:resid/:menuid/:dishid": ({ resid, dishid, menuid }) => (
     <EditDishItem dishid={dishid} menuid={menuid} resid={resid} />

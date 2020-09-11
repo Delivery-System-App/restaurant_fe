@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ListMenuItems = ({ resid, id, menuname }) => {
+const ListMenuItems = ({ resid, id, menuname, usertype }) => {
   //getting menuid as props
   useHeading("Dishes");
   const body = {
@@ -82,7 +82,6 @@ const ListMenuItems = ({ resid, id, menuname }) => {
           if (res.data.data[0] != null) {
             const len = res.data.data;
             setData(Object.values(len));
-            console.log(len);
             setLoading(false);
           } else {
             setData([]);
@@ -103,19 +102,20 @@ const ListMenuItems = ({ resid, id, menuname }) => {
 
   const handleConfirm = (e) => {
     body["dishId"] = e;
-    setLoading(true);
-    //not working
-    dispatch(deleteDish(body)).then((res) => {
-      if (res.status === 201) {
-        setnotify({
-          msg: "Dish Deleted",
-          type: "success",
-          popup: true,
-        });
-        setreRender(Math.random());
-      }
-      setLoading(false);
-    });
+    if (usertype === "owner") {
+      setLoading(true);
+      dispatch(deleteDish(body)).then((res) => {
+        if (res.status === 201) {
+          setnotify({
+            msg: "Dish Deleted",
+            type: "success",
+            popup: true,
+          });
+          setreRender(Math.random());
+        }
+        setLoading(false);
+      });
+    }
   };
 
   const closeAlert = () => {
@@ -129,21 +129,27 @@ const ListMenuItems = ({ resid, id, menuname }) => {
   return (
     <>
       <BackButton />
-      <Grid item container justify="center" style={{ marginBottom: "5px" }}>
-        <Button variant="outlined" color="primary" style={{ outline: "none" }}>
-          <A
-            href={`/${resid}/addmenudishes/${menuname}/${id}`}
-            className={classes.link}
-            style={{
-              color: "#757de8",
-              fontSize: "16px",
-              textDecoration: "none",
-            }}
+      {usertype === "owner" && (
+        <Grid item container justify="center" style={{ marginBottom: "5px" }}>
+          <Button
+            variant="outlined"
+            color="primary"
+            style={{ outline: "none" }}
           >
-            Add Dishes To The Menu
-          </A>
-        </Button>
-      </Grid>
+            <A
+              href={`/${resid}/addmenudishes/${menuname}/${id}`}
+              className={classes.link}
+              style={{
+                color: "#757de8",
+                fontSize: "16px",
+                textDecoration: "none",
+              }}
+            >
+              Add Dishes To The Menu
+            </A>
+          </Button>
+        </Grid>
+      )}
       <SearchBar searchChange={handleSearchChange} />
       {Loading ? (
         <Loader />
@@ -196,27 +202,31 @@ const ListMenuItems = ({ resid, id, menuname }) => {
                     </CardContent>
                     {/* </A> */}
                     <CardActions>
-                      <div className="flex w-2/3 flex-row">
-                        <div className="mr-2">
-                          <A href={`/editdish/${resid}/${id}/${value.dishId}`}>
-                            <Button
-                              size="small"
-                              color="primary"
-                              style={{ outline: "none" }}
+                      {usertype === "owner" && (
+                        <div className="flex w-2/3 flex-row">
+                          <div className="mr-2">
+                            <A
+                              href={`/editdish/${resid}/${id}/${value.dishId}`}
                             >
-                              Edit Item
-                            </Button>
-                          </A>
+                              <Button
+                                size="small"
+                                color="primary"
+                                style={{ outline: "none" }}
+                              >
+                                Edit Item
+                              </Button>
+                            </A>
+                          </div>
+                          <Confirm
+                            handleConfirm={handleConfirm}
+                            cancelDialog={"Cancel"}
+                            confirmDialog={"Delete"}
+                            buttonText={"Delete"}
+                            id={value.dishId}
+                            sentence={`You are about to delete the item ${value.name} ?`}
+                          />
                         </div>
-                        <Confirm
-                          handleConfirm={handleConfirm}
-                          cancelDialog={"Cancel"}
-                          confirmDialog={"Delete"}
-                          buttonText={"Delete"}
-                          id={value.dishId}
-                          sentence={`You are about to delete the item ${value.name} ?`}
-                        />
-                      </div>
+                      )}
                       <div className="w-1/3 flex flex-row text-right">
                         <div className="w-1/5 md:w-1/4 lg:w-1/4"></div>
                         <div className="w-4/5 md:w-3/4 lg:w-3/4">

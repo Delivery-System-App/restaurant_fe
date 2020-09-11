@@ -118,24 +118,37 @@ const AdminDashboard = () => {
 
   if (filteredValue.length > 0) {
     let i = 0;
+
     hotelList = filteredValue.map((e) => (
-      <TableRow key={e.id} hover onClick={() => navigate(`/`)}>
-        <TableCell className=" border-b border-gray-200 text-sm ">
+      <TableRow key={e.id} hover>
+        <TableCell
+          onClick={() => navigate("/hotel/" + e.id)}
+          className=" border-b border-gray-200 text-sm "
+        >
           <Typography className="items-center">
             <div className="ml-2">{++i}</div>
           </Typography>
         </TableCell>
-        <TableCell className=" border-b border-gray-200 text-sm ">
+        <TableCell
+          onClick={() => navigate("/hotel/" + e.id)}
+          className=" border-b border-gray-200 text-sm "
+        >
           <Typography className="items-center">
             <div className="ml-2">{e.name}</div>
           </Typography>
         </TableCell>
-        <TableCell className="border-b border-gray-200 text-sm ">
+        <TableCell
+          onClick={() => navigate("/hotel/" + e.id)}
+          className="border-b border-gray-200 text-sm "
+        >
           <Typography className="items-center">
             <div className="ml-2">{e.address}</div>
           </Typography>
         </TableCell>
-        <TableCell className=" border-b border-gray-200 text-sm ">
+        <TableCell
+          onClick={() => navigate("/hotel/" + e.id)}
+          className=" border-b border-gray-200 text-sm "
+        >
           <Typography className="items-center">
             <div className="ml-2">{e.contact}</div>
           </Typography>

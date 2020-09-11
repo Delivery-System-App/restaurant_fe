@@ -118,7 +118,7 @@ const FormDialog = ({ open, handleClose, handleEditName, data }) => {
   );
 };
 
-const ViewMenu = ({ id }) => {
+const ViewMenu = ({ id, usertype }) => {
   useHeading("Menu");
   const [Data, setData] = useState([]);
   const [Loading, setLoading] = useState(false);
@@ -174,17 +174,19 @@ const ViewMenu = ({ id }) => {
     });
   };
   const handleConfirm = (e) => {
-    setLoading(true);
-    dispatch(deleteMenu([e])).then((res) => {
-      if (res.status === 200) {
-        setnotify({
-          msg: "Menu Deleted",
-          type: "success",
-          popup: true,
-        });
-        setreRender(Math.random());
-      }
-    });
+    if (usertype === "owner") {
+      setLoading(true);
+      dispatch(deleteMenu([e])).then((res) => {
+        if (res.status === 200) {
+          setnotify({
+            msg: "Menu Deleted",
+            type: "success",
+            popup: true,
+          });
+          setreRender(Math.random());
+        }
+      });
+    }
   };
 
   const handleSearchChange = (e) => {
@@ -216,32 +218,34 @@ const ViewMenu = ({ id }) => {
             justify="center"
             style={{ marginBottom: "20px" }}
           >
-            <div className="flex">
-              <Button
-                variant="outlined"
-                color="primary"
-                size="medium"
-                style={{ outline: "none", marginRight: "1px" }}
-              >
-                <A
-                  href={`/hotel/${id}/addmenu`}
-                  className={classes.link}
-                  style={{
-                    color: "#757de8",
-                    fontSize: "16px",
-                    textDecoration: "none",
-                  }}
+            {usertype === "owner" && (
+              <div className="flex">
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  size="medium"
+                  style={{ outline: "none", marginRight: "1px" }}
                 >
-                  Add Menu
-                </A>
-              </Button>
-              <div className="ml-1">
-                <Addbutton
-                  title="View booking"
-                  href={`/hotel/${id}/bookings`}
-                />
+                  <A
+                    href={`/hotel/${id}/addmenu`}
+                    className={classes.link}
+                    style={{
+                      color: "#757de8",
+                      fontSize: "16px",
+                      textDecoration: "none",
+                    }}
+                  >
+                    Add Menu
+                  </A>
+                </Button>
+                <div className="ml-1">
+                  <Addbutton
+                    title="View booking"
+                    href={`/hotel/${id}/bookings`}
+                  />
+                </div>
               </div>
-            </div>
+            )}
             <SearchBar searchChange={handleSearchChange} />
             <Grid container className={classes.container}>
               {Data.map((value) => {
@@ -262,26 +266,28 @@ const ViewMenu = ({ id }) => {
                             </CardContent>
                           </CardActionArea>
                         </A>
-                        <CardActions>
-                          <Button
-                            size="small"
-                            color="primary"
-                            style={{ outline: "none" }}
-                            onClick={() =>
-                              handleClickOpen(value.id, value.name)
-                            }
-                          >
-                            Edit Name
-                          </Button>
-                          <Confirm
-                            handleConfirm={handleConfirm}
-                            cancelDialog={"Cancel"}
-                            confirmDialog={"Delete"}
-                            buttonText={"Delete"}
-                            id={value.id}
-                            sentence={`You are about to delete the full menu list ${value.name} ?`}
-                          />
-                        </CardActions>
+                        {usertype === "owner" && (
+                          <CardActions>
+                            <Button
+                              size="small"
+                              color="primary"
+                              style={{ outline: "none" }}
+                              onClick={() =>
+                                handleClickOpen(value.id, value.name)
+                              }
+                            >
+                              Edit Name
+                            </Button>
+                            <Confirm
+                              handleConfirm={handleConfirm}
+                              cancelDialog={"Cancel"}
+                              confirmDialog={"Delete"}
+                              buttonText={"Delete"}
+                              id={value.id}
+                              sentence={`You are about to delete the full menu list ${value.name} ?`}
+                            />
+                          </CardActions>
+                        )}
                       </Card>
                     </Grid>
                   )
