@@ -9,26 +9,6 @@ const bannerImg = require("../../assets/images/banner.svg");
 const loginImg = require("../../assets/images/login.svg");
 
 const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  root: {
-    maxWidth: 345,
-    marginTop: 15,
-    margin: "0px auto",
-  },
-  link: {
-    textDecoration: "none",
-    color: "inherit",
-    cursor: "pointer",
-  },
   container: {
     marginTop: "10px",
     padding: 10,
@@ -50,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
   moto: {
     fontWeight: "semibold",
-    fontSize: 20,
+    fontSize: 18,
     fontStyle: "italic",
   },
   media: {
