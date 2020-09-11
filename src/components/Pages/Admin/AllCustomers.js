@@ -13,6 +13,8 @@ import useHeading from "../useHeading";
 import SearchBar from "../../SearchBar/SearchBar";
 import { allCustomers } from "../../../redux/apiActions";
 import Notify from "../../../utils/Notify";
+import { exportCSVFile } from "../../../utils/exportCSVFile";
+import SaveAltOutlinedIcon from "@material-ui/icons/SaveAltOutlined";
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.common.black,
@@ -29,7 +31,11 @@ const AllCustomers = () => {
   let customersList = useState();
   const dispatch = useDispatch();
   const [Loading, setLoading] = useState(false);
-  const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
+  const [notify, setnotify] = useState({
+    popup: false,
+    msg: "",
+    type: "",
+  });
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
@@ -57,6 +63,18 @@ const AllCustomers = () => {
     setnotify({
       popup: false,
     });
+  };
+  const handleExport = () => {
+    let customersL = [];
+    // eslint-disable-next-line
+    Data.map(({ name, email, contact }) => {
+      customersL.push({
+        name,
+        email,
+        contact,
+      });
+    });
+    exportCSVFile(customersL, "Customers_List");
   };
 
   if (Data.length > 0) {
@@ -128,9 +146,22 @@ const AllCustomers = () => {
         <Button variant="outlined" color="primary" style={{ outline: "none" }}>
           Customers:{Data.length}
         </Button>
+
+        <Button
+          variant="outlined"
+          color="secondary"
+          style={{ outline: "none", marginLeft: 10 }}
+          onClick={handleExport}
+        >
+          <SaveAltOutlinedIcon />
+        </Button>
         <div style={{ overflow: "hidden" }}>
           <Paper
-            style={{ width: "100%", margin: "0px auto", marginTop: "15px" }}
+            style={{
+              width: "100%",
+              margin: "0px auto",
+              marginTop: "15px",
+            }}
           >
             <TableContainer style={{ maxHeight: 440 }} component={Paper}>
               <Table stickyHeader aria-label="sticky table">
