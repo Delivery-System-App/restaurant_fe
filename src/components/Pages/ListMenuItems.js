@@ -228,7 +228,9 @@ const ListMenuItems = ({ resid, id, menuname, usertype }) => {
                         </div>
                       )}
                       <div className="w-1/3 flex flex-row text-right">
-                        <div className="w-1/5 md:w-1/4 lg:w-1/4"></div>
+                        {usertype === "owner" && (
+                          <div className="w-1/5 md:w-1/4 lg:w-1/4"></div>
+                        )}
                         <div className="w-4/5 md:w-3/4 lg:w-3/4">
                           <StatusIndicator status={value.category} />
                         </div>
