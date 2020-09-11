@@ -12,7 +12,7 @@ import {
 } from "@material-ui/core";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import { makeStyles } from "@material-ui/core/styles";
-import { A, useQueryParams } from "hookrouter";
+import { A, useQueryParams, navigate } from "hookrouter";
 import { login } from "../../redux/apiActions";
 import { useDispatch } from "react-redux";
 import { validateEmailAddress } from "../../utils/validation";
@@ -189,6 +189,12 @@ const Login = () => {
               label="Password"
               type="password"
               id="password"
+              onKeyPress={(event) => {
+                if (event.charCode === 13) {
+                  submitHandler(event);
+                  navigate("/");
+                }
+              }}
               autoComplete="current-password"
             />
             <LoaderButton Loading={loading} handleSubmit={submitHandler} />

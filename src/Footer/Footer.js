@@ -12,7 +12,7 @@ function Copyright() {
       style={{ textAlign: "center" }}
     >
       {"Copyright © "}
-      <Link color="inherit" href="https://zomatolite.netlify.app/">
+      <Link color="inherit" href="https://skosh.netlify.app/">
         {"SKOSH "}
       </Link>
       {new Date().getFullYear()}
