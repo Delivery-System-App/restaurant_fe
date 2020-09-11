@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import DashboardIcon from "@material-ui/icons/Dashboard";
+import GroupAddIcon from "@material-ui/icons/GroupAdd";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import Navbar from "./Navbar";
 import { navigate } from "hookrouter";
@@ -11,6 +12,11 @@ const AdminNavbar = ({ page }) => {
       path: "/",
       text: "Admin Dashboard",
       icon: <DashboardIcon />,
+    },
+    {
+      path: "/customers",
+      text: "Customers",
+      icon: <GroupAddIcon />,
     },
     { divider: true },
     {

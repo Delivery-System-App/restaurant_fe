@@ -120,4 +120,9 @@ export default {
     method: "POST",
     noAuth: false,
   },
+  allCustomers: {
+    path: "/api/v1/customer/allCustomers",
+    method: "GET",
+    noAuth: false,
+  },
 };
