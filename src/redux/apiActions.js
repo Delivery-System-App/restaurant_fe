@@ -92,3 +92,7 @@ export const getAllhotels = () => {
 export const pendingApproval = (id, body) => {
   return fireRequest("pendingApproval", [id], body);
 };
+
+export const allCustomers = () => {
+  return fireRequest("allCustomers");
+};
