@@ -10,6 +10,10 @@ function StatusIndicator({ status }) {
       setstate({ msg: "APPROVED", clr: "#52b202" });
     } else if (status === -1) {
       setstate({ clr: "#d32f2f", msg: "REJECTED" });
+    } else if (status === "VEG") {
+      setstate({ clr: "#52b202", msg: "VEG" });
+    } else if (status === "NONVEG") {
+      setstate({ clr: "#d32f2f", msg: "NON VEG" });
     } else {
       setstate({ msg: "UNKNOWN", clr: "#1769aa" });
     }

@@ -20,6 +20,7 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
+  FormHelperText,
 } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
@@ -49,12 +50,14 @@ function EditDishItem({ dishid, menuid, resid }) {
     price: "",
     photos: "",
     status: "",
+    category: "EMPTY",
   };
   let initForm = {
     name: "",
     price: "",
     photos: "",
     status: "",
+    category: false,
   };
   const [Error, setError] = useState(initError);
   const [Form, setForm] = useState(initForm);
@@ -70,8 +73,8 @@ function EditDishItem({ dishid, menuid, resid }) {
           const len = res.data.data;
           const Resp = Object.values(len);
           const result = Resp.filter((obj) => obj.dishId === dishid);
-          const { name, price, photos, status } = result[0];
-          setForm({ name, price, photos, status });
+          const { name, price, photos, status, category } = result[0];
+          setForm({ name, price, photos, status, category });
         }
         setLoading(false);
       });
@@ -177,7 +180,7 @@ function EditDishItem({ dishid, menuid, resid }) {
             </Typography>
             <form className={classes.form}>
               <Grid container spacing={3}>
-                <Grid item xs={12}>
+                <Grid item xs={12} sm={6}>
                   <TextField
                     required
                     id="name"
@@ -191,20 +194,24 @@ function EditDishItem({ dishid, menuid, resid }) {
                     helperText={Error["name"]}
                   />
                 </Grid>
-                <FormControl className={classes.formControl}>
-                  <InputLabel id="demo-simple-select-label">Status</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    name="status"
-                    value={Form.status}
-                    onChange={handleChange}
-                  >
-                    <MenuItem value={"AVAILABLE"}>AVAILABLE</MenuItem>
-                    <MenuItem value={"NOT AVAILABLE"}>NOT AVAILABLE</MenuItem>
-                  </Select>
-                </FormControl>
-                <Grid item xs={12}>
+                <Grid item sm={6} xs={12}>
+                  <FormControl className={classes.formControl}>
+                    <InputLabel id="demo-simple-select-label">
+                      Status
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      name="status"
+                      value={Form.status}
+                      onChange={handleChange}
+                    >
+                      <MenuItem value={"AVAILABLE"}>AVAILABLE</MenuItem>
+                      <MenuItem value={"NOT AVAILABLE"}>NOT AVAILABLE</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12} sm={6}>
                   <TextField
                     label="Price"
                     type="text"
@@ -220,6 +227,28 @@ function EditDishItem({ dishid, menuid, resid }) {
                       ),
                     }}
                   />
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                  <FormControl className={classes.formControl}>
+                    <InputLabel style={{ minWidth: "80px" }}>
+                      Select type
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={Form.category}
+                      name="category"
+                      onChange={handleChange}
+                    >
+                      <MenuItem value={""} disabled>
+                        Select type
+                      </MenuItem>
+                      <MenuItem value={"VEG"}>VEG</MenuItem>
+                      <MenuItem value={"NONVEG"}>NON VEG</MenuItem>
+                    </Select>
+                    <FormHelperText>Veg/Non veg</FormHelperText>
+                  </FormControl>
                 </Grid>
                 <Grid item xs={12}>
                   <Uploader setFiles={setFiles} formLoading={false} />

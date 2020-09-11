@@ -11,6 +11,7 @@ import {
 } from "@material-ui/core";
 import Confirm from "./ConfirmPage";
 import BackButton from "../buttons/BackButton";
+import StatusIndicator from "./StatusIndicator";
 import { useDispatch } from "react-redux";
 import { menuItems, deleteDish } from "../../redux/apiActions";
 import Loader from "../../utils/Loader";
@@ -81,6 +82,7 @@ const ListMenuItems = ({ resid, id, menuname }) => {
           if (res.data.data[0] != null) {
             const len = res.data.data;
             setData(Object.values(len));
+            console.log(len);
             setLoading(false);
           } else {
             setData([]);
@@ -194,23 +196,33 @@ const ListMenuItems = ({ resid, id, menuname }) => {
                     </CardContent>
                     {/* </A> */}
                     <CardActions>
-                      <A href={`/editdish/${resid}/${id}/${value.dishId}`}>
-                        <Button
-                          size="small"
-                          color="primary"
-                          style={{ outline: "none" }}
-                        >
-                          Edit Item
-                        </Button>
-                      </A>
-                      <Confirm
-                        handleConfirm={handleConfirm}
-                        cancelDialog={"Cancel"}
-                        confirmDialog={"Delete"}
-                        buttonText={"Delete"}
-                        id={value.dishId}
-                        sentence={`You are about to delete the item ${value.name} ?`}
-                      />
+                      <div className="flex w-2/3 flex-row">
+                        <div className="mr-2">
+                          <A href={`/editdish/${resid}/${id}/${value.dishId}`}>
+                            <Button
+                              size="small"
+                              color="primary"
+                              style={{ outline: "none" }}
+                            >
+                              Edit Item
+                            </Button>
+                          </A>
+                        </div>
+                        <Confirm
+                          handleConfirm={handleConfirm}
+                          cancelDialog={"Cancel"}
+                          confirmDialog={"Delete"}
+                          buttonText={"Delete"}
+                          id={value.dishId}
+                          sentence={`You are about to delete the item ${value.name} ?`}
+                        />
+                      </div>
+                      <div className="w-1/3 flex flex-row text-right">
+                        <div className="w-1/5 md:w-1/4 lg:w-1/4"></div>
+                        <div className="w-4/5 md:w-3/4 lg:w-3/4">
+                          <StatusIndicator status={value.category} />
+                        </div>
+                      </div>
                     </CardActions>
                   </Card>
                 </Grid>

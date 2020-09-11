@@ -4,7 +4,14 @@ import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import { Button, InputAdornment, CircularProgress } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Card } from "@material-ui/core";
+import {
+  Card,
+  InputLabel,
+  Select,
+  MenuItem,
+  FormControl,
+  FormHelperText,
+} from "@material-ui/core";
 import Uploader from "./UploadImage";
 import { addDish } from "../../redux/apiActions";
 import { useDispatch } from "react-redux";
@@ -84,11 +91,13 @@ const AddMenu = ({ id }) => {
     photos: "",
     price: "",
     name: "",
+    category: "EMPTY",
   };
   const initError = {
     photos: "",
     price: "",
     name: "",
+    category: false,
   };
   const [previousDishes, setPreviousDishes] = useState([]);
   const [menuName, setMenuName] = useState("");
@@ -152,6 +161,7 @@ const AddMenu = ({ id }) => {
   const validateForm = () => {
     let formValid = true;
     let err = Object.assign({}, initError);
+    err["category"] = false;
     if (menuName === "") {
       err["name"] = "This field is required";
       formValid = false;
@@ -165,6 +175,12 @@ const AddMenu = ({ id }) => {
       if (key === "price") {
         if (isNaN(Form[key])) {
           err[key] = "Enter a Number";
+          formValid = false;
+        }
+      }
+      if (key === "category") {
+        if (Form[key] === "EMPTY") {
+          err[key] = true;
           formValid = false;
         }
       }
@@ -279,7 +295,7 @@ const AddMenu = ({ id }) => {
                 helperText={Error["name"]}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 label="Price"
                 type="text"
@@ -296,6 +312,32 @@ const AddMenu = ({ id }) => {
                 }}
               />
             </Grid>
+            <Grid item xs={12} sm={6}>
+              <FormControl className={""} error={Error["category"]}>
+                <InputLabel style={{ minWidth: "80px" }}>
+                  Select type
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={Form.category}
+                  name="category"
+                  onChange={handleChange}
+                >
+                  <MenuItem value={""} disabled>
+                    Select type
+                  </MenuItem>
+                  <MenuItem value={"VEG"}>VEG</MenuItem>
+                  <MenuItem value={"NONVEG"}>NON VEG</MenuItem>
+                </Select>
+                {Error["category"] ? (
+                  <FormHelperText>Select an option</FormHelperText>
+                ) : (
+                  <FormHelperText>Veg/Non veg</FormHelperText>
+                )}
+              </FormControl>
+            </Grid>
+
             <Grid item xs={12}>
               <Uploader
                 setFiles={setFiles}

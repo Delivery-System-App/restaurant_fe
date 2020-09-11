@@ -2,7 +2,16 @@ import React, { useState, useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
-import { Button, InputAdornment, CircularProgress } from "@material-ui/core";
+import {
+  Button,
+  InputAdornment,
+  CircularProgress,
+  FormControl,
+  FormHelperText,
+  Select,
+  MenuItem,
+  InputLabel,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Card } from "@material-ui/core";
 import Uploader from "./UploadImage";
@@ -83,11 +92,13 @@ const AddDishToMenu = ({ menuname, resid, menuid }) => {
     photos: "",
     price: "",
     name: "",
+    category: "EMPTY",
   };
   const initError = {
     photos: "",
     price: "",
     name: "",
+    category: false,
   };
   const [previousDishes, setPreviousDishes] = useState([]);
   const [menuName, setMenuName] = useState("");
@@ -151,11 +162,18 @@ const AddDishToMenu = ({ menuname, resid, menuid }) => {
   const validateForm = () => {
     let formValid = true;
     let err = Object.assign({}, initError);
+    err["category"] = false;
 
     Object.keys(Form).forEach((key) => {
       if (Form[key] === "" && !optionalValues.includes(key)) {
         formValid = false;
         err[key] = "This field is required";
+      }
+      if (key === "category") {
+        if (Form[key] === "EMPTY") {
+          err[key] = true;
+          formValid = false;
+        }
       }
       if (key === "price") {
         if (isNaN(Form[key])) {
@@ -271,7 +289,7 @@ const AddDishToMenu = ({ menuname, resid, menuid }) => {
                 helperText={Error["name"]}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 label="Price"
                 type="text"
@@ -287,6 +305,31 @@ const AddDishToMenu = ({ menuname, resid, menuid }) => {
                   ),
                 }}
               />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <FormControl className={""} error={Error["category"]}>
+                <InputLabel style={{ minWidth: "80px" }}>
+                  Select type
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={Form.category}
+                  name="category"
+                  onChange={handleChange}
+                >
+                  <MenuItem value={""} disabled>
+                    Select type
+                  </MenuItem>
+                  <MenuItem value={"VEG"}>VEG</MenuItem>
+                  <MenuItem value={"NONVEG"}>NON VEG</MenuItem>
+                </Select>
+                {Error["category"] ? (
+                  <FormHelperText>Select an option</FormHelperText>
+                ) : (
+                  <FormHelperText>Veg/Non veg</FormHelperText>
+                )}
+              </FormControl>
             </Grid>
             <Grid item xs={12}>
               <Uploader
