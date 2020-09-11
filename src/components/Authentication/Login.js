@@ -162,7 +162,7 @@ const Login = () => {
             <VpnKeyIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Login
+            Login to SKOSH
           </Typography>
           <form className={classes.form} onSubmit={submitHandler}>
             <TextField
@@ -176,7 +176,6 @@ const Login = () => {
               label="Email Address"
               name="email"
               autoComplete="email"
-              autoFocus
             />
             <TextField
               onChange={changeHandler}

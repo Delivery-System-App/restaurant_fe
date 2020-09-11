@@ -10,7 +10,6 @@ import Confirm from "./ConfirmPage";
 import Notify from "../../utils/Notify";
 import Carousal from "./Carousal";
 import StatusIndicator from "./StatusIndicator";
-
 import {
   Card,
   CardActions,

@@ -9,7 +9,7 @@ import Navbar from "./Navbar";
 const PublicNavbar = ({ page }) => {
   const drawer = [
     {
-      path: "/home",
+      path: "/",
       text: "Home",
       icon: <HomeIcon />,
     },
@@ -20,7 +20,7 @@ const PublicNavbar = ({ page }) => {
     },
     { divider: true },
     {
-      path: "/",
+      path: "/login",
       text: "Login",
       icon: <VpnKeyIcon />,
     },
