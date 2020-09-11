@@ -66,7 +66,6 @@ const Register = () => {
   const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
 
   function changeHandler(e) {
-    console.log(e);
     const { name, value } = e.target;
     const fieldValue = { ...form };
     fieldValue[name] = name === "email" ? value.toLowerCase() : value;
