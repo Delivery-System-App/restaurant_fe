@@ -9,7 +9,6 @@ import {
 import { withStyles } from "@material-ui/core/styles";
 import { useDispatch } from "react-redux";
 import { Button, Typography, TableCell, Paper, Table } from "@material-ui/core";
-import Loader from "../../../utils/Loader";
 import useHeading from "../useHeading";
 import SearchBar from "../../SearchBar/SearchBar";
 import { allCustomers } from "../../../redux/apiActions";
@@ -125,40 +124,32 @@ const AllCustomers = () => {
       <Grid item container justify="center" style={{ marginBottom: "5px" }}>
         <SearchBar searchChange={handleSearchChange} />
       </Grid>
-      {Loading ? (
-        <Loader />
-      ) : (
-        <>
-          <Button
-            variant="outlined"
-            color="primary"
-            style={{ outline: "none" }}
+      <>
+        <Button variant="outlined" color="primary" style={{ outline: "none" }}>
+          Customers:{Data.length}
+        </Button>
+        <div style={{ overflow: "hidden" }}>
+          <Paper
+            style={{ width: "100%", margin: "0px auto", marginTop: "15px" }}
           >
-            Customers:{Data.length}
-          </Button>
-          <div style={{ overflow: "hidden" }}>
-            <Paper
-              style={{ width: "100%", margin: "0px auto", marginTop: "15px" }}
-            >
-              <TableContainer style={{ maxHeight: 440 }} component={Paper}>
-                <Table stickyHeader aria-label="sticky table">
-                  <TableHead>
-                    <TableRow>
-                      <StyledTableCell>Customer Id</StyledTableCell>
-                      <StyledTableCell>Name</StyledTableCell>
-                      <StyledTableCell>Contact</StyledTableCell>
-                      <StyledTableCell>Email</StyledTableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody className={"cursor-pointer"}>
-                    {customersList}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Paper>
-          </div>
-        </>
-      )}
+            <TableContainer style={{ maxHeight: 440 }} component={Paper}>
+              <Table stickyHeader aria-label="sticky table">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell>Customer Id</StyledTableCell>
+                    <StyledTableCell>Name</StyledTableCell>
+                    <StyledTableCell>Contact</StyledTableCell>
+                    <StyledTableCell>Email</StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody className={"cursor-pointer"}>
+                  {customersList}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Paper>
+        </div>
+      </>
       <Notify props={notify} closeAlert={closeAlert} />
     </>
   );
