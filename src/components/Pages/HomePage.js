@@ -85,7 +85,7 @@ const HomePage = () => {
           <div id="bannertitle" className="text-center">
             <Typography className={classes.heading}>SKOSH</Typography>
             <Typography className={classes.moto}>
-              " This is a sample moto.."
+              " We aim to provide the best food services to you."
             </Typography>
           </div>
         </div>
