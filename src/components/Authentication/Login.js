@@ -245,6 +245,9 @@ const Login = () => {
               </Grid>
             </Grid>
           </form>
+          <Typography style={{ marginTop: 2, marginBottom: 1, fontSize: 16 }}>
+            OR
+          </Typography>
           <Button color="primary" className={classes.login} size="small">
             <GoogleLogin
               style={{ backgroundColor: "inherit" }}
