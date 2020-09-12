@@ -45,6 +45,9 @@ const useStyles = makeStyles((theme) => ({
   wrapper: {
     position: "relative",
   },
+  login: {
+    marginTop: 5,
+  },
   buttonProgress: {
     position: "absolute",
     top: "50%",
@@ -131,8 +134,6 @@ const Login = () => {
     };
     dispatch(login(body)).then((res) => {
       if (res.data) {
-        console.log(res);
-        alert();
         localStorage.setItem("access_token", res.data.access_token);
         setloading(false);
         window.location.reload();
@@ -244,14 +245,17 @@ const Login = () => {
               </Grid>
             </Grid>
           </form>
+          <Button color="primary" className={classes.login} size="small">
+            <GoogleLogin
+              style={{ backgroundColor: "inherit" }}
+              clientId="851553848714-023jl52skl877gsrkabla89chm0sscgu.apps.googleusercontent.com"
+              buttonText="Sign In"
+              onSuccess={responseGoogle}
+              onFailure={fresponseGoogle}
+              cookiePolicy={"single_host_origin"}
+            />
+          </Button>
         </div>
-        <GoogleLogin
-          clientId="851553848714-023jl52skl877gsrkabla89chm0sscgu.apps.googleusercontent.com"
-          buttonText="Sign In "
-          onSuccess={responseGoogle}
-          onFailure={fresponseGoogle}
-          cookiePolicy={"single_host_origin"}
-        />
       </Container>
       <Notify props={notify} closeAlert={closeAlert} />
     </>
