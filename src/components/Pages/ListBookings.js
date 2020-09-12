@@ -7,7 +7,6 @@ import { DELIVERY_STATUS } from "../Common/constants";
 import { navigate } from "hookrouter";
 import Notify from "../../utils/Notify";
 import SearchBar from "../SearchBar/SearchBar";
-
 import {
   Button,
   Grid,
@@ -59,8 +58,10 @@ const Listbookings = ({ resid }) => {
         res.data.filter((el) => {
           return (
             el.deliveryStatus === type &&
-            moment(new Date(el.createdAt)).format("DD-MM-YYYY") ===
-            moment(selectedDate).format("DD-MM-YYYY") &&
+            moment(new Date(el.createdAt)).format("DD-MM-YYYY") >=
+            moment(selectedDateFrom).format("DD-MM-YYYY") &&
+            moment(new Date(el.createdAt)).format("DD-MM-YYYY") <=
+            moment(selectedDateTo).format("DD-MM-YYYY") &&
             (String(el.bookId).toLowerCase().includes(String(filters.SEARCH_PARAM).toLowerCase()) || String(el.user.name).toLowerCase().includes(String(filters.SEARCH_PARAM).toLowerCase()) || String(el.deliveryAdd).toLowerCase().includes(String(filters.SEARCH_PARAM).toLowerCase()))
           );
         })
@@ -73,21 +74,42 @@ const Listbookings = ({ resid }) => {
         res.data.filter((el) => {
           return (
             el.deliveryStatus === filters.DEL_STATUS &&
-            moment(new Date(el.createdAt)).format("DD-MM-YYYY") ===
-            moment(selectedDate).format("DD-MM-YYYY") &&
+            moment(new Date(el.createdAt)).format("DD-MM-YYYY") >=
+            moment(selectedDateFrom).format("DD-MM-YYYY") &&
+            moment(new Date(el.createdAt)).format("DD-MM-YYYY") <=
+            moment(selectedDateTo).format("DD-MM-YYYY") &&
             (String(el.bookId).toLowerCase().includes(String(param).toLowerCase()) || String(el.user.name).toLowerCase().includes(String(param).toLowerCase()) || String(el.deliveryAdd).toLowerCase().includes(String(param).toLowerCase()))
           );
         })
       );
     }
   };
-  const applyDateFilter = (res, date) => {
-    setSelectedDate(date);
+  const applyDateFilterFrom = (res, date) => {
+    setSelectedDateFrom(date);
     if (res.data) {
       setFilteredValue(
         res.data.filter((el) => {
           return (
-            moment(new Date(el.createdAt)).format("DD-MM-YYYY") ===
+            moment(new Date(el.createdAt)).format("DD-MM-YYYY") >=
+            moment(date).format("DD-MM-YYYY") &&
+            moment(new Date(el.createdAt)).format("DD-MM-YYYY") <=
+            moment(selectedDateTo).format("DD-MM-YYYY") &&
+            filters.DEL_STATUS === el.deliveryStatus &&
+            (String(el.bookId).toLowerCase().includes(String(filters.SEARCH_PARAM).toLowerCase()) || String(el.user.name).toLowerCase().includes(String(filters.SEARCH_PARAM).toLowerCase()) || String(el.deliveryAdd).toLowerCase().includes(String(filters.SEARCH_PARAM).toLowerCase()))
+          );
+        })
+      );
+    }
+  };
+  const applyDateFilterTo = (res, date) => {
+    setSelectedDateTo(date);
+    if (res.data) {
+      setFilteredValue(
+        res.data.filter((el) => {
+          return (
+            moment(new Date(el.createdAt)).format("DD-MM-YYYY") >=
+            moment(selectedDateFrom).format("DD-MM-YYYY") &&
+            moment(new Date(el.createdAt)).format("DD-MM-YYYY") <=
             moment(date).format("DD-MM-YYYY") &&
             filters.DEL_STATUS === el.deliveryStatus &&
             (String(el.bookId).toLowerCase().includes(String(filters.SEARCH_PARAM).toLowerCase()) || String(el.user.name).toLowerCase().includes(String(filters.SEARCH_PARAM).toLowerCase()) || String(el.deliveryAdd).toLowerCase().includes(String(filters.SEARCH_PARAM).toLowerCase()))
@@ -96,10 +118,24 @@ const Listbookings = ({ resid }) => {
       );
     }
   };
-  const [selectedDate, setSelectedDate] = React.useState(new Date());
+  const [selectedDateFrom, setSelectedDateFrom] = React.useState(new Date());
+  const [selectedDateTo, setSelectedDateTo] = React.useState(new Date());
 
-  const handleDateChange = (date) => {
-    applyDateFilter(details, date);
+  const handleDateChangeFrom = (date) => {
+    if (moment(new Date(date)).format("DD-MM-YYYY") <= moment(selectedDateTo).format("DD-MM-YYYY")) {
+      applyDateFilterFrom(details, date);
+    }
+    else {
+      console.log("notify selected from date is ahead of to date");
+    }
+  };
+  const handleDateChangeTo = (date) => {
+    if (moment(new Date(date)).format("DD-MM-YYYY") >= moment(selectedDateFrom).format("DD-MM-YYYY")) {
+      applyDateFilterTo(details, date);
+    }
+    else {
+      console.log("notify selected to date is behind from date");
+    }
   };
 
   const closeAlert = () => {
@@ -114,7 +150,8 @@ const Listbookings = ({ resid }) => {
         const { data: res } = resp;
         setdetails(res);
         applyFilter(res, "Pending");
-        applyDateFilter(res, new Date());
+        applyDateFilterFrom(res, new Date());
+        applyDateFilterTo(res, new Date());
       }
       setLoading(false);
     });
@@ -274,22 +311,39 @@ const Listbookings = ({ resid }) => {
       <br />
       <br />
       <div>
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <Grid justify="space-around">
-            <KeyboardDatePicker
-              margin="normal"
-              id="date-picker-dialog"
-              label="Date picker dialog"
-              format="dd/MM/yyyy"
-              value={selectedDate}
-              onChange={handleDateChange}
-              KeyboardButtonProps={{
-                "aria-label": "change date",
-              }}
-            />
-          </Grid>
-        </MuiPickersUtilsProvider>
-        <br />
+        <Grid className="flex" container spacing={3}>
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <Grid className="flex" justify="space-around">
+              <KeyboardDatePicker
+                margin="normal"
+                id="Orders from"
+                label="Orders from"
+                format="dd/MM/yyyy"
+                value={selectedDateFrom}
+                onChange={handleDateChangeFrom}
+                KeyboardButtonProps={{
+                  "aria-label": "change date",
+                }}
+              />
+            </Grid>
+          </MuiPickersUtilsProvider>&nbsp;&nbsp;
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <Grid className="flex" justify="space-around">
+              <KeyboardDatePicker
+                margin="normal"
+                id="Orders till"
+                label="Orders till"
+                format="dd/MM/yyyy"
+                value={selectedDateTo}
+                onChange={handleDateChangeTo}
+                KeyboardButtonProps={{
+                  "aria-label": "change date",
+                }}
+              />
+            </Grid>
+          </MuiPickersUtilsProvider>
+        </Grid>
+        <br /><br />
         <Grid container spacing={3}>
           <Grid item className="flex" xs={12} sm={10}>
             {Object.values(DELIVERY_STATUS).map((status) => (
