@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { DELIVERY_STATUS } from "../Common/constants";
 import { navigate } from "hookrouter";
 import Notify from "../../utils/Notify";
+import SearchBar from "../SearchBar/SearchBar";
 
 import {
   Button,
@@ -50,6 +51,7 @@ const Listbookings = ({ resid }) => {
   const [filters, setFilters] = useState({
     DEL_STATUS: DELIVERY_STATUS.PENDING.type,
     CANCEL_STATUS: false,
+    SEARCH_PARAM: ""
   });
   const applyFilter = (res, type) => {
     if (res.data) {
@@ -58,7 +60,22 @@ const Listbookings = ({ resid }) => {
           return (
             el.deliveryStatus === type &&
             moment(new Date(el.createdAt)).format("DD-MM-YYYY") ===
-            moment(selectedDate).format("DD-MM-YYYY")
+            moment(selectedDate).format("DD-MM-YYYY") &&
+            (String(el.bookId).toLowerCase().includes(String(filters.SEARCH_PARAM).toLowerCase()) || String(el.user.name).toLowerCase().includes(String(filters.SEARCH_PARAM).toLowerCase()) || String(el.deliveryAdd).toLowerCase().includes(String(filters.SEARCH_PARAM).toLowerCase()))
+          );
+        })
+      );
+    }
+  };
+  const applySearch = (res, param) => {
+    if (res.data) {
+      setFilteredValue(
+        res.data.filter((el) => {
+          return (
+            el.deliveryStatus === filters.DEL_STATUS &&
+            moment(new Date(el.createdAt)).format("DD-MM-YYYY") ===
+            moment(selectedDate).format("DD-MM-YYYY") &&
+            (String(el.bookId).toLowerCase().includes(String(param).toLowerCase()) || String(el.user.name).toLowerCase().includes(String(param).toLowerCase()) || String(el.deliveryAdd).toLowerCase().includes(String(param).toLowerCase()))
           );
         })
       );
@@ -72,13 +89,13 @@ const Listbookings = ({ resid }) => {
           return (
             moment(new Date(el.createdAt)).format("DD-MM-YYYY") ===
             moment(date).format("DD-MM-YYYY") &&
-            filters.DEL_STATUS === el.deliveryStatus
+            filters.DEL_STATUS === el.deliveryStatus &&
+            (String(el.bookId).toLowerCase().includes(String(filters.SEARCH_PARAM).toLowerCase()) || String(el.user.name).toLowerCase().includes(String(filters.SEARCH_PARAM).toLowerCase()) || String(el.deliveryAdd).toLowerCase().includes(String(filters.SEARCH_PARAM).toLowerCase()))
           );
         })
       );
     }
   };
-
   const [selectedDate, setSelectedDate] = React.useState(new Date());
 
   const handleDateChange = (date) => {
@@ -126,10 +143,12 @@ const Listbookings = ({ resid }) => {
     });
   }
 
-
+  const handleSearchChange = (e) => {
+    setFilter("SEARCH_PARAM", e.target.value);
+    applySearch(details, e.target.value);
+  };
 
   if (filteredValue.length > 0) {
-    let i = 0;
     bookingList = filteredValue.map((e) =>
       filters.CANCEL_STATUS === false ? (
         <TableRow
@@ -139,7 +158,7 @@ const Listbookings = ({ resid }) => {
         >
           <TableCell className=" border-b border-gray-200 text-sm ">
             <Typography className="items-center">
-              <div className="ml-2">{++i}</div>
+              <div className="ml-2">{e.bookId}</div>
             </Typography>
           </TableCell>
           <TableCell className=" border-b border-gray-200 text-sm ">
@@ -253,19 +272,25 @@ const Listbookings = ({ resid }) => {
       <BackButton />
       <br />
       <br />
+      <br />
       <div>
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={6}>
-            <Button
-              onClick={() => setFilter("CANCEL_STATUS", !filters.CANCEL_STATUS)}
-              variant="contained"
-              size="small"
-              color={`${filters.CANCEL_STATUS ? "secondary" : "default"}`}
-              style={{ outline: "none" }}
-            >
-              Cancelled Orders
-            </Button>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <Grid justify="space-around">
+            <KeyboardDatePicker
+              margin="normal"
+              id="date-picker-dialog"
+              label="Date picker dialog"
+              format="dd/MM/yyyy"
+              value={selectedDate}
+              onChange={handleDateChange}
+              KeyboardButtonProps={{
+                "aria-label": "change date",
+              }}
+            />
           </Grid>
+        </MuiPickersUtilsProvider>
+        <br />
+        <Grid container spacing={3}>
           <Grid item className="flex" xs={12} sm={10}>
             {Object.values(DELIVERY_STATUS).map((status) => (
               <div className="mx-1">
@@ -287,21 +312,20 @@ const Listbookings = ({ resid }) => {
               </div>
             ))}
           </Grid>
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <Grid justify="space-around">
-              <KeyboardDatePicker
-                margin="normal"
-                id="date-picker-dialog"
-                label="Date picker dialog"
-                format="dd/MM/yyyy"
-                value={selectedDate}
-                onChange={handleDateChange}
-                KeyboardButtonProps={{
-                  "aria-label": "change date",
-                }}
-              />
-            </Grid>
-          </MuiPickersUtilsProvider>
+          <Grid item className="flex" xs={12} sm={10}>
+            <Button
+              onClick={() => setFilter("CANCEL_STATUS", !filters.CANCEL_STATUS)}
+              variant="contained"
+              size="small"
+              color={`${filters.CANCEL_STATUS ? "secondary" : "default"}`}
+              style={{ outline: "none" }}
+            >
+              Cancelled Orders
+            </Button>
+          </Grid>
+
+
+          <SearchBar searchChange={handleSearchChange} />
         </Grid>
       </div>
       <div style={{ overflow: "hidden" }}>
@@ -313,7 +337,6 @@ const Listbookings = ({ resid }) => {
                   <StyledTableCell>Book Id</StyledTableCell>
                   <StyledTableCell>Customer</StyledTableCell>
                   <StyledTableCell>Address</StyledTableCell>
-                  {/* <StyledTableCell>confirm/cancel order</StyledTableCell> */}
                   {filters.DEL_STATUS === "Pending" ? (
                     <StyledTableCell>confirm/cancel order</StyledTableCell>
                   ) : (
