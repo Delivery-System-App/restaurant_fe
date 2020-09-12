@@ -89,6 +89,13 @@ export default {
     method: "GET",
     noAuth: false,
   },
+  updateBooking: {
+    path: "/api/v1/booking/updateBooking",
+    method: "POST",
+    noAuth: false,
+  },
+
+
   addCustomer: {
     path: "/api/v1/customer/addCustomer",
     method: "POST",

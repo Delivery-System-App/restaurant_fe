@@ -100,3 +100,7 @@ export const allCustomers = () => {
 export const restaurantCount = () => {
   return fireRequest("restaurantCount");
 };
+
+export const updateBooking = (id, body) => {
+  return fireRequest("updateBooking", [id], body);
+};

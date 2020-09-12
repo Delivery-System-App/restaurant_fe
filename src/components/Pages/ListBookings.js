@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import BackButton from "../buttons/BackButton";
 import useHeading from "./useHeading";
-import { hotelBookingDetails } from "../../redux/apiActions";
+import { hotelBookingDetails, updateBooking } from "../../redux/apiActions";
 import { useDispatch } from "react-redux";
 import { DELIVERY_STATUS } from "../Common/constants";
 import { navigate } from "hookrouter";
+import Notify from "../../utils/Notify";
 
 import {
   Button,
@@ -41,9 +42,10 @@ const Listbookings = ({ resid }) => {
   const dispatch = useDispatch();
   const [details, setdetails] = useState({});
   const [Loading, setLoading] = useState(false);
-
+  const [notify, setnotify] = useState({ msg: "", type: "", popup: false });
   let bookingList = useState();
   const [filteredValue, setFilteredValue] = useState([]);
+  const [reRender, setreRender] = useState(Math.random());
 
   const [filters, setFilters] = useState({
     DEL_STATUS: DELIVERY_STATUS.PENDING.type,
@@ -83,6 +85,10 @@ const Listbookings = ({ resid }) => {
     applyDateFilter(details, date);
   };
 
+  const closeAlert = () => {
+    setnotify({ popup: false });
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
     setLoading(true);
@@ -96,10 +102,32 @@ const Listbookings = ({ resid }) => {
       setLoading(false);
     });
     // eslint-disable-next-line
-  }, [dispatch, resid]);
+  }, [dispatch, reRender]);
   function setFilter(type, value) {
     setFilters({ ...filters, [type]: value });
   }
+
+  function updateStatus(id, value) {
+    let body = {
+      deliveryStatus: value,
+    };
+    setLoading(true);
+    dispatch(updateBooking([id], body)).then((resp) => {
+      if (resp.status === 201) {
+        if (value === "Confirmed") {
+          setreRender(Math.random());
+          setnotify({ msg: "Confirmed", type: "success", popup: true });
+        } else {
+          setreRender(Math.random());
+          setnotify({ msg: "Rejected", type: "success", popup: true });
+        }
+      }
+      setLoading(false);
+    });
+  }
+
+
+
   if (filteredValue.length > 0) {
     let i = 0;
     bookingList = filteredValue.map((e) =>
@@ -124,11 +152,74 @@ const Listbookings = ({ resid }) => {
               <div className="ml-2">{e.deliveryAdd}</div>
             </Typography>
           </TableCell>
-          <TableCell className=" border-b border-gray-200 text-sm ">
-            <Typography className="items-center">
-              <div className="ml-2">{e.payStatus}</div>
-            </Typography>
-          </TableCell>
+          {e.deliveryStatus === "Pending" ? (
+            <TableCell className=" border-b border-gray-200 text-sm ">
+              <Typography className="items-center">
+                <div className="ml-2">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                      updateStatus(e.bookId, "Confirmed");
+                    }}
+                  >
+                    Confirm
+                </Button>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => {
+                      updateStatus(e.bookId, "Rejected");
+                    }}
+                  >
+                    Cancel
+                </Button>
+                </div>
+              </Typography>
+            </TableCell>
+          ) : (
+              e.deliveryStatus === "Confirmed" ? (
+                <TableCell className=" border-b border-gray-200 text-sm ">
+                  <Typography className="items-center">
+                    <div className="ml-2">
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => {
+                          updateStatus(e.bookId, "Ready to deliver");
+                        }}
+                      >
+                        Ready
+                  </Button>
+                    </div>
+                  </Typography>
+                </TableCell>
+              ) : (
+                  e.deliveryStatus === "Ready to deliver" ? (
+                    <TableCell className=" border-b border-gray-200 text-sm ">
+                      <Typography className="items-center">
+                        <div className="ml-2">
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() => {
+                              updateStatus(e.bookId, "On the way");
+                            }}
+                          >
+                            On the way
+                    </Button>
+                        </div>
+                      </Typography>
+                    </TableCell>
+                  ) : (
+                      <>
+                        <TableCell className="border-b border-gray-200 text-sm ">
+                          <Typography className="items-center">
+                            <div className="ml-2">{e.payStatus}</div>
+                          </Typography>
+                        </TableCell>
+                      </>
+                    )))}
         </TableRow>
       ) : (
           (bookingList = <tr></tr>)
@@ -175,7 +266,7 @@ const Listbookings = ({ resid }) => {
               Cancelled Orders
             </Button>
           </Grid>
-          <Grid item className="flex" xs={12} sm={6}>
+          <Grid item className="flex" xs={12} sm={10}>
             {Object.values(DELIVERY_STATUS).map((status) => (
               <div className="mx-1">
                 <Button
@@ -191,7 +282,7 @@ const Listbookings = ({ resid }) => {
                     applyFilter(details, status.string);
                   }}
                 >
-                  {status.string}
+                  {status.string === "Pending" ? (<>New Requests</>) : (<>{status.string}</>)}
                 </Button>
               </div>
             ))}
@@ -222,7 +313,20 @@ const Listbookings = ({ resid }) => {
                   <StyledTableCell>Book Id</StyledTableCell>
                   <StyledTableCell>Customer</StyledTableCell>
                   <StyledTableCell>Address</StyledTableCell>
-                  <StyledTableCell>Payment</StyledTableCell>
+                  {/* <StyledTableCell>confirm/cancel order</StyledTableCell> */}
+                  {filters.DEL_STATUS === "Pending" ? (
+                    <StyledTableCell>confirm/cancel order</StyledTableCell>
+                  ) : (
+                      filters.DEL_STATUS === "Confirmed" ? (
+                        <StyledTableCell>Ready to be delivered</StyledTableCell>
+                      ) : (
+                          filters.DEL_STATUS === "Ready to deliver" ? (
+                            <StyledTableCell>Change status</StyledTableCell>
+                          ) : (
+                              <>
+                                <StyledTableCell>Payment Status</StyledTableCell>
+                              </>
+                            )))}
                 </TableRow>
               </TableHead>
               <TableBody className={"cursor-pointer"}>{bookingList}</TableBody>
@@ -230,6 +334,7 @@ const Listbookings = ({ resid }) => {
           </TableContainer>
         </Paper>
       </div>
+      <Notify props={notify} closeAlert={closeAlert} />
     </div>
   );
 };
