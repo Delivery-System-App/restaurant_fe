@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import BackButton from "../buttons/BackButton";
 import useHeading from "./useHeading";
-import { hotelBookingDetails } from "../../redux/apiActions";
+import { hotelBookingDetails, updateBooking } from "../../redux/apiActions";
 import { useDispatch } from "react-redux";
 import { DELIVERY_STATUS } from "../Common/constants";
 import { navigate } from "hookrouter";
-
+import Notify from "../../utils/Notify";
+import SearchBar from "../SearchBar/SearchBar";
 import {
   Button,
   Grid,
@@ -41,13 +42,15 @@ const Listbookings = ({ resid }) => {
   const dispatch = useDispatch();
   const [details, setdetails] = useState({});
   const [Loading, setLoading] = useState(false);
-
+  const [notify, setnotify] = useState({ msg: "", type: "", popup: false });
   let bookingList = useState();
   const [filteredValue, setFilteredValue] = useState([]);
+  const [reRender, setreRender] = useState(Math.random());
 
   const [filters, setFilters] = useState({
     DEL_STATUS: DELIVERY_STATUS.PENDING.type,
     CANCEL_STATUS: false,
+    SEARCH_PARAM: ""
   });
   const applyFilter = (res, type) => {
     if (res.data) {
@@ -55,32 +58,88 @@ const Listbookings = ({ resid }) => {
         res.data.filter((el) => {
           return (
             el.deliveryStatus === type &&
-            moment(new Date(el.createdAt)).format("DD-MM-YYYY") ===
-            moment(selectedDate).format("DD-MM-YYYY")
+            moment(new Date(el.createdAt)).format("DD-MM-YYYY") >=
+            moment(selectedDateFrom).format("DD-MM-YYYY") &&
+            moment(new Date(el.createdAt)).format("DD-MM-YYYY") <=
+            moment(selectedDateTo).format("DD-MM-YYYY") &&
+            (String(el.bookId).toLowerCase().includes(String(filters.SEARCH_PARAM).toLowerCase()) || String(el.user.name).toLowerCase().includes(String(filters.SEARCH_PARAM).toLowerCase()) || String(el.deliveryAdd).toLowerCase().includes(String(filters.SEARCH_PARAM).toLowerCase()))
           );
         })
       );
     }
   };
-  const applyDateFilter = (res, date) => {
-    setSelectedDate(date);
+  const applySearch = (res, param) => {
     if (res.data) {
       setFilteredValue(
         res.data.filter((el) => {
           return (
-            moment(new Date(el.createdAt)).format("DD-MM-YYYY") ===
-            moment(date).format("DD-MM-YYYY") &&
-            filters.DEL_STATUS === el.deliveryStatus
+            el.deliveryStatus === filters.DEL_STATUS &&
+            moment(new Date(el.createdAt)).format("DD-MM-YYYY") >=
+            moment(selectedDateFrom).format("DD-MM-YYYY") &&
+            moment(new Date(el.createdAt)).format("DD-MM-YYYY") <=
+            moment(selectedDateTo).format("DD-MM-YYYY") &&
+            (String(el.bookId).toLowerCase().includes(String(param).toLowerCase()) || String(el.user.name).toLowerCase().includes(String(param).toLowerCase()) || String(el.deliveryAdd).toLowerCase().includes(String(param).toLowerCase()))
           );
         })
       );
     }
   };
+  const applyDateFilterFrom = (res, date) => {
+    setSelectedDateFrom(date);
+    if (res.data) {
+      setFilteredValue(
+        res.data.filter((el) => {
+          return (
+            moment(new Date(el.createdAt)).format("DD-MM-YYYY") >=
+            moment(date).format("DD-MM-YYYY") &&
+            moment(new Date(el.createdAt)).format("DD-MM-YYYY") <=
+            moment(selectedDateTo).format("DD-MM-YYYY") &&
+            filters.DEL_STATUS === el.deliveryStatus &&
+            (String(el.bookId).toLowerCase().includes(String(filters.SEARCH_PARAM).toLowerCase()) || String(el.user.name).toLowerCase().includes(String(filters.SEARCH_PARAM).toLowerCase()) || String(el.deliveryAdd).toLowerCase().includes(String(filters.SEARCH_PARAM).toLowerCase()))
+          );
+        })
+      );
+    }
+  };
+  const applyDateFilterTo = (res, date) => {
+    setSelectedDateTo(date);
+    if (res.data) {
+      setFilteredValue(
+        res.data.filter((el) => {
+          return (
+            moment(new Date(el.createdAt)).format("DD-MM-YYYY") >=
+            moment(selectedDateFrom).format("DD-MM-YYYY") &&
+            moment(new Date(el.createdAt)).format("DD-MM-YYYY") <=
+            moment(date).format("DD-MM-YYYY") &&
+            filters.DEL_STATUS === el.deliveryStatus &&
+            (String(el.bookId).toLowerCase().includes(String(filters.SEARCH_PARAM).toLowerCase()) || String(el.user.name).toLowerCase().includes(String(filters.SEARCH_PARAM).toLowerCase()) || String(el.deliveryAdd).toLowerCase().includes(String(filters.SEARCH_PARAM).toLowerCase()))
+          );
+        })
+      );
+    }
+  };
+  const [selectedDateFrom, setSelectedDateFrom] = React.useState(new Date());
+  const [selectedDateTo, setSelectedDateTo] = React.useState(new Date());
 
-  const [selectedDate, setSelectedDate] = React.useState(new Date());
+  const handleDateChangeFrom = (date) => {
+    if (moment(new Date(date)).format("DD-MM-YYYY") <= moment(selectedDateTo).format("DD-MM-YYYY")) {
+      applyDateFilterFrom(details, date);
+    }
+    else {
+      console.log("notify selected from date is ahead of to date");
+    }
+  };
+  const handleDateChangeTo = (date) => {
+    if (moment(new Date(date)).format("DD-MM-YYYY") >= moment(selectedDateFrom).format("DD-MM-YYYY")) {
+      applyDateFilterTo(details, date);
+    }
+    else {
+      console.log("notify selected to date is behind from date");
+    }
+  };
 
-  const handleDateChange = (date) => {
-    applyDateFilter(details, date);
+  const closeAlert = () => {
+    setnotify({ popup: false });
   };
 
   useEffect(() => {
@@ -91,17 +150,42 @@ const Listbookings = ({ resid }) => {
         const { data: res } = resp;
         setdetails(res);
         applyFilter(res, "Pending");
-        applyDateFilter(res, new Date());
+        applyDateFilterFrom(res, new Date());
+        applyDateFilterTo(res, new Date());
       }
       setLoading(false);
     });
     // eslint-disable-next-line
-  }, [dispatch, resid]);
+  }, [dispatch, reRender]);
   function setFilter(type, value) {
     setFilters({ ...filters, [type]: value });
   }
+
+  function updateStatus(id, value) {
+    let body = {
+      deliveryStatus: value,
+    };
+    setLoading(true);
+    dispatch(updateBooking([id], body)).then((resp) => {
+      if (resp.status === 201) {
+        if (value === "Confirmed") {
+          setreRender(Math.random());
+          setnotify({ msg: "Confirmed", type: "success", popup: true });
+        } else {
+          setreRender(Math.random());
+          setnotify({ msg: "Rejected", type: "success", popup: true });
+        }
+      }
+      setLoading(false);
+    });
+  }
+
+  const handleSearchChange = (e) => {
+    setFilter("SEARCH_PARAM", e.target.value);
+    applySearch(details, e.target.value);
+  };
+
   if (filteredValue.length > 0) {
-    let i = 0;
     bookingList = filteredValue.map((e) =>
       filters.CANCEL_STATUS === false ? (
         <TableRow
@@ -111,7 +195,7 @@ const Listbookings = ({ resid }) => {
         >
           <TableCell className=" border-b border-gray-200 text-sm ">
             <Typography className="items-center">
-              <div className="ml-2">{++i}</div>
+              <div className="ml-2">{e.bookId}</div>
             </Typography>
           </TableCell>
           <TableCell className=" border-b border-gray-200 text-sm ">
@@ -124,11 +208,74 @@ const Listbookings = ({ resid }) => {
               <div className="ml-2">{e.deliveryAdd}</div>
             </Typography>
           </TableCell>
-          <TableCell className=" border-b border-gray-200 text-sm ">
-            <Typography className="items-center">
-              <div className="ml-2">{e.payStatus}</div>
-            </Typography>
-          </TableCell>
+          {e.deliveryStatus === "Pending" ? (
+            <TableCell className=" border-b border-gray-200 text-sm ">
+              <Typography className="items-center">
+                <div className="ml-2">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                      updateStatus(e.bookId, "Confirmed");
+                    }}
+                  >
+                    Confirm
+                </Button>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => {
+                      updateStatus(e.bookId, "Rejected");
+                    }}
+                  >
+                    Cancel
+                </Button>
+                </div>
+              </Typography>
+            </TableCell>
+          ) : (
+              e.deliveryStatus === "Confirmed" ? (
+                <TableCell className=" border-b border-gray-200 text-sm ">
+                  <Typography className="items-center">
+                    <div className="ml-2">
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => {
+                          updateStatus(e.bookId, "Ready to deliver");
+                        }}
+                      >
+                        Ready
+                  </Button>
+                    </div>
+                  </Typography>
+                </TableCell>
+              ) : (
+                  e.deliveryStatus === "Ready to deliver" ? (
+                    <TableCell className=" border-b border-gray-200 text-sm ">
+                      <Typography className="items-center">
+                        <div className="ml-2">
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() => {
+                              updateStatus(e.bookId, "On the way");
+                            }}
+                          >
+                            On the way
+                    </Button>
+                        </div>
+                      </Typography>
+                    </TableCell>
+                  ) : (
+                      <>
+                        <TableCell className="border-b border-gray-200 text-sm ">
+                          <Typography className="items-center">
+                            <div className="ml-2">{e.payStatus}</div>
+                          </Typography>
+                        </TableCell>
+                      </>
+                    )))}
         </TableRow>
       ) : (
           (bookingList = <tr></tr>)
@@ -162,20 +309,43 @@ const Listbookings = ({ resid }) => {
       <BackButton />
       <br />
       <br />
+      <br />
       <div>
+        <Grid className="flex" container spacing={3}>
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <Grid className="flex" justify="space-around">
+              <KeyboardDatePicker
+                margin="normal"
+                id="Orders from"
+                label="Orders from"
+                format="dd/MM/yyyy"
+                value={selectedDateFrom}
+                onChange={handleDateChangeFrom}
+                KeyboardButtonProps={{
+                  "aria-label": "change date",
+                }}
+              />
+            </Grid>
+          </MuiPickersUtilsProvider>&nbsp;&nbsp;
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <Grid className="flex" justify="space-around">
+              <KeyboardDatePicker
+                margin="normal"
+                id="Orders till"
+                label="Orders till"
+                format="dd/MM/yyyy"
+                value={selectedDateTo}
+                onChange={handleDateChangeTo}
+                KeyboardButtonProps={{
+                  "aria-label": "change date",
+                }}
+              />
+            </Grid>
+          </MuiPickersUtilsProvider>
+        </Grid>
+        <br /><br />
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={6}>
-            <Button
-              onClick={() => setFilter("CANCEL_STATUS", !filters.CANCEL_STATUS)}
-              variant="contained"
-              size="small"
-              color={`${filters.CANCEL_STATUS ? "secondary" : "default"}`}
-              style={{ outline: "none" }}
-            >
-              Cancelled Orders
-            </Button>
-          </Grid>
-          <Grid item className="flex" xs={12} sm={6}>
+          <Grid item className="flex" xs={12} sm={10}>
             {Object.values(DELIVERY_STATUS).map((status) => (
               <div className="mx-1">
                 <Button
@@ -191,26 +361,25 @@ const Listbookings = ({ resid }) => {
                     applyFilter(details, status.string);
                   }}
                 >
-                  {status.string}
+                  {status.string === "Pending" ? (<>New Requests</>) : (<>{status.string}</>)}
                 </Button>
               </div>
             ))}
           </Grid>
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <Grid justify="space-around">
-              <KeyboardDatePicker
-                margin="normal"
-                id="date-picker-dialog"
-                label="Date picker dialog"
-                format="dd/MM/yyyy"
-                value={selectedDate}
-                onChange={handleDateChange}
-                KeyboardButtonProps={{
-                  "aria-label": "change date",
-                }}
-              />
-            </Grid>
-          </MuiPickersUtilsProvider>
+          <Grid item className="flex" xs={12} sm={10}>
+            <Button
+              onClick={() => setFilter("CANCEL_STATUS", !filters.CANCEL_STATUS)}
+              variant="contained"
+              size="small"
+              color={`${filters.CANCEL_STATUS ? "secondary" : "default"}`}
+              style={{ outline: "none" }}
+            >
+              Cancelled Orders
+            </Button>
+          </Grid>
+
+
+          <SearchBar searchChange={handleSearchChange} />
         </Grid>
       </div>
       <div style={{ overflow: "hidden" }}>
@@ -222,7 +391,19 @@ const Listbookings = ({ resid }) => {
                   <StyledTableCell>Book Id</StyledTableCell>
                   <StyledTableCell>Customer</StyledTableCell>
                   <StyledTableCell>Address</StyledTableCell>
-                  <StyledTableCell>Payment</StyledTableCell>
+                  {filters.DEL_STATUS === "Pending" ? (
+                    <StyledTableCell>confirm/cancel order</StyledTableCell>
+                  ) : (
+                      filters.DEL_STATUS === "Confirmed" ? (
+                        <StyledTableCell>Ready to be delivered</StyledTableCell>
+                      ) : (
+                          filters.DEL_STATUS === "Ready to deliver" ? (
+                            <StyledTableCell>Change status</StyledTableCell>
+                          ) : (
+                              <>
+                                <StyledTableCell>Payment Status</StyledTableCell>
+                              </>
+                            )))}
                 </TableRow>
               </TableHead>
               <TableBody className={"cursor-pointer"}>{bookingList}</TableBody>
@@ -230,6 +411,7 @@ const Listbookings = ({ resid }) => {
           </TableContainer>
         </Paper>
       </div>
+      <Notify props={notify} closeAlert={closeAlert} />
     </div>
   );
 };
