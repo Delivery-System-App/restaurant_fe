@@ -21,6 +21,7 @@ const useStyles = makeStyles({
   media: {
     margin: "0px auto",
     height: "150px",
+    marginTop: 10,
     width: "150px",
   },
   number: {
