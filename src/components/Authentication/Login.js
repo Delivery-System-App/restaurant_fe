@@ -11,12 +11,14 @@ import {
   Container,
 } from "@material-ui/core";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
+import GoogleLogin from "react-google-login";
 import { makeStyles } from "@material-ui/core/styles";
 import { A, useQueryParams, navigate } from "hookrouter";
 import { login } from "../../redux/apiActions";
 import { useDispatch } from "react-redux";
 import { validateEmailAddress } from "../../utils/validation";
 import Notify from "../../utils/Notify";
+const splitterString = "%=%@~!lorem^ipsum^split~@%//+%";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -111,13 +113,43 @@ const Login = () => {
     fieldValue[name] = name === "email" ? value.toLowerCase() : value;
     setForm(fieldValue);
   }
+  const fresponseGoogle = (response) => {
+    setnotify({ msg: "Login failed", popup: true, type: "error" });
+  };
+
+  const responseGoogle = (response) => {
+    const body = {
+      email:
+        response.profileObj.email +
+        splitterString +
+        "GOOGLE_AUTH" +
+        splitterString +
+        response.profileObj.name +
+        splitterString +
+        response.profileObj.imageUrl,
+      password: "password",
+    };
+    dispatch(login(body)).then((res) => {
+      if (res.data) {
+        console.log(res);
+        alert();
+        localStorage.setItem("access_token", res.data.access_token);
+        setloading(false);
+        window.location.reload();
+      }
+    });
+  };
 
   function submitHandler(e) {
     e.preventDefault();
-    const { email } = form;
+    const { email, password } = form;
     if (validateEmailAddress(email)) {
       setloading(true);
-      dispatch(login(form)).then((resp) => {
+      const resultForm = {
+        email: email + splitterString + "EMAIL_AUTH",
+        password: password,
+      };
+      dispatch(login(resultForm)).then((resp) => {
         if (resp) {
           const { data: res } = resp;
           const { status: statusCode } = resp;
@@ -213,6 +245,13 @@ const Login = () => {
             </Grid>
           </form>
         </div>
+        <GoogleLogin
+          clientId="851553848714-023jl52skl877gsrkabla89chm0sscgu.apps.googleusercontent.com"
+          buttonText="Sign In "
+          onSuccess={responseGoogle}
+          onFailure={fresponseGoogle}
+          cookiePolicy={"single_host_origin"}
+        />
       </Container>
       <Notify props={notify} closeAlert={closeAlert} />
     </>

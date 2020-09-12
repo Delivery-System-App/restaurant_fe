@@ -17,6 +17,7 @@ const Router = () => {
   useAbortableEffect(
     async (status) => {
       const access = localStorage.getItem("access_token");
+      console.log(access);
       if (access) {
         const res = await dispatch(getCurrentUser());
         if (res) {
