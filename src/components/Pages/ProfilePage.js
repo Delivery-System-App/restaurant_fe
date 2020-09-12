@@ -36,13 +36,15 @@ const ProfilePage = () => {
   const classes = useStyles();
   const state = useSelector((reduxState) => reduxState);
   const currentUser = state.newapi.currentUser.data.data;
+  const noImg =
+    "https://cdn4.iconfinder.com/data/icons/jetflat-2-faces-2/60/005b_042_user_profile_avatar_man_boy_round-512.png";
   return (
     <>
       <BackButton />
       <Card className={classes.root}>
         <Avatar
           className={classes.media}
-          src="https://cdn4.iconfinder.com/data/icons/jetflat-2-faces-2/60/005b_042_user_profile_avatar_man_boy_round-512.png"
+          src={currentUser.photo ? currentUser.photo : noImg}
         ></Avatar>
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">

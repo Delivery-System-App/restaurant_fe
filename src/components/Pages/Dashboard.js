@@ -72,11 +72,12 @@ const DashboardPage = () => {
     setLoading(true);
     if (mount) {
       dispatch(allHotels()).then((res) => {
-        if (res) {
+        if (res && res.data) {
           const len = res.data.data;
           setData(Object.values(len));
           setLoading(false);
         }
+        setLoading(false);
       });
     }
     return () => {
