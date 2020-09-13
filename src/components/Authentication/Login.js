@@ -121,15 +121,9 @@ const Login = () => {
   };
 
   const responseGoogle = (response) => {
+    setloading(true);
     const body = {
-      email:
-        response.profileObj.email +
-        splitterString +
-        "GOOGLE_AUTH" +
-        splitterString +
-        response.profileObj.name +
-        splitterString +
-        response.profileObj.imageUrl,
+      email: "GOOGLE_AUTH" + splitterString + response.tokenObj.id_token,
       password: "password",
     };
     dispatch(login(body)).then((res) => {
@@ -138,6 +132,7 @@ const Login = () => {
         setloading(false);
         window.location.reload();
       }
+      setloading(false);
     });
   };
 
@@ -147,7 +142,7 @@ const Login = () => {
     if (validateEmailAddress(email)) {
       setloading(true);
       const resultForm = {
-        email: email + splitterString + "EMAIL_AUTH",
+        email: "EMAIL_AUTH" + splitterString + email,
         password: password,
       };
       dispatch(login(resultForm)).then((resp) => {

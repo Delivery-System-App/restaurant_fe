@@ -100,8 +100,8 @@ export const APIRequest = (
 
   // set authorization header in the request header
   const config = {
-    baseURL: process.env.REACT_APP_BASE_URL,
-    //baseURL: "http://localhost:3999",
+    //baseURL: process.env.REACT_APP_BASE_URL,
+    baseURL: "http://localhost:3999",
     headers: {},
   };
   if (!request.noAuth && localStorage.getItem("access_token")) {
