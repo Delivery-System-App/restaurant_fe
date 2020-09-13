@@ -124,7 +124,7 @@ const Login = () => {
     setloading(true);
     const body = {
       email: "GOOGLE_AUTH" + splitterString + response.tokenObj.id_token,
-      password: "password",
+      password: "owner",
     };
     dispatch(login(body)).then((res) => {
       if (res.data) {
