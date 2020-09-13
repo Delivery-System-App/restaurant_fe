@@ -142,7 +142,7 @@ const Login = () => {
     if (validateEmailAddress(email)) {
       setloading(true);
       const resultForm = {
-        email: "EMAIL_AUTH" + splitterString + email,
+        email: "EMAIL_AUTH" + splitterString + email + splitterString + "owner",
         password: password,
       };
       dispatch(login(resultForm)).then((resp) => {
