@@ -12,7 +12,6 @@ import {
   Button,
   FormControl,
   FormHelperText,
-  InputLabel,
   Select,
   MenuItem,
   Grid,
@@ -398,11 +397,8 @@ const Listbookings = ({ resid }) => {
             </Grid>
           </MuiPickersUtilsProvider>
         </Grid>
-        <div className="block flex flex-row mt-2 mb-1 md:hidden lg:hidden">
+        <div className="block flex flex-row mt-3 mb-1 md:hidden lg:hidden">
           <FormControl className={classes.form}>
-            <InputLabel id="demo-simple-select-helper-label">
-              New Requests
-            </InputLabel>
             <Select
               labelId="demo-simple-select-helper-label"
               id="demo-simple-select-helper"
@@ -415,7 +411,9 @@ const Listbookings = ({ resid }) => {
               }}
               value={form}
             >
-              <MenuItem disabled>New requests</MenuItem>
+              <MenuItem value={""} disabled>
+                New requests
+              </MenuItem>
               {Object.values(DELIVERY_STATUS).map((status) => {
                 return (
                   <MenuItem value={status}>
@@ -430,7 +428,7 @@ const Listbookings = ({ resid }) => {
             </Select>
             <FormHelperText>Select a type from list</FormHelperText>
           </FormControl>
-          <div className="h-1/3 text-center mt-8 w-1/2">
+          <div className="h-1/3 text-center mt-2 w-1/2">
             <Button
               onClick={() => setFilter("CANCEL_STATUS", !filters.CANCEL_STATUS)}
               variant="contained"
