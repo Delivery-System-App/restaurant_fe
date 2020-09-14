@@ -7,8 +7,14 @@ import { DELIVERY_STATUS } from "../Common/constants";
 import { navigate } from "hookrouter";
 import Notify from "../../utils/Notify";
 import SearchBar from "../SearchBar/SearchBar";
+import { makeStyles } from "@material-ui/core/styles";
 import {
   Button,
+  FormControl,
+  FormHelperText,
+  InputLabel,
+  Select,
+  MenuItem,
   Grid,
   Typography,
   TableBody,
@@ -27,6 +33,19 @@ import {
 } from "@material-ui/pickers";
 import moment from "moment";
 
+const useStyles = makeStyles((theme) => ({
+  form: {
+    minwidth: "500px",
+    //margin: "0px auto",
+    // padding: "20px 30px 20px 30px",
+  },
+  button: {
+    height: "35px",
+    width: "75px",
+    fontSize: 10,
+  },
+}));
+
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.common.black,
@@ -38,6 +57,7 @@ const StyledTableCell = withStyles((theme) => ({
 }))(TableCell);
 
 const Listbookings = ({ resid }) => {
+  const classes = useStyles();
   useHeading("Bookings");
   const dispatch = useDispatch();
   const [details, setdetails] = useState({});
@@ -46,11 +66,11 @@ const Listbookings = ({ resid }) => {
   let bookingList = useState();
   const [filteredValue, setFilteredValue] = useState([]);
   const [reRender, setreRender] = useState(Math.random());
-
+  const [form, setform] = useState("");
   const [filters, setFilters] = useState({
     DEL_STATUS: DELIVERY_STATUS.PENDING.type,
     CANCEL_STATUS: false,
-    SEARCH_PARAM: ""
+    SEARCH_PARAM: "",
   });
   const applyFilter = (res, type) => {
     if (res.data) {
@@ -59,10 +79,18 @@ const Listbookings = ({ resid }) => {
           return (
             el.deliveryStatus === type &&
             moment(new Date(el.createdAt)).format("DD-MM-YYYY") >=
-            moment(selectedDateFrom).format("DD-MM-YYYY") &&
+              moment(selectedDateFrom).format("DD-MM-YYYY") &&
             moment(new Date(el.createdAt)).format("DD-MM-YYYY") <=
-            moment(selectedDateTo).format("DD-MM-YYYY") &&
-            (String(el.bookId).toLowerCase().includes(String(filters.SEARCH_PARAM).toLowerCase()) || String(el.user.name).toLowerCase().includes(String(filters.SEARCH_PARAM).toLowerCase()) || String(el.deliveryAdd).toLowerCase().includes(String(filters.SEARCH_PARAM).toLowerCase()))
+              moment(selectedDateTo).format("DD-MM-YYYY") &&
+            (String(el.bookId)
+              .toLowerCase()
+              .includes(String(filters.SEARCH_PARAM).toLowerCase()) ||
+              String(el.user.name)
+                .toLowerCase()
+                .includes(String(filters.SEARCH_PARAM).toLowerCase()) ||
+              String(el.deliveryAdd)
+                .toLowerCase()
+                .includes(String(filters.SEARCH_PARAM).toLowerCase()))
           );
         })
       );
@@ -75,10 +103,18 @@ const Listbookings = ({ resid }) => {
           return (
             el.deliveryStatus === filters.DEL_STATUS &&
             moment(new Date(el.createdAt)).format("DD-MM-YYYY") >=
-            moment(selectedDateFrom).format("DD-MM-YYYY") &&
+              moment(selectedDateFrom).format("DD-MM-YYYY") &&
             moment(new Date(el.createdAt)).format("DD-MM-YYYY") <=
-            moment(selectedDateTo).format("DD-MM-YYYY") &&
-            (String(el.bookId).toLowerCase().includes(String(param).toLowerCase()) || String(el.user.name).toLowerCase().includes(String(param).toLowerCase()) || String(el.deliveryAdd).toLowerCase().includes(String(param).toLowerCase()))
+              moment(selectedDateTo).format("DD-MM-YYYY") &&
+            (String(el.bookId)
+              .toLowerCase()
+              .includes(String(param).toLowerCase()) ||
+              String(el.user.name)
+                .toLowerCase()
+                .includes(String(param).toLowerCase()) ||
+              String(el.deliveryAdd)
+                .toLowerCase()
+                .includes(String(param).toLowerCase()))
           );
         })
       );
@@ -91,11 +127,19 @@ const Listbookings = ({ resid }) => {
         res.data.filter((el) => {
           return (
             moment(new Date(el.createdAt)).format("DD-MM-YYYY") >=
-            moment(date).format("DD-MM-YYYY") &&
+              moment(date).format("DD-MM-YYYY") &&
             moment(new Date(el.createdAt)).format("DD-MM-YYYY") <=
-            moment(selectedDateTo).format("DD-MM-YYYY") &&
+              moment(selectedDateTo).format("DD-MM-YYYY") &&
             filters.DEL_STATUS === el.deliveryStatus &&
-            (String(el.bookId).toLowerCase().includes(String(filters.SEARCH_PARAM).toLowerCase()) || String(el.user.name).toLowerCase().includes(String(filters.SEARCH_PARAM).toLowerCase()) || String(el.deliveryAdd).toLowerCase().includes(String(filters.SEARCH_PARAM).toLowerCase()))
+            (String(el.bookId)
+              .toLowerCase()
+              .includes(String(filters.SEARCH_PARAM).toLowerCase()) ||
+              String(el.user.name)
+                .toLowerCase()
+                .includes(String(filters.SEARCH_PARAM).toLowerCase()) ||
+              String(el.deliveryAdd)
+                .toLowerCase()
+                .includes(String(filters.SEARCH_PARAM).toLowerCase()))
           );
         })
       );
@@ -108,11 +152,19 @@ const Listbookings = ({ resid }) => {
         res.data.filter((el) => {
           return (
             moment(new Date(el.createdAt)).format("DD-MM-YYYY") >=
-            moment(selectedDateFrom).format("DD-MM-YYYY") &&
+              moment(selectedDateFrom).format("DD-MM-YYYY") &&
             moment(new Date(el.createdAt)).format("DD-MM-YYYY") <=
-            moment(date).format("DD-MM-YYYY") &&
+              moment(date).format("DD-MM-YYYY") &&
             filters.DEL_STATUS === el.deliveryStatus &&
-            (String(el.bookId).toLowerCase().includes(String(filters.SEARCH_PARAM).toLowerCase()) || String(el.user.name).toLowerCase().includes(String(filters.SEARCH_PARAM).toLowerCase()) || String(el.deliveryAdd).toLowerCase().includes(String(filters.SEARCH_PARAM).toLowerCase()))
+            (String(el.bookId)
+              .toLowerCase()
+              .includes(String(filters.SEARCH_PARAM).toLowerCase()) ||
+              String(el.user.name)
+                .toLowerCase()
+                .includes(String(filters.SEARCH_PARAM).toLowerCase()) ||
+              String(el.deliveryAdd)
+                .toLowerCase()
+                .includes(String(filters.SEARCH_PARAM).toLowerCase()))
           );
         })
       );
@@ -122,18 +174,22 @@ const Listbookings = ({ resid }) => {
   const [selectedDateTo, setSelectedDateTo] = React.useState(new Date());
 
   const handleDateChangeFrom = (date) => {
-    if (moment(new Date(date)).format("DD-MM-YYYY") <= moment(selectedDateTo).format("DD-MM-YYYY")) {
+    if (
+      moment(new Date(date)).format("DD-MM-YYYY") <=
+      moment(selectedDateTo).format("DD-MM-YYYY")
+    ) {
       applyDateFilterFrom(details, date);
-    }
-    else {
+    } else {
       console.log("notify selected from date is ahead of to date");
     }
   };
   const handleDateChangeTo = (date) => {
-    if (moment(new Date(date)).format("DD-MM-YYYY") >= moment(selectedDateFrom).format("DD-MM-YYYY")) {
+    if (
+      moment(new Date(date)).format("DD-MM-YYYY") >=
+      moment(selectedDateFrom).format("DD-MM-YYYY")
+    ) {
       applyDateFilterTo(details, date);
-    }
-    else {
+    } else {
       console.log("notify selected to date is behind from date");
     }
   };
@@ -220,7 +276,7 @@ const Listbookings = ({ resid }) => {
                     }}
                   >
                     Confirm
-                </Button>
+                  </Button>
                   <Button
                     variant="contained"
                     color="secondary"
@@ -229,57 +285,55 @@ const Listbookings = ({ resid }) => {
                     }}
                   >
                     Cancel
-                </Button>
+                  </Button>
+                </div>
+              </Typography>
+            </TableCell>
+          ) : e.deliveryStatus === "Confirmed" ? (
+            <TableCell className=" border-b border-gray-200 text-sm ">
+              <Typography className="items-center">
+                <div className="ml-2">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                      updateStatus(e.bookId, "Ready to deliver");
+                    }}
+                  >
+                    Ready
+                  </Button>
+                </div>
+              </Typography>
+            </TableCell>
+          ) : e.deliveryStatus === "Ready to deliver" ? (
+            <TableCell className=" border-b border-gray-200 text-sm ">
+              <Typography className="items-center">
+                <div className="ml-2">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                      updateStatus(e.bookId, "On the way");
+                    }}
+                  >
+                    On the way
+                  </Button>
                 </div>
               </Typography>
             </TableCell>
           ) : (
-              e.deliveryStatus === "Confirmed" ? (
-                <TableCell className=" border-b border-gray-200 text-sm ">
-                  <Typography className="items-center">
-                    <div className="ml-2">
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => {
-                          updateStatus(e.bookId, "Ready to deliver");
-                        }}
-                      >
-                        Ready
-                  </Button>
-                    </div>
-                  </Typography>
-                </TableCell>
-              ) : (
-                  e.deliveryStatus === "Ready to deliver" ? (
-                    <TableCell className=" border-b border-gray-200 text-sm ">
-                      <Typography className="items-center">
-                        <div className="ml-2">
-                          <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={() => {
-                              updateStatus(e.bookId, "On the way");
-                            }}
-                          >
-                            On the way
-                    </Button>
-                        </div>
-                      </Typography>
-                    </TableCell>
-                  ) : (
-                      <>
-                        <TableCell className="border-b border-gray-200 text-sm ">
-                          <Typography className="items-center">
-                            <div className="ml-2">{e.payStatus}</div>
-                          </Typography>
-                        </TableCell>
-                      </>
-                    )))}
+            <>
+              <TableCell className="border-b border-gray-200 text-sm ">
+                <Typography className="items-center">
+                  <div className="ml-2">{e.payStatus}</div>
+                </Typography>
+              </TableCell>
+            </>
+          )}
         </TableRow>
       ) : (
-          (bookingList = <tr></tr>)
-        )
+        (bookingList = <tr></tr>)
+      )
     );
   } else if (Loading) {
     bookingList = (
@@ -326,7 +380,8 @@ const Listbookings = ({ resid }) => {
                 }}
               />
             </Grid>
-          </MuiPickersUtilsProvider>&nbsp;&nbsp;
+          </MuiPickersUtilsProvider>
+          &nbsp;&nbsp;
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <Grid className="flex" justify="space-around">
               <KeyboardDatePicker
@@ -343,44 +398,96 @@ const Listbookings = ({ resid }) => {
             </Grid>
           </MuiPickersUtilsProvider>
         </Grid>
-        <br /><br />
-        <Grid container spacing={3}>
-          <Grid item className="flex" xs={12} sm={10}>
-            {Object.values(DELIVERY_STATUS).map((status) => (
-              <div className="mx-1">
-                <Button
-                  key={status.type}
-                  variant="contained"
-                  size="small"
-                  style={{ outline: "none" }}
-                  color={`${
-                    filters.DEL_STATUS === status.type ? "primary" : "default"
-                    }`}
-                  onClick={() => {
-                    setFilter("DEL_STATUS", status.type);
-                    applyFilter(details, status.string);
-                  }}
-                >
-                  {status.string === "Pending" ? (<>New Requests</>) : (<>{status.string}</>)}
-                </Button>
-              </div>
-            ))}
-          </Grid>
-          <Grid item className="flex" xs={12} sm={10}>
+        <div className="block flex flex-row mt-2 mb-1 md:hidden lg:hidden">
+          <FormControl className={classes.form}>
+            <InputLabel id="demo-simple-select-helper-label">
+              New Requests
+            </InputLabel>
+            <Select
+              labelId="demo-simple-select-helper-label"
+              id="demo-simple-select-helper"
+              displayEmpty
+              inputProps={{ "aria-label": "Without label" }}
+              onChange={(e) => {
+                setform(e.target.value);
+                setFilter("DEL_STATUS", e.target.value.type);
+                applyFilter(details, e.target.value.string);
+              }}
+              value={form}
+            >
+              <MenuItem disabled>New requests</MenuItem>
+              {Object.values(DELIVERY_STATUS).map((status) => {
+                return (
+                  <MenuItem value={status}>
+                    {status.string === "Pending" ? (
+                      <>New Requests</>
+                    ) : (
+                      <>{status.string}</>
+                    )}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+            <FormHelperText>Select a type from list</FormHelperText>
+          </FormControl>
+          <div className="h-1/3 text-center mt-8 w-1/2">
             <Button
               onClick={() => setFilter("CANCEL_STATUS", !filters.CANCEL_STATUS)}
               variant="contained"
               size="small"
+              className={classes.button}
               color={`${filters.CANCEL_STATUS ? "secondary" : "default"}`}
               style={{ outline: "none" }}
             >
               Cancelled Orders
             </Button>
+          </div>
+        </div>
+        <div className="md:block lg:block  hidden">
+          <Grid container spacing={3}>
+            <Grid item className="flex" xs={12} sm={10}>
+              {Object.values(DELIVERY_STATUS).map((status) => (
+                <div className="mx-1">
+                  <Button
+                    key={status.type}
+                    variant="contained"
+                    size="small"
+                    style={{ outline: "none" }}
+                    color={`${
+                      filters.DEL_STATUS === status.type ? "primary" : "default"
+                    }`}
+                    onClick={() => {
+                      setFilter("DEL_STATUS", status.type);
+                      applyFilter(details, status.string);
+                    }}
+                  >
+                    {status.string === "Pending" ? (
+                      <>New Requests</>
+                    ) : (
+                      <>{status.string}</>
+                    )}
+                  </Button>
+                </div>
+              ))}
+            </Grid>
+            <Grid item className="flex" xs={12} sm={10}>
+              <Button
+                onClick={() =>
+                  setFilter("CANCEL_STATUS", !filters.CANCEL_STATUS)
+                }
+                variant="contained"
+                size="small"
+                color={`${filters.CANCEL_STATUS ? "secondary" : "default"}`}
+                style={{ outline: "none" }}
+              >
+                Cancelled Orders
+              </Button>
+            </Grid>
           </Grid>
-
-
+        </div>
+        <div className="w-full text-center my-1 m-0 m-auto">
           <SearchBar searchChange={handleSearchChange} />
-        </Grid>
+        </div>
       </div>
       <div style={{ overflow: "hidden" }}>
         <Paper style={{ width: "100%", margin: "0px auto", marginTop: "15px" }}>
@@ -393,17 +500,15 @@ const Listbookings = ({ resid }) => {
                   <StyledTableCell>Address</StyledTableCell>
                   {filters.DEL_STATUS === "Pending" ? (
                     <StyledTableCell>confirm/cancel order</StyledTableCell>
+                  ) : filters.DEL_STATUS === "Confirmed" ? (
+                    <StyledTableCell>Ready to be delivered</StyledTableCell>
+                  ) : filters.DEL_STATUS === "Ready to deliver" ? (
+                    <StyledTableCell>Change status</StyledTableCell>
                   ) : (
-                      filters.DEL_STATUS === "Confirmed" ? (
-                        <StyledTableCell>Ready to be delivered</StyledTableCell>
-                      ) : (
-                          filters.DEL_STATUS === "Ready to deliver" ? (
-                            <StyledTableCell>Change status</StyledTableCell>
-                          ) : (
-                              <>
-                                <StyledTableCell>Payment Status</StyledTableCell>
-                              </>
-                            )))}
+                    <>
+                      <StyledTableCell>Payment Status</StyledTableCell>
+                    </>
+                  )}
                 </TableRow>
               </TableHead>
               <TableBody className={"cursor-pointer"}>{bookingList}</TableBody>
