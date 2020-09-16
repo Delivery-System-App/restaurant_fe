@@ -16,6 +16,7 @@ import Listbookings from "../components/Pages/ListBookings";
 import BookingDetails from "../components/Pages/BookingDetails";
 import AddCustomer from "../../src/components/Pages/Customers/AddCustomer";
 import CustomerDashboard from "../components/Pages/Customers/CustomerDashboard";
+import BannerManagement from "../components/Pages/BannerManagement";
 
 const routes = {
   "/": () => <Dashboard />,
@@ -37,6 +38,8 @@ const routes = {
     <AddDishToMenu menuname={menuname} resid={resid} menuid={id} />
   ),
   "/hotel/:resid/bookings": ({ resid }) => <Listbookings resid={resid} />,
+  "/hotel/:resid/banner": ({ resid }) => <BannerManagement resid={resid} />,
+
   "/bookings/:bookid": ({ bookid }) => <BookingDetails bookid={bookid} />,
 };
 

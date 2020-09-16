@@ -13,6 +13,10 @@ export default {
     method: "post",
     noAuth: true,
   },
+  getHotel: {
+    path: "/api/v1/restaurant",
+    method: "GET",
+  },
   addHotel: {
     path: "/api/v1/restaurant/add-restaurant",
     method: "post",
@@ -72,6 +76,11 @@ export default {
     method: "POST",
     noAuth: false,
   },
+  addBanner: {
+    path: "/api/v1/restaurant/addbanner",
+    method: "POST",
+    noAuth: false,
+  },
   addMoreDish: {
     path: "/api/v1/menu/addmoredish",
     method: "PATCH",
@@ -94,7 +103,6 @@ export default {
     method: "POST",
     noAuth: false,
   },
-
 
   addCustomer: {
     path: "/api/v1/customer/addCustomer",

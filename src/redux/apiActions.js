@@ -16,8 +16,16 @@ export const addHotel = (body) => {
   return fireRequest("addHotel", [], body);
 };
 
+export const addBanner = (id, body) => {
+  return fireRequest("addBanner", [id], body);
+};
+
 export const updateProfile = (body) => {
   return fireRequest("updateProfile", [], body);
+};
+
+export const getHotel = (id) => {
+  return fireRequest("getHotel", [id]);
 };
 
 export const allHotels = () => {

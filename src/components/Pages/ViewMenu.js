@@ -244,6 +244,11 @@ const ViewMenu = ({ id, usertype }) => {
                     href={`/hotel/${id}/bookings`}
                   />
                 </div>
+                <A href={`/hotel/${id}/banner`}>
+                  <Button variant="contained" color="primary">
+                    Banner
+                  </Button>
+                </A>
               </div>
             )}
             <SearchBar searchChange={handleSearchChange} />
