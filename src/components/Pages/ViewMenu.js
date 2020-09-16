@@ -99,10 +99,15 @@ const FormDialog = ({ open, handleClose, handleEditName, data }) => {
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color="primary">
+        <Button
+          style={{ outline: "none" }}
+          onClick={handleClose}
+          color="primary"
+        >
           Cancel
         </Button>
         <Button
+          style={{ outline: "none" }}
           onClick={() => {
             if (form.replace(/\s/g, "").length) handleEditName(data.id, form);
             else {
@@ -238,17 +243,23 @@ const ViewMenu = ({ id, usertype }) => {
                     Add Menu
                   </A>
                 </Button>
-                <div className="ml-1">
+                <div className="mx-1">
                   <Addbutton
                     title="View booking"
                     href={`/hotel/${id}/bookings`}
                   />
                 </div>
-                <A href={`/hotel/${id}/banner`}>
-                  <Button variant="contained" color="primary">
-                    Banner
-                  </Button>
-                </A>
+                <div>
+                  <A href={`/hotel/${id}/banner`}>
+                    <Button
+                      style={{ outline: "none" }}
+                      variant="contained"
+                      color="primary"
+                    >
+                      Banner
+                    </Button>
+                  </A>
+                </div>
               </div>
             )}
             <SearchBar searchChange={handleSearchChange} />

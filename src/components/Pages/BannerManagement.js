@@ -5,6 +5,7 @@ import BackButton from "../buttons/BackButton";
 import useHeading from "./useHeading";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Carousal from "./Carousal";
+import Loader from "../../utils/Loader";
 import {
   Grid,
   Button,
@@ -144,6 +145,7 @@ const FormDialog = ({
             onClick={handleClose}
             variant="contained"
             color="primary"
+            style={{ outline: "none" }}
           >
             Cancel
           </Button>
@@ -227,37 +229,44 @@ const BannerManagement = ({ resid }) => {
     setnotify({ popup: false });
   };
   return (
-    <div>
+    <>
       <BackButton />
-      <FormDialog
-        loading={loading}
-        setFiles={setFiles}
-        open={open}
-        handleClose={handleClose}
-        images={images}
-        imageCleared={imageCleared}
-        handleSubmit={handleSubmit}
-      />
-      <Grid className={classes.root} spacing={3}>
-        <Grid>
-          <Button
-            onClick={() => setopen(true)}
-            color="primary"
-            variant="contained"
-          >
-            Add/Edit banner
-          </Button>
-        </Grid>
-        <Grid className={classes.card}>
-          {banner && (
-            <Card className={classes.card}>
-              <Carousal images={banner ? banner : "noImage"} />
-            </Card>
-          )}
-        </Grid>
-      </Grid>
-      <Notify props={notify} closeAlert={closeAlert} />
-    </div>
+      {loading ? (
+        <Loader />
+      ) : (
+        <div>
+          <FormDialog
+            loading={loading}
+            setFiles={setFiles}
+            open={open}
+            handleClose={handleClose}
+            images={images}
+            imageCleared={imageCleared}
+            handleSubmit={handleSubmit}
+          />
+          <Grid className={classes.root} spacing={3}>
+            <Grid>
+              <Button
+                onClick={() => setopen(true)}
+                color="primary"
+                variant="contained"
+                style={{ outline: "none" }}
+              >
+                Add/Edit banner
+              </Button>
+            </Grid>
+            <Grid className={classes.card}>
+              {banner && (
+                <Card className={classes.card}>
+                  <Carousal images={banner ? banner : "noImage"} />
+                </Card>
+              )}
+            </Grid>
+          </Grid>
+          <Notify props={notify} closeAlert={closeAlert} />
+        </div>
+      )}
+    </>
   );
 };
 
