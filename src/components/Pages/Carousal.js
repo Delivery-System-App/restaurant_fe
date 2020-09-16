@@ -1,15 +1,27 @@
 import React, { useState, useEffect } from "react";
-import { Card, makeStyles, CardMedia } from "@material-ui/core";
+import {
+  Card,
+  makeStyles,
+  CardMedia,
+  CardActionArea,
+  Button,
+} from "@material-ui/core";
 import { ChevronRight, ChevronLeft } from "@material-ui/icons";
+import DeleteIcon from "@material-ui/icons/Delete";
 
-const CarouselSlide = ({ images }) => {
+const CarouselSlide = ({ images, props = null }) => {
   const useStyles = makeStyles(() => ({
     media: {
       height: 180,
-      backgroundImage: "url(" + images + ")",
+      backgroundImage: "url(" + images.image + ")",
       backgroundSize: "100% 100%",
       backgroundRepeat: "no-repeat",
       backgroundPosition: "50% 50%",
+    },
+    delete: {
+      width: "100",
+      textAlign: "right",
+      padding: 5,
     },
   }));
 
@@ -18,11 +30,25 @@ const CarouselSlide = ({ images }) => {
   return (
     <Card>
       <CardMedia className={classes.media} title="Hotel image"></CardMedia>
+      {props ? (
+        <CardActionArea style={{ outline: "none" }} className={classes.delete}>
+          <Button
+            onClick={() => props.deleteFunction(images.index)}
+            size="small"
+            style={{ outline: "none" }}
+          >
+            Delete
+            <DeleteIcon color="secondary" />
+          </Button>
+        </CardActionArea>
+      ) : (
+        ""
+      )}
     </Card>
   );
 };
 
-const Carousal = ({ images }) => {
+const Carousal = ({ images, props }) => {
   function Arrow(props) {
     const { direction, clickFunction } = props;
     const icon = direction === "left" ? <ChevronLeft /> : <ChevronRight />;
@@ -40,7 +66,7 @@ const Carousal = ({ images }) => {
     images = [images];
   }
 
-  const content = images[index];
+  const content = { index: index, image: images[index] };
   const numSlides = images.length;
   useEffect(() => {
     setLen(numSlides);
@@ -60,7 +86,7 @@ const Carousal = ({ images }) => {
         <Arrow direction="left" clickFunction={() => onArrowClick("left")} />
       </div>
       <div style={{ width: "80%" }}>
-        <CarouselSlide images={content} />
+        <CarouselSlide props={props} images={content} />
       </div>
       <div
         style={{ width: "10%", marginTop: "60px" }}

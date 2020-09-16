@@ -6,6 +6,7 @@ import useHeading from "./useHeading";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Carousal from "./Carousal";
 import Loader from "../../utils/Loader";
+import Confirm from "./ConfirmBanner";
 import {
   Grid,
   Button,
@@ -163,6 +164,8 @@ const BannerManagement = ({ resid }) => {
   const [loading, setloading] = useState(false);
   const [banner, setbanner] = useState(null);
   const [rerender, setrerender] = useState(false);
+  const [bannerOpen, setbannerOpen] = useState(false);
+  const [form, setform] = useState("");
   const dispatch = useDispatch();
   const [notify, setnotify] = useState({ msg: "", popup: false, type: "" });
   useEffect(() => {
@@ -198,18 +201,17 @@ const BannerManagement = ({ resid }) => {
     setimages("CLEARED");
   };
   const finalSubmit = (secureLinkArray) => {
-    console.log(secureLinkArray);
-
     if (secureLinkArray.length > 0) {
+      setloading(true);
       dispatch(addBanner([resid], { banner: secureLinkArray })).then((res) => {
         if (res) {
-          console.log(res);
+          setloading(false);
+          setimages("CLEARED");
+          setopen(false);
+          setrerender(Math.random());
+          setnotify({ msg: "Banner updated", popup: true, type: "success" });
         }
         setloading(false);
-        setimages("CLEARED");
-        setopen(false);
-        setrerender(Math.random());
-        setnotify({ msg: "Banner updated", popup: true, type: "success" });
       });
     } else {
       setloading(false);
@@ -228,6 +230,23 @@ const BannerManagement = ({ resid }) => {
   const closeAlert = () => {
     setnotify({ popup: false });
   };
+  const bannerDelete = (id) => {
+    setbannerOpen(true);
+    let newBanner = [];
+    if (banner.length === 1) {
+      newBanner = [null];
+    } else
+      for (let i = 0; i < banner.length; i++) {
+        if (i !== id) {
+          newBanner = newBanner.concat(banner[i]);
+        }
+      }
+    setform(newBanner);
+  };
+  const bannerProps = {
+    view: true,
+    deleteFunction: bannerDelete,
+  };
   return (
     <>
       <BackButton />
@@ -235,6 +254,15 @@ const BannerManagement = ({ resid }) => {
         <Loader />
       ) : (
         <div>
+          <Confirm
+            open={bannerOpen}
+            form={form}
+            handleClose={() => setbannerOpen(false)}
+            handleSubmit={(e) => {
+              setbannerOpen(false);
+              finalSubmit(e);
+            }}
+          />
           <FormDialog
             loading={loading}
             setFiles={setFiles}
@@ -250,15 +278,18 @@ const BannerManagement = ({ resid }) => {
                 onClick={() => setopen(true)}
                 color="primary"
                 variant="contained"
-                style={{ outline: "none" }}
+                style={{ outline: "none", marginRight: 5 }}
               >
                 Add/Edit banner
               </Button>
             </Grid>
             <Grid className={classes.card}>
-              {banner && (
+              {banner && banner[0] !== null && (
                 <Card className={classes.card}>
-                  <Carousal images={banner ? banner : "noImage"} />
+                  <Carousal
+                    props={bannerProps}
+                    images={banner && banner[0] !== null ? banner : "noImage"}
+                  />
                 </Card>
               )}
             </Grid>
