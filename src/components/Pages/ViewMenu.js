@@ -250,15 +250,7 @@ const ViewMenu = ({ id, usertype }) => {
                   />
                 </div>
                 <div>
-                  <A href={`/hotel/${id}/banner`}>
-                    <Button
-                      style={{ outline: "none" }}
-                      variant="contained"
-                      color="primary"
-                    >
-                      Banner
-                    </Button>
-                  </A>
+                  <Addbutton title="Banner" href={`/hotel/${id}/banner`} />
                 </div>
               </div>
             )}
