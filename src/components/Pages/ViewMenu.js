@@ -268,6 +268,7 @@ const ViewMenu = ({ id, usertype }) => {
                                 gutterBottom
                                 variant="h5"
                                 component="h2"
+                                className="truncate"
                               >
                                 {value.name}
                               </Typography>

@@ -171,7 +171,12 @@ const ListMenuItems = ({ resid, id, menuname, usertype }) => {
                       />
                     </CardMedia>
                     <CardContent>
-                      <Typography gutterBottom variant="h5" component="h2">
+                      <Typography
+                        className="truncate"
+                        gutterBottom
+                        variant="h5"
+                        component="h2"
+                      >
                         {value.name}
                       </Typography>
 

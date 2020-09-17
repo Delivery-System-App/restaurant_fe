@@ -143,7 +143,12 @@ const DashboardPage = () => {
                     </CardMedia>
                     <A href={`/hotel/${value.id}`}>
                       <CardContent>
-                        <Typography gutterBottom variant="h5" component="h2">
+                        <Typography
+                          className="truncate"
+                          gutterBottom
+                          variant="h5"
+                          component="h2"
+                        >
                           {value.name}
                         </Typography>
                         <Typography
