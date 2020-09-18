@@ -7,11 +7,14 @@ import { getCurrentUser } from "../redux/apiActions";
 import { navigate } from "hookrouter";
 import Loader from "../utils/Loader";
 import AdminRouter from "./AdminRouter";
+import Notify from "../utils/Notify";
+
 const Router = () => {
   const [user, setUser] = useState();
   const [admin, setAdmin] = useState(false);
   const dispatch = useDispatch();
   const state = useSelector((reduxState) => reduxState);
+  const [notify, setnotify] = useState({ msg: "", popup: false, type: "" });
   const currentUser = state.newapi.currentUser;
 
   useAbortableEffect(
@@ -28,10 +31,20 @@ const Router = () => {
               res.data.data.type === "admin" ? setAdmin(true) : setAdmin(false);
             setUser(res.data.data);
           } else {
-            navigate("/error");
+            setnotify({
+              popup: true,
+              msg: "Please login again",
+              type: "error",
+            });
+            navigate("/");
           }
         } else {
-          navigate("/error");
+          setnotify({
+            popup: true,
+            msg: "Please login again",
+            type: "error",
+          });
+          navigate("/");
         }
       } else {
         setUser(null);
@@ -39,17 +52,26 @@ const Router = () => {
     },
     [dispatch]
   );
+
+  const closeAlert = () => {
+    setnotify({ popup: false });
+  };
   if (user !== null && (!currentUser || currentUser.isFetching)) {
     return <Loader />;
   }
-  return user ? (
-    admin ? (
-      <AdminRouter />
-    ) : (
-      <AuthenticatedRouter />
-    )
-  ) : (
-    <PublicRouter />
+  return (
+    <>
+      <Notify props={notify} closeAlert={closeAlert} />
+      {user ? (
+        admin ? (
+          <AdminRouter />
+        ) : (
+          <AuthenticatedRouter />
+        )
+      ) : (
+        <PublicRouter />
+      )}
+    </>
   );
 };
 
