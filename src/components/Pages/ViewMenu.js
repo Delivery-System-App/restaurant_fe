@@ -262,7 +262,7 @@ const ViewMenu = ({ id, usertype }) => {
                     <Grid key={value.id} item xs={12} md={6} lg={4}>
                       <Card className={classes.root}>
                         <A href={`/hotel/${id}/${value.id}/${value.name}`}>
-                          <CardActionArea>
+                          <CardActionArea style={{ outline: "none" }}>
                             <CardContent>
                               <Typography
                                 gutterBottom
