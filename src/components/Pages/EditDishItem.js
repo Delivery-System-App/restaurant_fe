@@ -51,6 +51,7 @@ function EditDishItem({ dishid, menuid, resid }) {
     photos: "",
     status: "",
     category: "EMPTY",
+    discount: "",
   };
   let initForm = {
     name: "",
@@ -58,6 +59,7 @@ function EditDishItem({ dishid, menuid, resid }) {
     photos: "",
     status: "",
     category: false,
+    discount: "",
   };
   const [Error, setError] = useState(initError);
   const [Form, setForm] = useState(initForm);
@@ -73,8 +75,11 @@ function EditDishItem({ dishid, menuid, resid }) {
           const len = res.data.data;
           const Resp = Object.values(len);
           const result = Resp.filter((obj) => obj.dishId === dishid);
-          const { name, price, photos, status, category } = result[0];
-          setForm({ name, price, photos, status, category });
+          let { name, price, photos, status, category, discount } = result[0];
+          if (isNaN(discount)) {
+            discount = 0;
+          }
+          setForm({ name, price, photos, status, category, discount });
         }
         setLoading(false);
       });
@@ -94,7 +99,7 @@ function EditDishItem({ dishid, menuid, resid }) {
     const { value, name } = e.target;
     setForm({ ...Form, [name]: value });
   };
-  const optionalValues = ["photos", "name", "price", "status"];
+  const optionalValues = ["photos", "discount"];
   const validInputs = () => {
     let formValid = true;
     let err = Object.assign({}, initError);
@@ -102,6 +107,21 @@ function EditDishItem({ dishid, menuid, resid }) {
       if (Form[key] === "" && !optionalValues.includes(key)) {
         formValid = false;
         err[key] = "This field is required";
+      }
+      if (key === "price") {
+        if (isNaN(Form[key])) {
+          err[key] = "Enter a Number";
+          formValid = false;
+        }
+      }
+      if (key === "discount" && Form[key] === "") {
+        Form[key] = 0;
+      }
+      if (key === "discount") {
+        if (isNaN(Form[key])) {
+          err[key] = "Enter a Number";
+          formValid = false;
+        }
       }
     });
     setError(err);
@@ -228,6 +248,18 @@ function EditDishItem({ dishid, menuid, resid }) {
                     }}
                   />
                 </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label="Discount %"
+                    type="discount"
+                    id="discount"
+                    name="discount"
+                    value={Form.discount}
+                    onChange={handleChange}
+                    error={Error["discount"]}
+                    helperText={Error["doscount"]}
+                  />
+                </Grid>
 
                 <Grid item xs={12} sm={6}>
                   <FormControl className={classes.formControl}>
@@ -262,7 +294,7 @@ function EditDishItem({ dishid, menuid, resid }) {
                     className={classes.submit}
                     style={{ outline: "none" }}
                   >
-                    Submit Menu
+                    Update Dish
                   </Button>
                 </Grid>
               </Grid>

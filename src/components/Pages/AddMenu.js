@@ -92,6 +92,7 @@ const AddMenu = ({ id }) => {
     price: "",
     name: "",
     category: "EMPTY",
+    discount: 0,
   };
   const initError = {
     photos: "",
