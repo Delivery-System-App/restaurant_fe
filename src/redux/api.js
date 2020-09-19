@@ -145,4 +145,16 @@ export default {
     method: "GET",
     noAuth: true,
   },
+
+  //report
+  getSalesReport: {
+    path: "/api/v1/booking/generateSalesReport",
+    method: "POST",
+    noAuth: false,
+  },
+  getItemReport: {
+    path: "/api/v1/booking/generateItemReport",
+    method: "POST",
+    noAuth: false,
+  },
 };

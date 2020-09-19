@@ -112,3 +112,11 @@ export const restaurantCount = () => {
 export const updateBooking = (id, body) => {
   return fireRequest("updateBooking", [id], body);
 };
+
+export const getSalesReport = (id, body) => {
+  return fireRequest("getSalesReport", [id], body);
+};
+
+export const getItemReport = (id, body) => {
+  return fireRequest("getItemReport", [id], body);
+};

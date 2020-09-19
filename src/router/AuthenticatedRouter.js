@@ -17,6 +17,7 @@ import BookingDetails from "../components/Pages/BookingDetails";
 import AddCustomer from "../../src/components/Pages/Customers/AddCustomer";
 import CustomerDashboard from "../components/Pages/Customers/CustomerDashboard";
 import BannerManagement from "../components/Pages/BannerManagement";
+import ViewReport from "../components/Pages/ViewReport";
 
 const routes = {
   "/": () => <Dashboard />,
@@ -41,6 +42,8 @@ const routes = {
   "/hotel/:resid/banner": ({ resid }) => <BannerManagement resid={resid} />,
 
   "/bookings/:bookid": ({ bookid }) => <BookingDetails bookid={bookid} />,
+
+  "/hotel/:id/report": ({ id }) => <ViewReport id={id} />,
 };
 
 const AuthenticatedRouter = () => {

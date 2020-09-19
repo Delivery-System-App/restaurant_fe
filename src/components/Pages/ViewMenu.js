@@ -210,102 +210,108 @@ const ViewMenu = ({ id, usertype }) => {
       {Loading ? (
         <Loader />
       ) : (
-        <div>
-          <FormDialog
-            handleEditName={handleEditName}
-            data={select}
-            open={open}
-            handleClose={handleClose}
-          />
-          <Grid
-            item
-            container
-            justify="center"
-            style={{ marginBottom: "20px" }}
-          >
-            {usertype === "owner" && (
-              <div className="flex">
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  size="medium"
-                  style={{ outline: "none", marginRight: "1px" }}
-                >
-                  <A
-                    href={`/hotel/${id}/addmenu`}
-                    className={classes.link}
-                    style={{
-                      color: "#757de8",
-                      fontSize: "16px",
-                      textDecoration: "none",
-                    }}
+          <div>
+            <FormDialog
+              handleEditName={handleEditName}
+              data={select}
+              open={open}
+              handleClose={handleClose}
+            />
+            <Grid
+              item
+              container
+              justify="center"
+              style={{ marginBottom: "20px" }}
+            >
+              {usertype === "owner" && (
+                <div className="flex">
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    size="medium"
+                    style={{ outline: "none", marginRight: "1px" }}
                   >
-                    Add Menu
+                    <A
+                      href={`/hotel/${id}/addmenu`}
+                      className={classes.link}
+                      style={{
+                        color: "#757de8",
+                        fontSize: "16px",
+                        textDecoration: "none",
+                      }}
+                    >
+                      Add Menu
                   </A>
-                </Button>
-                <div className="mx-1">
-                  <Addbutton
-                    title="View booking"
-                    href={`/hotel/${id}/bookings`}
-                  />
+                  </Button>
+                  <div className="mx-1">
+                    <Addbutton
+                      title="View booking"
+                      href={`/hotel/${id}/bookings`}
+                    />
+                  </div>
+                  <div>
+                    <Addbutton title="Banner" href={`/hotel/${id}/banner`} />
+                  </div>
+                  <div className="mx-1">
+                    <Addbutton
+                      title="View report"
+                      href={`/hotel/${id}/report`}
+                    />
+                  </div>
                 </div>
-                <div>
-                  <Addbutton title="Banner" href={`/hotel/${id}/banner`} />
-                </div>
-              </div>
-            )}
-            <SearchBar searchChange={handleSearchChange} />
-            <Grid container className={classes.container}>
-              {Data.map((value) => {
-                return (
-                  value.name.toLowerCase().includes(filter.toLowerCase()) && (
-                    <Grid key={value.id} item xs={12} md={6} lg={4}>
-                      <Card className={classes.root}>
-                        <A href={`/hotel/${id}/${value.id}/${value.name}`}>
-                          <CardActionArea>
-                            <CardContent>
-                              <Typography
-                                gutterBottom
-                                variant="h5"
-                                component="h2"
-                                className="truncate"
+              )}
+              <SearchBar searchChange={handleSearchChange} />
+              <Grid container className={classes.container}>
+                {Data.map((value) => {
+                  return (
+                    value.name.toLowerCase().includes(filter.toLowerCase()) && (
+                      <Grid key={value.id} item xs={12} md={6} lg={4}>
+                        <Card className={classes.root}>
+                          <A href={`/hotel/${id}/${value.id}/${value.name}`}>
+                            <CardActionArea>
+                              <CardContent>
+                                <Typography
+                                  gutterBottom
+                                  variant="h5"
+                                  component="h2"
+                                  className="truncate"
+                                >
+                                  {value.name}
+                                </Typography>
+                              </CardContent>
+                            </CardActionArea>
+                          </A>
+                          {usertype === "owner" && (
+                            <CardActions>
+                              <Button
+                                size="small"
+                                color="primary"
+                                style={{ outline: "none" }}
+                                onClick={() =>
+                                  handleClickOpen(value.id, value.name)
+                                }
                               >
-                                {value.name}
-                              </Typography>
-                            </CardContent>
-                          </CardActionArea>
-                        </A>
-                        {usertype === "owner" && (
-                          <CardActions>
-                            <Button
-                              size="small"
-                              color="primary"
-                              style={{ outline: "none" }}
-                              onClick={() =>
-                                handleClickOpen(value.id, value.name)
-                              }
-                            >
-                              Edit Name
+                                Edit Name
                             </Button>
-                            <Confirm
-                              handleConfirm={handleConfirm}
-                              cancelDialog={"Cancel"}
-                              confirmDialog={"Delete"}
-                              buttonText={"Delete"}
-                              id={value.id}
-                              sentence={`You are about to delete the full menu list ${value.name} ?`}
-                            />
-                          </CardActions>
-                        )}
-                      </Card>
-                    </Grid>
-                  )
-                );
-              })}
+                              <Confirm
+                                handleConfirm={handleConfirm}
+                                cancelDialog={"Cancel"}
+                                confirmDialog={"Delete"}
+                                buttonText={"Delete"}
+                                id={value.id}
+                                sentence={`You are about to delete the full menu list ${value.name} ?`}
+                              />
+                            </CardActions>
+                          )}
+                        </Card>
+                      </Grid>
+                    )
+                  );
+                })}
+              </Grid>
             </Grid>
-          </Grid>
-        </div>
-      )}
+          </div>
+        )}
       <Notify props={notify} closeAlert={closeAlert} />
     </>
   );

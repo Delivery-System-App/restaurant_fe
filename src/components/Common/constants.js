@@ -9,3 +9,7 @@ export const APPROVAL_STATUS = {
     PENDING: { type: "Pending", string: 0, color: "red-700" },
     APPROVED: { type: "Approved", string: 1, color: "green-600" },
 };
+export const REPORTS = {
+    SALES: { type: "Sales Report", string: "Sales Report", color: "green-600" },
+    ITEM: { type: "Item Report", string: "Item Report", color: "green-500" },
+}
