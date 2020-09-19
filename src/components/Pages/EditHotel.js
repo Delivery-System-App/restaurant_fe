@@ -6,6 +6,7 @@ import { phonePreg } from "../../utils/validation";
 import Notify from "../../utils/Notify";
 import { imageUploader } from "../../utils/helper";
 import BackButton from "../buttons/BackButton";
+import moment from "moment";
 
 function EditHotel({ id }) {
   const dispatch = useDispatch();
@@ -22,12 +23,18 @@ function EditHotel({ id }) {
     location: "",
     address: "",
     contact: "",
+    openTime: "",
+    closeTime: "",
   };
   const [Error, setError] = useState(initError);
   const [Form, setForm] = useState(initForm);
   const [Loading, setLoading] = useState(false);
   const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
   const [image, setImage] = useState("");
+  const [time, settime] = useState({
+    open: new Date("2000-08-18T08:00:00"),
+    close: new Date("2000-08-18T21:00:00"),
+  });
   useEffect(() => {
     setLoading(true);
     let mount = true;
@@ -39,6 +46,11 @@ function EditHotel({ id }) {
           const Resp = Object.values(len);
           const result = Resp.filter((obj) => obj.id === id);
           setForm(result[0]);
+          if (result[0].timings !== undefined) {
+            const timing = result[0].timings;
+            const { open, close } = timing.unformatted;
+            settime({ open, close });
+          }
         }
         setLoading(false);
       });
@@ -50,6 +62,9 @@ function EditHotel({ id }) {
   const setFiles = (files) => {
     //    setForm({ ...Form, photos: files });
     setImage(files);
+  };
+  const handleTimechange = (timeNow, type) => {
+    settime({ ...time, [type]: timeNow });
   };
   const handleChange = (e) => {
     setnotify({
@@ -83,6 +98,16 @@ function EditHotel({ id }) {
       err["number"] = "This field is required";
     }
 
+    if (moment(time.open).isValid() === false) {
+      err["openTime"] = "Invalid time";
+      formValid = false;
+    }
+
+    if (moment(time.close).isValid() === false) {
+      err["closeTime"] = "Invalid time";
+      formValid = false;
+    }
+
     if (!phonePreg(contact)) {
       formValid = false;
       err["contact"] = "Enter Valid phone number";
@@ -106,14 +131,26 @@ function EditHotel({ id }) {
       });
       */
       let Result;
+      const finalTimes = {
+        formatted: {
+          open: moment(time.open).format("LT"),
+          close: moment(time.close).format("LT"),
+        },
+        unformatted: {
+          open: time.open,
+          close: time.close,
+        },
+      };
       if (secureUrl !== "") {
         Result = {
           ...Form,
           photos: secureUrl,
+          timings: finalTimes,
         };
       } else {
         Result = {
           ...Form,
+          timings: finalTimes,
         };
       }
       dispatch(updateHotel([id + "/update-Restaurant"], Result)).then((res) => {
@@ -149,6 +186,8 @@ function EditHotel({ id }) {
         Error={Error}
         type={"Update"}
         Loading={Loading}
+        handleTimechange={handleTimechange}
+        time={time}
         Helper={"Adding new will remove previous ones"}
       />
     </>

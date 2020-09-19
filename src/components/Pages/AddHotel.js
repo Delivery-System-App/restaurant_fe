@@ -7,6 +7,7 @@ import Notify from "../../utils/Notify";
 import useHeading from "./useHeading";
 import { imageUploader } from "../../utils/helper";
 import BackButton from "../buttons/BackButton";
+import moment from "moment";
 
 export default function AddHotel() {
   useHeading("Add Hotel");
@@ -24,22 +25,30 @@ export default function AddHotel() {
     location: "",
     address: "",
     contact: "",
+    openTime: "",
+    closeTime: "",
   };
 
   const [Form, setForm] = useState(Initform);
   const [Error, setError] = useState(initError);
   const [notify, setnotify] = useState({ popup: false, msg: "", type: "" });
   const [image, setImage] = useState("");
+  const [time, settime] = useState({
+    open: new Date("2000-08-18T08:00:00"),
+    close: new Date("2000-08-18T21:00:00"),
+  });
   const [Loading, setLoading] = useState(false);
 
   const setFiles = (files) => {
-    // setForm({ ...Form, photos: files });
     setImage(files);
   };
   const handleChange = (e) => {
     setError(initError);
     const { value, name } = e.target;
     setForm({ ...Form, [name]: value });
+  };
+  const handleTimechange = (timeNow, type) => {
+    settime({ ...time, [type]: timeNow });
   };
   const optionalValues = ["photos"];
 
@@ -60,6 +69,16 @@ export default function AddHotel() {
       err["contact"] = "Enter Valid phone number";
     }
 
+    if (moment(time.open).isValid() === false) {
+      err["openTime"] = "Invalid time";
+      formValid = false;
+    }
+
+    if (moment(time.close).isValid() === false) {
+      err["closeTime"] = "Invalid time";
+      formValid = false;
+    }
+
     setError(err);
     return formValid;
   };
@@ -68,9 +87,20 @@ export default function AddHotel() {
   };
   const handleSubmit = (secureUrl) => {
     if (validInputs()) {
+      const finalTimes = {
+        formatted: {
+          open: moment(time.open).format("LT"),
+          close: moment(time.close).format("LT"),
+        },
+        unformatted: {
+          open: time.open,
+          close: time.close,
+        },
+      };
       const Result = {
         ...Form,
         photos: secureUrl,
+        timings: finalTimes,
       };
       setForm(Initform);
       setImage("CLEARALL");
@@ -122,6 +152,8 @@ export default function AddHotel() {
         type={"Add"}
         Helper={""}
         Loading={Loading}
+        handleTimechange={handleTimechange}
+        time={time}
         imageCleared={imageCleared}
       />
     </>
