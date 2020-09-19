@@ -62,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
   },
   topButton: {
     padding: 2,
+    outline: "none",
   },
 }));
 
