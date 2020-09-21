@@ -10,6 +10,7 @@ import Confirm from "./ConfirmPage";
 import Notify from "../../utils/Notify";
 import Carousal from "./Carousal";
 import StatusIndicator from "./StatusIndicator";
+import RateReviewIcon from "@material-ui/icons/RateReview";
 import {
   Card,
   CardActions,
@@ -75,6 +76,7 @@ const DashboardPage = () => {
         if (res && res.data) {
           const len = res.data.data;
           setData(Object.values(len));
+          console.log(Object.values(len));
           setLoading(false);
         }
         setLoading(false);
@@ -181,10 +183,15 @@ const DashboardPage = () => {
                           id={value.id}
                           sentence={`You are about to delete hotel ${value.name} ?`}
                         />
+                        <div className="ml-1">
+                          <A className="" href={`/hotel/${value.id}/reviews`}>
+                            <RateReviewIcon color="action" fontSize="large" />
+                          </A>
+                        </div>
                       </div>
                       <div className="w-1/3 flex flex-row text-right">
                         <div className="w-1/5 md:w-1/4 lg:w-1/4"></div>
-                        <div className="w-4/5 md:w-3/4 lg:w-3/4">
+                        <div className="w-full md:w-3/4 lg:w-3/4">
                           <StatusIndicator status={value.approved} />
                         </div>
                       </div>

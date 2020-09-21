@@ -18,6 +18,7 @@ import AddCustomer from "../../src/components/Pages/Customers/AddCustomer";
 import CustomerDashboard from "../components/Pages/Customers/CustomerDashboard";
 import BannerManagement from "../components/Pages/BannerManagement";
 import ViewReport from "../components/Pages/ViewReport";
+import ViewReviews from "../components/Pages/ViewReviews";
 
 const routes = {
   "/": () => <Dashboard />,
@@ -27,6 +28,7 @@ const routes = {
   "/addhotel": () => <AddHotel />,
   "/edithotel/:id": ({ id }) => <EditHotel id={id} />,
   "/hotel/:id": ({ id }) => <ViewMenu id={id} usertype="owner" />,
+  "/hotel/:id/reviews": ({ id }) => <ViewReviews id={id} usertype="owner" />,
   "/hotel/:id/addmenu": ({ id }) => <AddMenu id={id} />,
   "/hotel/:resid/:id/:menuname": ({ resid, id, menuname }) => (
     <ListMenuItems usertype="owner" resid={resid} id={id} menuname={menuname} />
