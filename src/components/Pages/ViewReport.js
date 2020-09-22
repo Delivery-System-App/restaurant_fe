@@ -76,7 +76,6 @@ const ViewReport = (id) => {
             from: moment(selectedDateFrom).format("YYYY-MM-DD"),
             to: moment(selectedDateTo).format("YYYY-MM-DD")
         };
-        console.log("body", body);
         setLoading(true);
         if (filter.REPORT === "Sales Report") {
             dispatch(getSalesReport([id.id], body)).then((resp) => {
@@ -98,7 +97,6 @@ const ViewReport = (id) => {
     }, [dispatch, selectedDateFrom, selectedDateTo]);
 
     function updateReport(value) {
-        console.log("hello", value);
         filter.REPORT = value;
         let body = {
             from: moment(selectedDateFrom).format("YYYY-MM-DD"),
@@ -123,9 +121,6 @@ const ViewReport = (id) => {
         }
 
     }
-    console.log("details current", details);
-    console.log("from", moment(selectedDateFrom).format("YYYY-MM-DD"));
-    console.log("to", moment(selectedDateTo).format("YYYY-MM-DD"));
     const closeAlert = () => {
         setnotify({ popup: false });
     };
