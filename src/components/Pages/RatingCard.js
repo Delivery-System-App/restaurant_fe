@@ -49,8 +49,10 @@ const RatingCard = ({ stars, review, name }) => {
           />
         </Box>
         <Typography>
-          <span style={{ fontWeight: "bold" }}>{"Name : "}</span>
-          {name}
+          <p className="truncate">
+            <span style={{ fontWeight: "bold" }}>{"Name : "}</span>
+            {name}
+          </p>
         </Typography>
         <Typography>
           <p className="truncate">
