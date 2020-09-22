@@ -28,6 +28,10 @@ export const getHotel = (id) => {
   return fireRequest("getHotel", [id]);
 };
 
+export const getReviews = (id) => {
+  return fireRequest("getReviews", [id]);
+};
+
 export const allHotels = () => {
   return fireRequest("allHotels");
 };

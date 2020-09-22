@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch } from "react-redux";
-import { getHotel } from "../../redux/apiActions";
+import { getReviews } from "../../redux/apiActions";
 import RatingCard from "./RatingCard";
 import Loader from "../../utils/Loader";
 import UseHeading from "./useHeading";
@@ -18,24 +18,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ViewReviews = ({ id }) => {
+const ViewReviews = ({ id, hotelName }) => {
   UseHeading("Reviews");
   const classes = useStyles();
   const [reviews, setreviews] = useState([]);
   const dispatch = useDispatch();
   const [Loading, setLoading] = useState(false);
-  const [name, setname] = useState("");
+  const [name, setname] = useState(hotelName);
 
+  const escapeRegExp = (string) => {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  };
+
+  const replaceAll = (str, term, replacement) => {
+    return str.replace(new RegExp(escapeRegExp(term), "g"), replacement);
+  };
   useEffect(() => {
     let mount = true;
     setLoading(true);
     if (mount) {
-      dispatch(getHotel([id])).then((res) => {
+      setname(replaceAll(hotelName, "%20", " "));
+      dispatch(getReviews([id])).then((res) => {
         if (res && res.data) {
-          setname(res.data.name);
-          if (res.data.review) {
-            setreviews(res.data.review);
-          }
+          setreviews(res.data);
           setLoading(false);
         }
         setLoading(false);
@@ -44,7 +49,8 @@ const ViewReviews = ({ id }) => {
     return () => {
       mount = false;
     };
-  }, [dispatch, id]);
+    //eslint-disable-next-line
+  }, [dispatch, id, hotelName]);
   return (
     <>
       <BackButton />
@@ -55,7 +61,7 @@ const ViewReviews = ({ id }) => {
           <div className="w-full">
             <div className="w-full text-center">
               <Typography className={classes.heading}>
-                Reviews of {name}
+                <p className="truncate">Reviews of {name}</p>
               </Typography>
             </div>
             <Grid container className={classes.container}>
@@ -65,6 +71,7 @@ const ViewReviews = ({ id }) => {
                     <Grid key={index + 1} item xs={12} md={6} lg={4}>
                       <RatingCard
                         stars={Number(value.star)}
+                        name={value.username}
                         review={value.feedback}
                       />
                     </Grid>

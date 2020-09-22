@@ -86,6 +86,10 @@ export default {
     method: "PATCH",
     noAuth: false,
   },
+  getReviews: {
+    path: "/api/v1/restaurant/getrestaurantreview",
+    method: "GET",
+  },
 
   //booking
   hotelBookingDetails: {

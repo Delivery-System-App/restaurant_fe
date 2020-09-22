@@ -5,7 +5,7 @@ import Box from "@material-ui/core/Box";
 import { Card } from "@material-ui/core";
 import ModalDialog from "./ModalDialog";
 
-const RatingCard = ({ stars, review }) => {
+const RatingCard = ({ stars, review, name }) => {
   const [state, setstate] = useState("");
   const [open, setopen] = useState(false);
   useEffect(() => {
@@ -48,6 +48,12 @@ const RatingCard = ({ stars, review }) => {
             readOnly
           />
         </Box>
+        <Typography>
+          <p className="truncate">
+            <span style={{ fontWeight: "bold" }}>{"Name : "}</span>
+            {name}
+          </p>
+        </Typography>
         <Typography>
           <p className="truncate">
             <span style={{ fontWeight: "bold" }}>{"Review : "}</span>

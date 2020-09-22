@@ -183,7 +183,10 @@ const DashboardPage = () => {
                           sentence={`You are about to delete hotel ${value.name} ?`}
                         />
                         <div className="ml-1">
-                          <A className="" href={`/hotel/${value.id}/reviews`}>
+                          <A
+                            className=""
+                            href={`/hotel/${value.id}/${value.name}/reviews`}
+                          >
                             <RateReviewIcon color="action" fontSize="large" />
                           </A>
                         </div>
