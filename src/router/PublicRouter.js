@@ -7,6 +7,7 @@ import RegisterPage from "../components/Pages/RegisterPage";
 import NotFoundPage from "../components/Pages/NotFoundPage";
 import PublicNavbar from "../components/Navbar/PublicNavbar";
 import ErrorPage from "../components/Pages/ErrorPage";
+import ForgotPassword from "../components/Pages/ForgotPassword";
 
 const routes = {
   "/": () => <HomePage />,
@@ -14,6 +15,7 @@ const routes = {
   "/login": () => <LoginPage />,
   "/register": () => <RegisterPage />,
   "/error": () => <ErrorPage />,
+  "/reset-password": () => <ForgotPassword />,
 };
 
 const PublicRouter = () => {

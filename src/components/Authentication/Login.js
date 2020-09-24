@@ -227,9 +227,9 @@ const Login = () => {
             <LoaderButton Loading={loading} handleSubmit={submitHandler} />
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
+                <A href="/reset-password" variant="body2">
+                  <Typography color="primary">Forgot password?</Typography>
+                </A>
               </Grid>
               <Grid item>
                 <A href="/register" className={classes.link}>
