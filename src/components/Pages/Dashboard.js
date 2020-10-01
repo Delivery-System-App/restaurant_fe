@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useHeading from "./useHeading";
 import { A } from "hookrouter";
-import { Grid } from "@material-ui/core";
+import { Grid, Badge } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch } from "react-redux";
 import { allHotels, deleteHotel } from "../../redux/apiActions";
@@ -57,7 +57,9 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "10px",
   },
 }));
-
+const defaultProps = {
+  color: "secondary",
+};
 const DashboardPage = () => {
   const classes = useStyles();
   useHeading("My Restaurants");
@@ -137,6 +139,16 @@ const DashboardPage = () => {
               value.name.toLowerCase().includes(filter.toLowerCase()) && (
                 <Grid key={index + 1} item xs={12} md={6} lg={4}>
                   <Card className={classes.root}>
+                    <div className="absolute">
+                      {value.openStatus === false && (
+                        <Badge
+                          className="ml-6"
+                          size="large"
+                          badgeContent={"CLOSED"}
+                          {...defaultProps}
+                        />
+                      )}
+                    </div>
                     <CardMedia className={classes.media} title="Hotel Image">
                       <Carousal
                         images={value.photos ? value.photos : noImage}

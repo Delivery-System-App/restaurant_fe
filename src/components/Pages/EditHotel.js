@@ -25,6 +25,7 @@ function EditHotel({ id }) {
     contact: "",
     openTime: "",
     closeTime: "",
+    openStatus: true,
   };
   const [Error, setError] = useState(initError);
   const [Form, setForm] = useState(initForm);
@@ -44,7 +45,11 @@ function EditHotel({ id }) {
         if (res) {
           const len = res.data.data;
           const Resp = Object.values(len);
-          const result = Resp.filter((obj) => obj.id === id);
+          let result = Resp.filter((obj) => obj.id === id);
+          console.log(result[0]);
+          if (result[0].openStatus === undefined) {
+            result[0].openStatus = true;
+          }
           setForm(result[0]);
           if (result[0].timings !== undefined) {
             const timing = result[0].timings;
@@ -72,7 +77,9 @@ function EditHotel({ id }) {
     });
     setError(initError);
     const { value, name } = e.target;
-    setForm({ ...Form, [name]: value });
+    if (name === "openStatus") {
+      setForm({ ...Form, [name]: !Form.openStatus });
+    } else setForm({ ...Form, [name]: value });
   };
 
   const uploadImage = () => {

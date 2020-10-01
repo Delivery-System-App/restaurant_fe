@@ -2,9 +2,9 @@ import React from "react";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
-import { Button } from "@material-ui/core";
+import { Button, FormControlLabel } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Card } from "@material-ui/core";
+import { Card, Switch } from "@material-ui/core";
 import Uploader from "./UploadImage";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { green } from "@material-ui/core/colors";
@@ -13,6 +13,22 @@ import {
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
+import { withStyles } from "@material-ui/core/styles";
+import { purple } from "@material-ui/core/colors";
+
+const PurpleSwitch = withStyles({
+  switchBase: {
+    color: purple[300],
+    "&$checked": {
+      color: purple[500],
+    },
+    "&$checked + $track": {
+      backgroundColor: purple[500],
+    },
+  },
+  checked: {},
+  track: {},
+})(Switch);
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -95,13 +111,36 @@ const HotelForm = ({
 
   return (
     <Card className={classes.form}>
-      <Typography variant="h6" gutterBottom>
-        {type} Hotel Details
-      </Typography>
+      <Grid container>
+        <Grid item style={{ textAlign: "center" }} xs={12} sm={6}>
+          <Typography variant="h6" gutterBottom>
+            {type} Hotel Details
+          </Typography>
+        </Grid>
+        <Grid item style={{ textAlign: "right" }} xs={12} sm={6}>
+          <Typography component="div">
+            <Grid component="label" container alignItems="center" spacing={1}>
+              <Grid item>Closed</Grid>
+              <Grid item style={{ width: 45, marginRight: 3, marginLeft: 3 }}>
+                <FormControlLabel
+                  control={
+                    <PurpleSwitch
+                      checked={Form.openStatus}
+                      onChange={handleChange}
+                      name="openStatus"
+                    />
+                  }
+                />
+              </Grid>
+              <Grid item>Open</Grid>
+            </Grid>
+          </Typography>
+        </Grid>
+      </Grid>
       <form className={classes.form}>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <Grid container spacing={3}>
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 required
                 id="name"

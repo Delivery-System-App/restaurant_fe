@@ -18,6 +18,7 @@ export default function AddHotel() {
     location: "",
     address: "",
     contact: "",
+    openStatus: true,
   };
   const initError = {
     name: "",
@@ -44,8 +45,10 @@ export default function AddHotel() {
   };
   const handleChange = (e) => {
     setError(initError);
-    const { value, name } = e.target;
-    setForm({ ...Form, [name]: value });
+    let { value, name } = e.target;
+    if (name === "openStatus") {
+      setForm({ ...Form, [name]: !Form.openStatus });
+    } else setForm({ ...Form, [name]: value });
   };
   const handleTimechange = (timeNow, type) => {
     settime({ ...time, [type]: timeNow });
